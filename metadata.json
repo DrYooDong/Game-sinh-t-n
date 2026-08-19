@@ -1,0 +1,6 @@
+{
+  "name": "Dịch Chuyển Sinh Tồn: Ký Túc Xá Zombie",
+  "description": "Game RPG sinh tồn Isekai thế giới ngẫu nhiên - Dịch chuyển vào ký túc xá 100 người chống lại đại dịch Zombie với kỹ năng cấp bậc, chế tạo, thám hiểm và sự kiện tiến hóa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
