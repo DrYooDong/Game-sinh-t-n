@@ -1,0 +1,56 @@
+{
+  "plants": {
+    "plant_peashooter": "/pvz_assets/plants/plant_peashooter.png",
+    "plant_sunflower": "/pvz_assets/plants/plant_sunflower.png",
+    "plant_twin_sunflower": "/pvz_assets/plants/plant_twin_sunflower.png",
+    "plant_snow_pea": "/pvz_assets/plants/plant_snow_pea.png",
+    "plant_chomper": "/pvz_assets/plants/plant_chomper.png",
+    "plant_squash": "/pvz_assets/plants/plant_squash.png",
+    "plant_fume_shroom": "/pvz_assets/plants/plant_fume_shroom.png",
+    "plant_hypno_shroom": "/pvz_assets/plants/plant_hypno_shroom.png",
+    "plant_gatling_pea": "/pvz_assets/plants/plant_gatling_pea.png",
+    "plant_pumpkin": "/pvz_assets/plants/plant_pumpkin.png",
+    "plant_cherry_bomb": "/pvz_assets/plants/plant_cherry_bomb.png",
+    "plant_jalapeno": "/pvz_assets/plants/plant_jalapeno.png",
+    "plant_spikeweed": "/pvz_assets/plants/plant_spikeweed.png",
+    "plant_magnet_shroom": "/pvz_assets/plants/plant_magnet_shroom.png",
+    "plant_tallnut": "/pvz_assets/plants/plant_tallnut.png",
+    "plant_doom_shroom": "/pvz_assets/plants/plant_doom_shroom.png",
+    "plant_plantern": "/pvz_assets/plants/plant_plantern.png",
+    "plant_winter_melon": "/pvz_assets/plants/plant_winter_melon.png",
+    "plant_repeater": "/pvz_assets/plants/plant_repeater.png",
+    "plant_torchwood": "/pvz_assets/plants/plant_torchwood.png",
+    "plant_bonk_choy": "/pvz_assets/plants/plant_bonk_choy.png",
+    "plant_blover": "/pvz_assets/plants/plant_blover.png",
+    "peashooter_devourer": "/pvz_assets/plants/peashooter_devourer.png",
+    "giant_walnut": "/pvz_assets/plants/giant_walnut.png"
+  },
+  "zombies": {
+    "zombie_fast": "/pvz_assets/zombies/zombie_fast.png",
+    "zombie_strong_2": "/pvz_assets/zombies/zombie_strong_2.png",
+    "zombie_flag": "/pvz_assets/zombies/zombie_flag.png",
+    "zombie_newspaper": "/pvz_assets/zombies/zombie_newspaper.png",
+    "zombie_gargantuar": "/pvz_assets/zombies/zombie_gargantuar.png",
+    "zombie_screendoor": "/pvz_assets/zombies/zombie_screendoor.png",
+    "zombie_boss_lion_king": "/pvz_assets/zombies/zombie_boss_lion_king.png",
+    "zombie_boss_gargantuar": "/pvz_assets/zombies/zombie_boss_gargantuar.png"
+  },
+  "lawns": {
+    "frontyard_day": "/pvz_assets/lawns/frontyard_day.png",
+    "egypt": "/pvz_assets/lawns/egypt.png",
+    "pirate": "/pvz_assets/lawns/pirate.png",
+    "cowboy": "/pvz_assets/lawns/cowboy.png",
+    "future": "/pvz_assets/lawns/future.png",
+    "dark": "/pvz_assets/lawns/dark.png",
+    "beach": "/pvz_assets/lawns/beach.png",
+    "eighties": "/pvz_assets/lawns/eighties.png",
+    "dino": "/pvz_assets/lawns/dino.png"
+  },
+  "projectiles": {
+    "pea": "/pvz_assets/projectiles/pea.png",
+    "gatling": "/pvz_assets/projectiles/gatling.png",
+    "fireball": "/pvz_assets/projectiles/fireball.png",
+    "mower": "/pvz_assets/projectiles/mower.png"
+  },
+  "ui": {}
+}

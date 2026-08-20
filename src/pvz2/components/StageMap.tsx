@@ -423,7 +423,7 @@ export const StageMap: React.FC<StageMapProps> = ({
                           key={cId}
                           className="bg-black/60 px-2.5 py-1 rounded-xl border border-emerald-600/50 text-xs font-bold text-emerald-200 flex items-center gap-1.5"
                         >
-                          <PvZIcon type={cardDef?.iconType || 'peashooter'} className="w-5 h-5" />
+                          <PvZIcon type={cardDef?.iconType || 'peashooter'} cardId={cardDef?.id} className="w-5 h-5" />
                           <span>{cardDef?.vietnameseTitle || cId}</span>
                         </div>
                       );

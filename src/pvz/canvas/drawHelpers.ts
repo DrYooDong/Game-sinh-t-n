@@ -1,5 +1,7 @@
 import { PlacedPlant, ActiveZombie, Projectile, SunDrop, DamagePopup, LawnMowerState, PlantData, ZombieData } from '../types';
 import { PVZ_PLANTS, PVZ_ZOMBIES } from '../data/pvzData';
+import { PVZ_PLANT_ASSETS, PVZ_ZOMBIE_ASSETS, PVZ_LAWN_ASSETS, PVZ_PROJECTILE_ASSETS, PVZ_UI_ASSETS } from '../data/pvzAssetMap';
+import { imageCache } from './assetLoader';
 
 export interface RenderContext {
   ctx: CanvasRenderingContext2D;
@@ -25,10 +27,11 @@ export interface RenderContext {
   time: number; // in seconds
 }
 
-// Stage themes colors
+// Stage themes colors & background lawn mappings
 export const STAGE_CANVAS_THEMES = [
   {
     name: 'Đường Phố Tân Thủ',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_day,
     grassA: '#143d22',
     grassB: '#0f311a',
     gridLine: 'rgba(52, 211, 153, 0.15)',
@@ -37,6 +40,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Bãi Đỗ Siêu Thị',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_cowboy,
     grassA: '#2d2417',
     grassB: '#221a10',
     gridLine: 'rgba(245, 158, 11, 0.15)',
@@ -45,6 +49,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Hầm Tàu Điện Ngầm',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_future,
     grassA: '#0d2538',
     grassB: '#091c2b',
     gridLine: 'rgba(6, 182, 212, 0.15)',
@@ -53,6 +58,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Viện Nông Nghiệp Công Nghệ Cao',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_egypt,
     grassA: '#12382a',
     grassB: '#0c281e',
     gridLine: 'rgba(16, 185, 129, 0.18)',
@@ -61,6 +67,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Vườn Thực Nghiệm Bào Tử Biến Dị',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_dark,
     grassA: '#2b1338',
     grassB: '#200e2b',
     gridLine: 'rgba(217, 70, 239, 0.2)',
@@ -69,6 +76,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Đại Chiến Sân Vận Động',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_eighties,
     grassA: '#381619',
     grassB: '#2b0f12',
     gridLine: 'rgba(244, 63, 94, 0.2)',
@@ -77,6 +85,7 @@ export const STAGE_CANVAS_THEMES = [
   },
   {
     name: 'Pháo Đài Quốc Vận Bất Diệt',
+    lawnAsset: PVZ_LAWN_ASSETS.lawn_dino,
     grassA: '#1a1f3d',
     grassB: '#12162c',
     gridLine: 'rgba(250, 204, 21, 0.25)',
@@ -92,6 +101,15 @@ export function drawBackground(rc: RenderContext) {
   // Base background fill
   ctx.fillStyle = '#080c10';
   ctx.fillRect(0, 0, width, height);
+
+  // Try to render original Lawn image if loaded
+  const lawnImg = imageCache.getImage(theme.lawnAsset);
+  if (lawnImg) {
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    ctx.drawImage(lawnImg, gridLeft, gridTop, cols * cellWidth, rows * cellHeight);
+    ctx.restore();
+  }
 
   // Draw Lawnmower sidebar lane
   ctx.fillStyle = theme.mowerBg;
@@ -112,8 +130,10 @@ export function drawBackground(rc: RenderContext) {
       const y = gridTop + r * cellHeight;
       const isAlt = (r + c) % 2 === 0;
 
-      // Checkerboard grass tile
-      ctx.fillStyle = isAlt ? theme.grassA : theme.grassB;
+      // Checkerboard grass tile (subtle tint overlay if image present, solid if fallback)
+      ctx.fillStyle = lawnImg
+        ? (isAlt ? 'rgba(20, 61, 34, 0.4)' : 'rgba(15, 49, 26, 0.25)')
+        : (isAlt ? theme.grassA : theme.grassB);
       ctx.fillRect(x, y, cellWidth, cellHeight);
 
       // Subtle grass stripe texture
@@ -200,6 +220,7 @@ export function drawBackground(rc: RenderContext) {
 
 export function drawLawnMowers(rc: RenderContext, mowers: LawnMowerState[]) {
   const { ctx, gridLeft, gridTop, cellHeight, cellWidth, cols } = rc;
+  const mowerImg = imageCache.getImage(PVZ_UI_ASSETS.lawn_mower);
 
   mowers.forEach((mower) => {
     const cy = gridTop + mower.row * cellHeight + cellHeight / 2;
@@ -218,23 +239,29 @@ export function drawLawnMowers(rc: RenderContext, mowers: LawnMowerState[]) {
       return;
     }
 
-    // Draw Lawnmower
     ctx.save();
-    ctx.font = mower.isTriggered ? '28px sans-serif' : '22px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
     if (mower.isTriggered) {
       // Rush effect trails
       ctx.fillStyle = 'rgba(239, 68, 68, 0.4)';
       ctx.beginPath();
       ctx.arc(cx - 15, cy, 18, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillText('🚜💨', cx, cy);
+    }
+
+    if (mowerImg) {
+      const mwSize = mower.isTriggered ? cellHeight * 0.75 : cellHeight * 0.65;
+      ctx.drawImage(mowerImg, cx - mwSize / 2, cy - mwSize / 2, mwSize, mwSize);
     } else {
-      ctx.shadowColor = '#22c55e';
-      ctx.shadowBlur = 8;
-      ctx.fillText('🚜', cx, cy);
+      ctx.font = mower.isTriggered ? '28px sans-serif' : '22px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if (mower.isTriggered) {
+        ctx.fillText('🚜💨', cx, cy);
+      } else {
+        ctx.shadowColor = '#22c55e';
+        ctx.shadowBlur = 8;
+        ctx.fillText('🚜', cx, cy);
+      }
     }
     ctx.restore();
   });
@@ -307,13 +334,24 @@ export function drawPlants(rc: RenderContext, plants: PlacedPlant[]) {
     ctx.translate(cx, cy);
     ctx.rotate(swayAngle);
 
-    // Draw Plant Icon / Emoji
-    ctx.font = `${Math.min(cellWidth, cellHeight) * 0.52}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
-    ctx.shadowBlur = 6;
-    ctx.fillText(pDef.icon, 0, 0);
+    // Try rendering PVZ plant sprite image
+    const plantAssetUrl = PVZ_PLANT_ASSETS[plant.plantId];
+    const plantImg = imageCache.getImage(plantAssetUrl);
+
+    if (plantImg) {
+      const plantSize = Math.min(cellWidth, cellHeight) * 0.85;
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+      ctx.shadowBlur = 6;
+      ctx.drawImage(plantImg, -plantSize / 2, -plantSize / 2, plantSize, plantSize);
+    } else {
+      // Fallback: Draw Plant Icon / Emoji
+      ctx.font = `${Math.min(cellWidth, cellHeight) * 0.52}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(pDef.icon, 0, 0);
+    }
 
     ctx.restore();
 
@@ -401,16 +439,28 @@ export function drawZombies(rc: RenderContext, zombies: ActiveZombie[]) {
       ctx.scale(-1, 1);
     }
 
-    // Draw Zombie Icon
-    const size = zDef.isBoss ? cellHeight * 0.75 : cellHeight * 0.55;
-    ctx.font = `${size}px sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
+    // Try rendering PVZ zombie sprite image
+    const zombieAssetUrl = PVZ_ZOMBIE_ASSETS[zombie.zombieId] || PVZ_ZOMBIE_ASSETS.zombie_normal;
+    const zombieImg = imageCache.getImage(zombieAssetUrl);
 
-    if (isDigging) {
-      ctx.fillText('⛏️💨', 0, 0);
+    if (zombieImg && !isDigging) {
+      const zSize = zDef.isBoss ? cellHeight * 1.15 : cellHeight * 0.95;
+      if (isFrozen) {
+        ctx.filter = 'hue-rotate(180deg) brightness(1.2)';
+      }
+      ctx.drawImage(zombieImg, -zSize / 2, -zSize / 2, zSize, zSize);
     } else {
-      ctx.fillText(zDef.icon, 0, 0);
+      // Fallback: Draw Zombie Icon
+      const size = zDef.isBoss ? cellHeight * 0.75 : cellHeight * 0.55;
+      ctx.font = `${size}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      if (isDigging) {
+        ctx.fillText('⛏️💨', 0, 0);
+      } else {
+        ctx.fillText(zDef.icon, 0, 0);
+      }
     }
 
     ctx.restore();
@@ -476,69 +526,78 @@ export function drawProjectiles(rc: RenderContext, projectiles: Projectile[]) {
 
     ctx.save();
 
-    if (proj.type === 'ice_pea') {
-      ctx.shadowColor = '#38bdf8';
-      ctx.shadowBlur = 10;
-      ctx.fillStyle = '#bae6fd';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.font = '10px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('❄️', cx, cy);
-    } else if (proj.type === 'melon_ice') {
-      ctx.font = '18px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.shadowColor = '#0284c7';
-      ctx.shadowBlur = 12;
-      ctx.fillText('🍉❄️', cx, cy);
-    } else if (proj.type === 'fume_wave') {
-      ctx.fillStyle = 'rgba(217, 70, 239, 0.7)';
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, 14, 10, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.font = '11px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('💨', cx, cy);
-    } else if (proj.type === 'lightning') {
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = '#0284c7';
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.moveTo(cx - 15, cy + (Math.random() - 0.5) * 8);
-      ctx.lineTo(cx, cy + (Math.random() - 0.5) * 8);
-      ctx.lineTo(cx + 15, cy + (Math.random() - 0.5) * 8);
-      ctx.stroke();
-    } else if (proj.type === 'fireball') {
-      ctx.shadowColor = '#f97316';
-      ctx.shadowBlur = 14;
-      ctx.fillStyle = '#fbbf24';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 9, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.font = '12px sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('🔥', cx, cy);
-    } else if (proj.type === 'gatling') {
-      ctx.fillStyle = '#84cc16';
-      ctx.shadowColor = '#4d7c0f';
-      ctx.shadowBlur = 6;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 6, 0, Math.PI * 2);
-      ctx.fill();
+    const prjAssetUrl = PVZ_PROJECTILE_ASSETS[proj.type || 'pea'];
+    const prjImg = imageCache.getImage(prjAssetUrl);
+
+    if (prjImg) {
+      const pSize = 22;
+      ctx.drawImage(prjImg, cx - pSize / 2, cy - pSize / 2, pSize, pSize);
     } else {
-      // Default Pea Bullet
-      ctx.fillStyle = '#34d399';
-      ctx.shadowColor = '#10b981';
-      ctx.shadowBlur = 8;
-      ctx.beginPath();
-      ctx.arc(cx, cy, 6.5, 0, Math.PI * 2);
-      ctx.fill();
+      // Fallback
+      if (proj.type === 'ice_pea') {
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 10;
+        ctx.fillStyle = '#bae6fd';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.font = '10px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('❄️', cx, cy);
+      } else if (proj.type === 'melon_ice') {
+        ctx.font = '18px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = '#0284c7';
+        ctx.shadowBlur = 12;
+        ctx.fillText('🍉❄️', cx, cy);
+      } else if (proj.type === 'fume_wave') {
+        ctx.fillStyle = 'rgba(217, 70, 239, 0.7)';
+        ctx.beginPath();
+        ctx.ellipse(cx, cy, 14, 10, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('💨', cx, cy);
+      } else if (proj.type === 'lightning') {
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 3;
+        ctx.shadowColor = '#0284c7';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.moveTo(cx - 15, cy + (Math.random() - 0.5) * 8);
+        ctx.lineTo(cx, cy + (Math.random() - 0.5) * 8);
+        ctx.lineTo(cx + 15, cy + (Math.random() - 0.5) * 8);
+        ctx.stroke();
+      } else if (proj.type === 'fireball') {
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = 14;
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(cx, cy, 9, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.font = '12px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('🔥', cx, cy);
+      } else if (proj.type === 'gatling') {
+        ctx.fillStyle = '#84cc16';
+        ctx.shadowColor = '#4d7c0f';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 6, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        // Default Pea Bullet
+        ctx.fillStyle = '#34d399';
+        ctx.shadowColor = '#10b981';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(cx, cy, 6.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     ctx.restore();
@@ -547,6 +606,7 @@ export function drawProjectiles(rc: RenderContext, projectiles: Projectile[]) {
 
 export function drawSunDrops(rc: RenderContext, suns: SunDrop[]) {
   const { ctx, gridLeft, gridTop, cellWidth, cellHeight, time } = rc;
+  const sunImg = imageCache.getImage(PVZ_UI_ASSETS.sun);
 
   suns.forEach((sun) => {
     const cx = gridLeft + sun.col * cellWidth + cellWidth / 2;
@@ -568,13 +628,18 @@ export function drawSunDrops(rc: RenderContext, suns: SunDrop[]) {
     ctx.arc(0, 0, 24, 0, Math.PI * 2);
     ctx.fill();
 
-    // Sun center
-    ctx.font = '22px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = '#f59e0b';
-    ctx.shadowBlur = 12;
-    ctx.fillText('☀️', 0, 0);
+    if (sunImg) {
+      const sSize = 34;
+      ctx.drawImage(sunImg, -sSize / 2, -sSize / 2, sSize, sSize);
+    } else {
+      // Sun center fallback
+      ctx.font = '22px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = '#f59e0b';
+      ctx.shadowBlur = 12;
+      ctx.fillText('☀️', 0, 0);
+    }
 
     ctx.restore();
   });

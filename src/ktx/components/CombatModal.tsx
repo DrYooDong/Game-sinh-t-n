@@ -315,15 +315,40 @@ export const CombatModal: React.FC<CombatModalProps> = ({
         {/* Top Arena: Enemy & Player Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">
           {/* Enemy Card */}
-          <div className="p-3 bg-neutral-900 border border-red-500/40 relative">
-            <div className="flex items-center gap-2.5">
-              <span className="text-3xl">{enemy.icon}</span>
+          <div className="p-3 bg-neutral-900 border border-red-500/40 relative overflow-hidden">
+            {enemy.isBoss && (
+              <div className="absolute -top-10 -left-10 w-32 h-32 bg-red-600/20 rounded-full blur-xl pointer-events-none animate-pulse" />
+            )}
+            <div className="flex items-center gap-3 relative z-10">
+              <div className="w-14 h-14 bg-neutral-950 border border-red-600/60 p-1 flex items-center justify-center rounded-xs shrink-0 relative shadow-inner">
+                {enemy.imageUrl ? (
+                  <img
+                    src={enemy.imageUrl}
+                    alt={enemy.name}
+                    className="w-full h-full object-contain filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.8)] animate-pulse"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'inline';
+                    }}
+                  />
+                ) : null}
+                <span
+                  className="text-3xl"
+                  style={{ display: enemy.imageUrl ? 'none' : 'inline' }}
+                >
+                  {enemy.icon}
+                </span>
+              </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <h4 className="font-bold text-white text-xs truncate">{enemy.name}</h4>
                   {enemy.isBoss && <span className="text-[8px] bg-red-600 text-white font-bold px-1 uppercase">BOSS</span>}
                 </div>
                 <div className="text-[9px] text-red-400 truncate">{enemy.title}</div>
+                {enemy.floor && (
+                  <div className="text-[8px] text-neutral-400">Vị trí: <span className="text-amber-300 font-bold">{enemy.floor}</span></div>
+                )}
               </div>
             </div>
 

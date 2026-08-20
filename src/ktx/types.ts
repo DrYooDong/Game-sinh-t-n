@@ -277,6 +277,7 @@ export interface Enemy {
   drops: { itemId: string; name: string; chance: number; count: number }[];
   isBoss?: boolean;
   icon: string;
+  imageUrl?: string;
   description: string;
   skills: { name: string; damageMultiplier: number; description: string }[];
   phases?: number;
@@ -330,6 +331,7 @@ export interface BestiaryEntry {
   id: string;
   name: string;
   icon: string;
+  imageUrl?: string;
   type: string;
   threatLevel: string;
   killCount: number;

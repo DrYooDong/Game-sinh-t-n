@@ -12,6 +12,7 @@ import { ALL_CARDS } from '../data/cardsData';
 import { ALL_ENEMY_TYPES } from '../data/enemiesData';
 import { PvZIcon, CardVisual } from './CardVisual';
 import { ZombieVisual, ProjectileVisual } from './BattleEntities';
+import { PVZ2_LAWN_ASSETS, PVZ2_UI_ASSETS } from '../data/pvz2AssetMap';
 import { sound } from '../utils/audio';
 import confetti from 'canvas-confetti';
 
@@ -825,6 +826,14 @@ export const Battlefield: React.FC<BattlefieldProps> = ({
         }`}
         style={{ minHeight: `${rows * 78}px` }}
       >
+        {/* Original PVZ Lawn Background Theme */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none"
+          style={{
+            backgroundImage: `url(${PVZ2_LAWN_ASSETS[arc.id] || PVZ2_LAWN_ASSETS[1]})`
+          }}
+        />
+
         {/* Floating Ambient Atmosphere Particles */}
         <div className="absolute top-1/4 left-1/3 w-2 h-2 rounded-full bg-emerald-400/40 blur-xs animate-particle-1 pointer-events-none" />
         <div className="absolute top-2/3 left-2/3 w-1.5 h-1.5 rounded-full bg-yellow-300/40 blur-xs animate-particle-2 pointer-events-none" />
@@ -834,17 +843,17 @@ export const Battlefield: React.FC<BattlefieldProps> = ({
         <div className="absolute inset-0 bg-radial from-transparent via-transparent to-black/60 pointer-events-none z-10" />
 
         {/* Lawn Mower / House Defense line on the Left */}
-        <div className="absolute top-0 bottom-0 left-0 w-9 bg-gradient-to-b from-black/80 via-emerald-950/80 to-black/80 border-r-2 border-emerald-500/50 flex flex-col justify-around items-center z-20 shadow-lg">
+        <div className="absolute top-0 bottom-0 left-0 w-11 bg-gradient-to-b from-black/80 via-emerald-950/80 to-black/80 border-r-2 border-emerald-500/50 flex flex-col justify-around items-center z-20 shadow-lg p-1">
           {Array.from({ length: rows }).map((_, r) => (
-            <span key={r} className="text-sm filter drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" title="Hàng Rào Năng Lượng Tuyết Mộc">
-              🛡️
-            </span>
+            <div key={r} className="w-8 h-8 flex items-center justify-center filter drop-shadow-[0_0_8px_rgba(52,211,153,0.8)]" title="Xe Cắt Cỏ Tuyết Mộc">
+              <img src={PVZ2_UI_ASSETS.lawn_mower} alt="Mower" className="w-full h-full object-contain" />
+            </div>
           ))}
         </div>
 
         {/* Grid Cells */}
         <div
-          className="grid h-full"
+          className="grid h-full relative z-15"
           style={{
             gridTemplateRows: `repeat(${rows}, minmax(70px, 1fr))`,
             gridTemplateColumns: `repeat(${cols}, 1fr)`
@@ -867,7 +876,7 @@ export const Battlefield: React.FC<BattlefieldProps> = ({
                   {/* Plant In Tile */}
                   {plant && cardDef && (
                     <div className="relative flex flex-col items-center justify-center animate-fadeIn animate-plant-breathe">
-                      <PvZIcon type={cardDef.iconType} className="w-13 h-13 drop-shadow-[0_4px_8px_rgba(16,185,129,0.5)]" />
+                      <PvZIcon type={cardDef.iconType} cardId={cardDef.id} className="w-13 h-13 drop-shadow-[0_4px_8px_rgba(16,185,129,0.5)]" />
 
                       {/* Health Mini Bar */}
                       <div className="w-9 h-1.5 bg-black/70 rounded-full mt-0.5 overflow-hidden border border-emerald-500/50 shadow">
@@ -941,13 +950,13 @@ export const Battlefield: React.FC<BattlefieldProps> = ({
           <button
             key={sun.id}
             onClick={() => handleCollectSun(sun.id, sun.value)}
-            className="absolute z-40 p-2 bg-yellow-400 hover:bg-yellow-300 text-neutral-950 font-black rounded-full shadow-2xl border-2 border-amber-200 animate-bounce transition-transform hover:scale-125"
+            className="absolute z-40 p-1 bg-yellow-400/80 hover:bg-yellow-300 text-neutral-950 font-black rounded-full shadow-2xl border-2 border-amber-200 animate-bounce transition-transform hover:scale-125 cursor-pointer"
             style={{
               top: `${sun.y}%`,
               left: `${sun.x}%`
             }}
           >
-            ☀️
+            <img src={PVZ2_UI_ASSETS.sun} alt="Sun" className="w-7 h-7 object-contain" />
           </button>
         ))}
       </div>

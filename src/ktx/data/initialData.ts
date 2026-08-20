@@ -16,6 +16,7 @@ import {
   LordRoomData,
   RadioTransmission
 } from '../types';
+import { KTX_ZOMBIE_ASSETS } from './ktxZombieAssetMap';
 
 // ==========================================
 // 1. SKILL POOL (Bao gồm Thiên Phú Chúa Tể & Kỹ Năng Cốt Truyện)
@@ -1319,6 +1320,13 @@ export const ENEMIES: Enemy[] = [
   }
 ];
 
+// Map extracted PVZ zombie assets to all KTX Enemies
+ENEMIES.forEach((e) => {
+  if (KTX_ZOMBIE_ASSETS[e.id]) {
+    e.imageUrl = KTX_ZOMBIE_ASSETS[e.id];
+  }
+});
+
 // ==========================================
 // 6. ĐỊA ĐIỂM 7 TẦNG KÝ TÚC XÁ
 // ==========================================
@@ -1717,6 +1725,12 @@ export const INITIAL_BESTIARY: BestiaryEntry[] = [
     lore: 'Tự nhìn thấy dung mạo thật trong gương sẽ hoảng sợ tan biến thành làn khói đen.'
   }
 ];
+
+INITIAL_BESTIARY.forEach((b) => {
+  if (b.id === 'bestiary_thi_khoi') b.imageUrl = KTX_ZOMBIE_ASSETS.enemy_boss_thi_khoi;
+  else if (b.id === 'bestiary_song_quy_vuong') b.imageUrl = KTX_ZOMBIE_ASSETS.enemy_boss_song_quy_vuong;
+  else if (b.id === 'bestiary_hong_nuong_tu') b.imageUrl = KTX_ZOMBIE_ASSETS.enemy_boss_hong_nuong_tu;
+});
 
 export const INITIAL_QUESTS: Quest[] = [
   {

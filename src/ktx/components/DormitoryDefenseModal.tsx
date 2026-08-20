@@ -308,14 +308,34 @@ export const DormitoryDefenseModal: React.FC<DormitoryDefenseModalProps> = ({
         {/* Tab 2: Siege Defense Battle */}
         {activeTab === 'siege' && (
           <div className="flex-1 flex flex-col space-y-3 overflow-hidden">
-            <div className="p-3 bg-neutral-900 border border-red-500/40 text-xs">
+            <div className="p-3 bg-neutral-900 border border-red-500/40 text-xs relative overflow-hidden">
               <div className="flex items-center gap-2 text-red-400 font-bold mb-1">
                 <Skull className="w-4 h-4 animate-pulse" />
                 <span>CHỈ HUY PHÒNG THỦ ĐÊM SÓNG QUÁI</span>
               </div>
-              <p className="text-[11px] text-neutral-300 leading-relaxed">
+              <p className="text-[11px] text-neutral-300 leading-relaxed relative z-10">
                 Khi kích hoạt, đàn xác sống từ khuôn viên ngoài sẽ tấn công dồn dập vào cổng ký túc xá. Các công trình phòng thủ, bẫy điện, đèn UV và đội cư dân canh gác sẽ tự động tham chiến hiệp đồng.
               </p>
+
+              {/* Animated PVZ Zombie Swarm Preview */}
+              <div className="flex items-center justify-around gap-2 mt-3 pt-2 border-t border-neutral-800 bg-neutral-950/80 p-2 rounded-xs">
+                <div className="flex flex-col items-center">
+                  <img src="./pvz_assets/zombies/zombie_normal.png" alt="Normal Zombie" className="w-10 h-10 object-contain animate-bounce" style={{ animationDuration: '1.8s' }} />
+                  <span className="text-[8px] text-neutral-400 font-bold mt-1">Xác Sống Thường</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="./pvz_assets/zombies/zombie_conehead.png" alt="Conehead Zombie" className="w-10 h-10 object-contain animate-bounce" style={{ animationDuration: '1.5s' }} />
+                  <span className="text-[8px] text-amber-400 font-bold mt-1">Zombie Mũ Nón</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="./pvz_assets/zombies/zombie_buckethead.png" alt="Buckethead Zombie" className="w-10 h-10 object-contain animate-bounce" style={{ animationDuration: '1.3s' }} />
+                  <span className="text-[8px] text-cyan-400 font-bold mt-1">Thiết Giáp Mũ Sắt</span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <img src="./pvz_assets/zombies/zombie_gargantuar.png" alt="Gargantuar" className="w-12 h-12 object-contain animate-pulse" />
+                  <span className="text-[8px] text-rose-400 font-black mt-1">Boss Cự Nhân</span>
+                </div>
+              </div>
             </div>
 
             {/* Battle Log Box */}

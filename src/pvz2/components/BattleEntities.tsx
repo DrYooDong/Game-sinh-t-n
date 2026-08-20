@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Enemy, PlacedEntity, Projectile } from '../types/game';
 import { ALL_CARDS } from '../data/cardsData';
 import { PvZIcon } from './CardVisual';
+import { PVZ2_ENEMY_ASSETS, PVZ2_PROJECTILE_ASSETS } from '../data/pvz2AssetMap';
 
 export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
+  const [imgError, setImgError] = useState(false);
+  const assetUrl = PVZ2_ENEMY_ASSETS[enemy.enemyTypeId] || PVZ2_ENEMY_ASSETS.basic_zombie;
+
+  if (assetUrl && !imgError) {
+    const isBoss = enemy.isBoss;
+    const isFlying = enemy.isFlying || enemy.enemyTypeId.includes('balloon');
+    return (
+      <div className={`relative flex flex-col items-center select-none ${isFlying ? 'animate-float-gentle' : 'animate-zombie-sway'}`}>
+        {isBoss && (
+          <div className="absolute inset-0 rounded-full bg-red-600/30 blur-md animate-pulse" />
+        )}
+        <img
+          src={assetUrl}
+          alt={enemy.enemyTypeId}
+          className={`${isBoss ? 'w-20 h-20' : 'w-14 h-16'} object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]`}
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
+
+  // Fallback SVG rendering
   switch (enemy.enemyTypeId) {
     case 'newspaper_zombie':
       return (
@@ -22,6 +45,7 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
       );
 
     case 'conehead_zombie':
+    case 'conehead_mutant':
       return (
         <div className="relative w-14 h-16 flex flex-col items-center animate-zombie-sway">
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_4px_6px_rgba(234,88,12,0.4)]">
@@ -41,6 +65,7 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
       );
 
     case 'buckethead_zombie':
+    case 'buckethead_heavy':
       return (
         <div className="relative w-14 h-16 flex flex-col items-center animate-zombie-sway">
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_4px_6px_rgba(100,116,139,0.5)]">
@@ -53,21 +78,6 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
             <circle cx="42" cy="56" r="3.5" fill="#EF4444" />
             <circle cx="58" cy="56" r="3.5" fill="#EF4444" />
             <rect x="36" y="78" width="28" height="20" fill="#475569" rx="2" />
-          </svg>
-        </div>
-      );
-
-    case 'dolphin_zombie':
-      return (
-        <div className="relative w-16 h-16 flex flex-col items-center animate-zombie-sway">
-          <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_4px_6px_rgba(2,132,199,0.5)]">
-            {/* Dolphin Mount */}
-            <path d="M 10 70 Q 45 42 90 65 Q 65 92 10 70 Z" fill="#0284C7" stroke="#0369A1" strokeWidth="2.5" />
-            <polygon points="50,52 58,35 64,54" fill="#0284C7" stroke="#0369A1" strokeWidth="1.5" />
-            {/* Zombie Rider with Snorkel */}
-            <circle cx="42" cy="34" r="15" fill="#86EFAC" stroke="#166534" strokeWidth="2" />
-            <rect x="36" y="28" width="16" height="10" rx="2" fill="#FDE047" stroke="#CA8A04" strokeWidth="1.5" />
-            <line x1="48" y1="28" x2="48" y2="12" stroke="#EF4444" strokeWidth="3" strokeLinecap="round" />
           </svg>
         </div>
       );
@@ -106,20 +116,13 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
       if (enemy.isBoss) {
         return (
           <div className="relative w-20 h-20 flex flex-col items-center animate-zombie-sway">
-            {/* Glowing Boss Red Aura */}
             <div className="absolute inset-0 rounded-full bg-red-600/30 blur-md animate-pulse" />
             <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_6px_12px_rgba(239,68,68,0.7)]">
-              {/* Tyrant Beast Skull */}
               <ellipse cx="50" cy="50" rx="32" ry="34" fill="#7F1D1D" stroke="#450A0A" strokeWidth="4" />
-              {/* Horns */}
               <path d="M 22 34 Q 10 10 28 6 Q 30 20 34 30 Z" fill="#F59E0B" stroke="#78350F" strokeWidth="2" />
               <path d="M 78 34 Q 90 10 72 6 Q 70 20 66 30 Z" fill="#F59E0B" stroke="#78350F" strokeWidth="2" />
-              {/* Glowing Demonic Eyes */}
               <circle cx="36" cy="46" r="6" fill="#FDE047" stroke="#DC2626" strokeWidth="2" />
               <circle cx="64" cy="46" r="6" fill="#FDE047" stroke="#DC2626" strokeWidth="2" />
-              <circle cx="36" cy="46" r="2.5" fill="#991B1B" />
-              <circle cx="64" cy="46" r="2.5" fill="#991B1B" />
-              {/* Fangs & Jaw */}
               <ellipse cx="50" cy="68" rx="20" ry="12" fill="#1C1917" />
               <polygon points="38,62 42,70 46,62" fill="#FFF" />
               <polygon points="46,62 50,72 54,62" fill="#FFF" />
@@ -132,14 +135,10 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
       return (
         <div className="relative w-13 h-15 flex flex-col items-center animate-zombie-sway">
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_4px_6px_rgba(16,185,129,0.3)]">
-            {/* Standard Zombie */}
             <circle cx="50" cy="44" r="22" fill="#86EFAC" stroke="#166534" strokeWidth="2.5" />
             <circle cx="42" cy="42" r="3.5" fill="#DC2626" />
             <circle cx="58" cy="42" r="3.5" fill="#DC2626" />
-            <circle cx="41" cy="41" r="1" fill="#FFF" />
-            <circle cx="57" cy="41" r="1" fill="#FFF" />
             <path d="M 44 56 Q 50 60 56 56" stroke="#064E3B" strokeWidth="2" fill="none" />
-            {/* Suit & Tie */}
             <rect x="36" y="66" width="28" height="26" fill="#475569" rx="3" stroke="#1E293B" strokeWidth="2" />
             <polygon points="50,68 53,82 50,86 47,82" fill="#DC2626" />
           </svg>
@@ -149,22 +148,30 @@ export const ZombieVisual: React.FC<{ enemy: Enemy }> = ({ enemy }) => {
 };
 
 export const ProjectileVisual: React.FC<{ proj: Projectile }> = ({ proj }) => {
+  const [imgError, setImgError] = useState(false);
+  const assetUrl = PVZ2_PROJECTILE_ASSETS[proj.type || 'pea'];
+
+  if (assetUrl && !imgError) {
+    return (
+      <div className="relative w-6 h-6 flex items-center justify-center">
+        <img
+          src={assetUrl}
+          alt={proj.type}
+          className="w-full h-full object-contain filter drop-shadow-[0_0_6px_rgba(34,197,94,0.8)]"
+          onError={() => setImgError(true)}
+        />
+      </div>
+    );
+  }
+
+  // Fallback SVG
   switch (proj.type) {
     case 'fire_pea':
       return (
         <div className="relative w-7 h-7 flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-orange-500/50 blur-sm animate-pulse" />
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]">
-            <defs>
-              <radialGradient id="fireBallGrad" cx="40%" cy="40%" r="60%">
-                <stop offset="0%" stopColor="#FEF08A" />
-                <stop offset="40%" stopColor="#F97316" />
-                <stop offset="100%" stopColor="#DC2626" />
-              </radialGradient>
-            </defs>
-            <circle cx="50" cy="50" r="36" fill="url(#fireBallGrad)" />
-            {/* Trailing Fire Sparks */}
-            <path d="M 18 50 Q 6 42 2 50 Q 8 58 18 50 Z" fill="#EF4444" />
+            <circle cx="50" cy="50" r="36" fill="#EF4444" />
           </svg>
         </div>
       );
@@ -174,8 +181,6 @@ export const ProjectileVisual: React.FC<{ proj: Projectile }> = ({ proj }) => {
         <div className="relative w-8 h-8 flex items-center justify-center animate-spin" style={{ animationDuration: '0.8s' }}>
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_4px_6px_rgba(22,163,74,0.5)]">
             <ellipse cx="50" cy="50" rx="42" ry="34" fill="#22C55E" stroke="#14532D" strokeWidth="4" />
-            <path d="M 20 40 Q 50 48 80 40" stroke="#052E16" strokeWidth="4" fill="none" />
-            <path d="M 20 60 Q 50 68 80 60" stroke="#052E16" strokeWidth="4" fill="none" />
           </svg>
         </div>
       );
@@ -185,14 +190,7 @@ export const ProjectileVisual: React.FC<{ proj: Projectile }> = ({ proj }) => {
         <div className="relative w-5 h-5 flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-emerald-400/40 blur-xs" />
           <svg viewBox="0 0 100 100" className="w-full h-full filter drop-shadow-[0_0_6px_rgba(34,197,94,0.7)]">
-            <defs>
-              <radialGradient id="peaGrad" cx="35%" cy="35%" r="65%">
-                <stop offset="0%" stopColor="#BBF7D0" />
-                <stop offset="60%" stopColor="#22C55E" />
-                <stop offset="100%" stopColor="#15803D" />
-              </radialGradient>
-            </defs>
-            <circle cx="50" cy="50" r="42" fill="url(#peaGrad)" stroke="#166534" strokeWidth="2" />
+            <circle cx="50" cy="50" r="42" fill="#22C55E" stroke="#166534" strokeWidth="2" />
           </svg>
         </div>
       );

@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardDefinition } from '../types/game';
+import { PVZ2_CARD_ASSETS } from '../data/pvz2AssetMap';
 
 interface CardVisualProps {
   card: CardDefinition;
@@ -13,7 +14,21 @@ interface CardVisualProps {
   level?: number;
 }
 
-export const PvZIcon: React.FC<{ type: string; className?: string }> = ({ type, className = 'w-12 h-12' }) => {
+export const PvZIcon: React.FC<{ type: string; cardId?: string; className?: string }> = ({ type, cardId, className = 'w-12 h-12' }) => {
+  const assetUrl = (cardId && PVZ2_CARD_ASSETS[cardId]) || PVZ2_CARD_ASSETS[type];
+  const [imgError, setImgError] = React.useState(false);
+
+  if (assetUrl && !imgError) {
+    return (
+      <img
+        src={assetUrl}
+        alt={type}
+        className={`${className} object-contain filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)]`}
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+
   switch (type) {
     case 'sunflower':
       return (
@@ -436,7 +451,7 @@ export const CardVisual: React.FC<CardVisualProps> = ({
       {/* Center Illustrated Icon with Bobbing Anime Feel & Dynamic Glow Plate */}
       <div className="relative flex justify-center items-center py-1">
         <div className="absolute inset-0 bg-white/5 rounded-full blur-sm" />
-        <PvZIcon type={card.iconType} className={`${compact ? 'w-12 h-12' : 'w-18 h-18'} relative z-10 transition-transform duration-300 group-hover:scale-110`} />
+        <PvZIcon type={card.iconType} cardId={card.id} className={`${compact ? 'w-12 h-12' : 'w-18 h-18'} relative z-10 transition-transform duration-300 group-hover:scale-110`} />
       </div>
 
       {/* Card Vietnamese Title */}

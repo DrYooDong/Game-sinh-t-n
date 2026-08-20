@@ -113,7 +113,7 @@ export const CardAlmanac: React.FC<CardAlmanacProps> = ({
           {/* Card Title & Icon Header */}
           <div className="flex items-start gap-4 pb-4 border-b border-emerald-800/50">
             <div className="p-3.5 bg-black/40 rounded-2xl border border-emerald-700/50 shadow-inner">
-              <PvZIcon type={selectedCard.iconType} className="w-16 h-16" />
+              <PvZIcon type={selectedCard.iconType} cardId={selectedCard.id} className="w-16 h-16" />
             </div>
 
             <div className="flex-1">

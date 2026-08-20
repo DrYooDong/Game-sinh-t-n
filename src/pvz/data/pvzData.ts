@@ -10,6 +10,7 @@ import {
   PathologyEntry,
   StoryEvent
 } from '../types';
+import { PVZ_PLANT_ASSETS, PVZ_ZOMBIE_ASSETS } from './pvzAssetMap';
 
 // Core GOTY Projectile & Combat Balance Constants
 export const CHILLED_SPEED_FACTOR = 0.4; // Chilled zombies move at 40% speed
@@ -936,6 +937,19 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     description: 'Cầm ván lướt sóng tốc độ cao, khi chạm cây đầu tiên sẽ cắm ván đè bẹp cây và chuyển thành đi bộ!'
   }
 };
+
+// Map original extracted assets to all plants & zombies
+PVZ_PLANTS.forEach(p => {
+  if (PVZ_PLANT_ASSETS[p.id]) {
+    p.imageUrl = PVZ_PLANT_ASSETS[p.id];
+  }
+});
+
+Object.values(PVZ_ZOMBIES).forEach(z => {
+  if (PVZ_ZOMBIE_ASSETS[z.id]) {
+    z.imageUrl = PVZ_ZOMBIE_ASSETS[z.id];
+  }
+});
 
 export const PVZ_WAVES: PvzWave[] = [
   {

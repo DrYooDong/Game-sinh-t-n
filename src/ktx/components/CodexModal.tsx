@@ -106,8 +106,25 @@ export const CodexModal: React.FC<CodexModalProps> = ({
                 key={entry.id}
                 className="p-3.5 bg-neutral-900/80 border border-neutral-800 flex items-start gap-3.5 text-xs"
               >
-                <div className="w-12 h-12 bg-neutral-800 border border-neutral-700 rounded-sm flex items-center justify-center text-3xl shrink-0">
-                  {entry.icon}
+                <div className="w-14 h-14 bg-neutral-950 border border-neutral-700 rounded-sm flex items-center justify-center p-1 shrink-0 relative shadow-inner">
+                  {entry.imageUrl ? (
+                    <img
+                      src={entry.imageUrl}
+                      alt={entry.name}
+                      className="w-full h-full object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallback) fallback.style.display = 'inline';
+                      }}
+                    />
+                  ) : null}
+                  <span
+                    className="text-3xl"
+                    style={{ display: entry.imageUrl ? 'none' : 'inline' }}
+                  >
+                    {entry.icon}
+                  </span>
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
