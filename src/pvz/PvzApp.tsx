@@ -42,6 +42,9 @@ import { PvzPathologyModal } from './components/PvzPathologyModal';
 import { PvzStoryEventModal } from './components/PvzStoryEventModal';
 import { PvzSurvivalCampModal } from './components/PvzSurvivalCampModal';
 import { PvzPlantMasteryModal, getPlantEffectiveStats, getPlantUpgradeCost } from './components/PvzPlantMasteryModal';
+import { AlmanacModal } from '../shared/components/AlmanacModal';
+import { CrazyDaveShopModal } from '../shared/components/CrazyDaveShopModal';
+import { PvzMinigamesModal } from '../shared/components/PvzMinigamesModal';
 import { Trophy, RotateCcw, Play, CheckCircle2, Skull, Sparkles, MapPin, AlertTriangle } from 'lucide-react';
 
 interface PvzAppProps {
@@ -141,8 +144,22 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
   const [showStageSelectModal, setShowStageSelectModal] = useState<boolean>(false);
   const [showMasteryModal, setShowMasteryModal] = useState<boolean>(false);
   const [showPathologyModal, setShowPathologyModal] = useState<boolean>(false);
+  const [showAlmanacModal, setShowAlmanacModal] = useState<boolean>(false);
+  const [showPopCapDaveShopModal, setShowPopCapDaveShopModal] = useState<boolean>(false);
+  const [showMinigamesModal, setShowMinigamesModal] = useState<boolean>(false);
   const [waveClearedModal, setWaveClearedModal] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+
+  // Coins & Dave Shop Upgrades state
+  const [playerCoins, setPlayerCoins] = useState<number>(() => {
+    const saved = localStorage.getItem('pvz_player_coins_v1');
+    return saved ? parseInt(saved, 10) : 1500;
+  });
+
+  const [purchasedShopItemIds, setPurchasedShopItemIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem('pvz_purchased_shop_items_v1');
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // Plant Leveling & Mastery state
   const [plantLevels, setPlantLevels] = useState<Record<PlantId, number>>(() => {
@@ -2065,6 +2082,9 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
         onOpenSurvivalCamp={() => setShowSurvivalCampModal(true)}
         onOpenTactics={() => setShowTacticsModal(true)}
         onOpenCodex={() => setShowCodexModal(true)}
+        onOpenAlmanac={() => setShowAlmanacModal(true)}
+        onOpenCrazyDaveShop={() => setShowPopCapDaveShopModal(true)}
+        onOpenMinigames={() => setShowMinigamesModal(true)}
         onReturnToWorldSelect={onReturnToWorldSelect}
         currentComment={COMMENTATORS_FEED[currentCommentIndex] || COMMENTATORS_FEED[0]}
         waveProgressPct={waveProgressPct}
@@ -2268,6 +2288,42 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
           onClose={() => setShowPathologyModal(false)}
         />
       )}
+
+      {/* Suburban Almanac PopCap Modal */}
+      <AlmanacModal
+        isOpen={showAlmanacModal}
+        onClose={() => setShowAlmanacModal(false)}
+      />
+
+      {/* Crazy Dave Twiddydinkies Shop Modal */}
+      <CrazyDaveShopModal
+        isOpen={showPopCapDaveShopModal}
+        onClose={() => setShowPopCapDaveShopModal(false)}
+        coins={playerCoins}
+        onUpdateCoins={(newCoins) => {
+          setPlayerCoins(newCoins);
+          localStorage.setItem('pvz_player_coins_v1', newCoins.toString());
+        }}
+        purchasedItemIds={purchasedShopItemIds}
+        onPurchaseItem={(itemId) => {
+          const next = [...purchasedShopItemIds, itemId];
+          setPurchasedShopItemIds(next);
+          localStorage.setItem('pvz_purchased_shop_items_v1', JSON.stringify(next));
+          soundManager.play('level_up');
+        }}
+      />
+
+      {/* PopCap Minigames Modal (Vasebreaker, Bowling, I Zombie) */}
+      <PvzMinigamesModal
+        isOpen={showMinigamesModal}
+        onClose={() => setShowMinigamesModal(false)}
+        onRewardCoins={(amount) => {
+          const nextCoins = playerCoins + amount;
+          setPlayerCoins(nextCoins);
+          localStorage.setItem('pvz_player_coins_v1', nextCoins.toString());
+          soundManager.play('victory');
+        }}
+      />
     </div>
   );
 };

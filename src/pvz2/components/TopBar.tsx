@@ -11,6 +11,9 @@ interface TopBarProps {
   onSelectArc: (arcId: number) => void;
   onToggleAudio: () => void;
   onReturnToWorldSelect?: () => void;
+  onOpenAlmanac?: () => void;
+  onOpenCrazyDaveShop?: () => void;
+  onOpenMinigames?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -20,7 +23,10 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSelectView,
   onSelectArc,
   onToggleAudio,
-  onReturnToWorldSelect
+  onReturnToWorldSelect,
+  onOpenAlmanac,
+  onOpenCrazyDaveShop,
+  onOpenMinigames
 }) => {
   return (
     <header className="w-full bg-[#0a1a0f]/95 border-b border-emerald-800/50 sticky top-0 z-50 backdrop-blur-md px-3 py-2.5 md:px-6 md:py-3.5 select-none text-emerald-50">
@@ -123,6 +129,43 @@ export const TopBar: React.FC<TopBarProps> = ({
               <span>{tab.label}</span>
             </button>
           ))}
+
+          {/* Quick PopCap Modal Buttons */}
+          <button
+            onClick={() => {
+              sound.playClick();
+              onOpenAlmanac?.();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-950/60 hover:bg-amber-900 border border-amber-500/60 text-amber-300 shadow-sm transition whitespace-nowrap"
+            title="Tra Cứu Bách Khoa Toàn Thư Cây & Zombie"
+          >
+            <span>📖</span>
+            <span className="hidden sm:inline">Almanac</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playClick();
+              onOpenCrazyDaveShop?.();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-yellow-950/80 hover:bg-yellow-900 border border-yellow-400 text-yellow-300 shadow-[0_0_10px_rgba(234,179,8,0.3)] transition whitespace-nowrap"
+            title="Tiệm Tạp Hóa Crazy Dave"
+          >
+            <span>🛒</span>
+            <span className="hidden sm:inline">Dave Shop</span>
+          </button>
+
+          <button
+            onClick={() => {
+              sound.playClick();
+              onOpenMinigames?.();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black bg-purple-950/80 hover:bg-purple-900 border border-purple-400 text-purple-300 shadow-[0_0_10px_rgba(168,85,247,0.3)] transition whitespace-nowrap"
+            title="Phòng Chơi Mini-Games: Vasebreaker, Bowling, I Zombie"
+          >
+            <span>🎮</span>
+            <span className="hidden sm:inline">Minigames</span>
+          </button>
 
           {/* Desktop Audio Toggle */}
           <button

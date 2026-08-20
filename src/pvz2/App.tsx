@@ -16,8 +16,13 @@ import { VipShop } from './components/VipShop';
 import { EndlessAbyss } from './components/EndlessAbyss';
 import { ShopItem } from './data/monetizationData';
 import { sound } from './utils/audio';
+import { AlmanacModal } from '../shared/components/AlmanacModal';
+import { CrazyDaveShopModal } from '../shared/components/CrazyDaveShopModal';
+import { PvzMinigamesModal } from '../shared/components/PvzMinigamesModal';
 
 const STORAGE_KEY = 'pvz_destiny_era_save_v2';
+const PVZ_COINS_KEY = 'pvz_player_coins_v1';
+const PVZ_PURCHASED_ITEMS_KEY = 'pvz_purchased_shop_items_v1';
 
 interface Pvz2AppProps {
   onReturnToWorldSelect?: () => void;
@@ -27,6 +32,20 @@ export function Pvz2App({ onReturnToWorldSelect }: Pvz2AppProps) {
   const [currentView, setCurrentView] = useState<GameView>('stage_map');
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [isAlmanacOpen, setIsAlmanacOpen] = useState<boolean>(false);
+  const [isDaveShopOpen, setIsDaveShopOpen] = useState<boolean>(false);
+  const [isMinigamesOpen, setIsMinigamesOpen] = useState<boolean>(false);
+
+  // Coins & Shop items
+  const [coins, setCoins] = useState<number>(() => {
+    const saved = localStorage.getItem(PVZ_COINS_KEY);
+    return saved ? parseInt(saved, 10) : 1250;
+  });
+
+  const [purchasedShopItemIds, setPurchasedShopItemIds] = useState<string[]>(() => {
+    const saved = localStorage.getItem(PVZ_PURCHASED_ITEMS_KEY);
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // Player Profile State with local storage persistence
   const [player, setPlayer] = useState<PlayerProfile>(() => {
@@ -435,6 +454,9 @@ export function Pvz2App({ onReturnToWorldSelect }: Pvz2AppProps) {
         }}
         onToggleAudio={handleToggleAudio}
         onReturnToWorldSelect={onReturnToWorldSelect}
+        onOpenAlmanac={() => setIsAlmanacOpen(true)}
+        onOpenCrazyDaveShop={() => setIsDaveShopOpen(true)}
+        onOpenMinigames={() => setIsMinigamesOpen(true)}
       />
 
       {/* Main Interactive Screen Content */}
@@ -565,6 +587,41 @@ export function Pvz2App({ onReturnToWorldSelect }: Pvz2AppProps) {
         )}
       </main>
 
+      {/* Suburban Almanac Pop-up Modal */}
+      <AlmanacModal
+        isOpen={isAlmanacOpen}
+        onClose={() => setIsAlmanacOpen(false)}
+      />
+
+      {/* Crazy Dave Twiddydinkies Shop Modal */}
+      <CrazyDaveShopModal
+        isOpen={isDaveShopOpen}
+        onClose={() => setIsDaveShopOpen(false)}
+        coins={coins}
+        onUpdateCoins={(newCoins) => {
+          setCoins(newCoins);
+          localStorage.setItem(PVZ_COINS_KEY, newCoins.toString());
+        }}
+        purchasedItemIds={purchasedShopItemIds}
+        onPurchaseItem={(itemId) => {
+          const next = [...purchasedShopItemIds, itemId];
+          setPurchasedShopItemIds(next);
+          localStorage.setItem(PVZ_PURCHASED_ITEMS_KEY, JSON.stringify(next));
+          showToast('🛒 Giao dịch thành công tại cửa hàng Crazy Dave!');
+        }}
+      />
+
+      {/* PopCap Minigames Modal (Vasebreaker, Bowling, I Zombie) */}
+      <PvzMinigamesModal
+        isOpen={isMinigamesOpen}
+        onClose={() => setIsMinigamesOpen(false)}
+        onRewardCoins={(amount) => {
+          const next = coins + amount;
+          setCoins(next);
+          localStorage.setItem(PVZ_COINS_KEY, next.toString());
+          showToast(`🏆 Chiến thắng Minigame! +${amount} Xu Vàng!`);
+        }}
+      />
 
       {/* Footer info */}
       <footer className="w-full bg-neutral-950 border-t border-neutral-900 py-3 px-6 text-center text-xs text-neutral-400">

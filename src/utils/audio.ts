@@ -1,19 +1,40 @@
-// Web Audio API Procedural Sound Synthesizer for Isekai Survival Game
+// Enhanced Audio Controller with Original PopCap SFX and Procedural Synthesizer Fallback
+
+export type AudioEventType = 
+  | 'click' | 'system_alert' | 'level_up' | 'item_get' 
+  | 'attack' | 'skill' | 'craft' | 'rest' | 'danger' | 'victory';
 
 class SoundController {
   private ctx: AudioContext | null = null;
   private isMuted: boolean = false;
+  private audioBufferCache: Map<string, AudioBuffer> = new Map();
+  private loadingPromises: Map<string, Promise<AudioBuffer | null>> = new Map();
 
-  private initCtx() {
+  private readonly sfxMapping: Record<AudioEventType, string[]> = {
+    click: ['bleep.ogg', 'tap.ogg'],
+    system_alert: ['awooga.ogg', 'readysetplant.ogg'],
+    level_up: ['winmusic.ogg', 'tada.ogg'],
+    item_get: ['points.ogg', 'coin.ogg', 'diamond.ogg'],
+    attack: ['throw.ogg', 'splat.ogg', 'splat2.ogg'],
+    skill: ['cherrybomb.ogg', 'plantgrow.ogg'],
+    craft: ['shovel.ogg', 'plant.ogg'],
+    rest: ['plant_water.ogg'],
+    danger: ['hugewave.ogg', 'siren.ogg', 'awooga.ogg'],
+    victory: ['winmusic.ogg', 'tada.ogg']
+  };
+
+  private initCtx(): AudioContext | null {
+    if (this.isMuted) return null;
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
+    return this.ctx;
   }
 
   public toggleMute(): boolean {
@@ -25,8 +46,67 @@ class SoundController {
     return this.isMuted;
   }
 
-  public play(type: 'click' | 'system_alert' | 'level_up' | 'item_get' | 'attack' | 'skill' | 'craft' | 'rest' | 'danger' | 'victory') {
+  private async loadAudioBuffer(fileName: string): Promise<AudioBuffer | null> {
+    if (this.audioBufferCache.has(fileName)) {
+      return this.audioBufferCache.get(fileName)!;
+    }
+    if (this.loadingPromises.has(fileName)) {
+      return this.loadingPromises.get(fileName)!;
+    }
+
+    const promise = (async () => {
+      try {
+        const response = await fetch(`/pvz_assets/sounds/${fileName}`);
+        if (!response.ok) return null;
+        const arrayBuffer = await response.arrayBuffer();
+        const ctx = this.initCtx();
+        if (!ctx) return null;
+        const decoded = await ctx.decodeAudioData(arrayBuffer);
+        this.audioBufferCache.set(fileName, decoded);
+        return decoded;
+      } catch {
+        return null;
+      }
+    })();
+
+    this.loadingPromises.set(fileName, promise);
+    return promise;
+  }
+
+  private async playOriginalAudio(type: AudioEventType): Promise<boolean> {
+    const list = this.sfxMapping[type];
+    if (!list || list.length === 0) return false;
+    const file = list[Math.floor(Math.random() * list.length)];
+    const buffer = await this.loadAudioBuffer(file);
+    const ctx = this.initCtx();
+    if (buffer && ctx) {
+      try {
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+        src.playbackRate.value = 0.96 + Math.random() * 0.08;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.55, ctx.currentTime);
+        src.connect(gain);
+        gain.connect(ctx.destination);
+        src.start(0);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  public play(type: AudioEventType) {
     if (this.isMuted) return;
+    this.playOriginalAudio(type).then(success => {
+      if (!success) {
+        this.fallbackPlay(type);
+      }
+    });
+  }
+
+  private fallbackPlay(type: AudioEventType) {
     try {
       this.initCtx();
       if (!this.ctx) return;
@@ -49,7 +129,6 @@ class SoundController {
         }
 
         case 'system_alert': {
-          // Futuristic hologram prompt
           [440, 880, 1320].forEach((freq, i) => {
             if (!this.ctx) return;
             const osc = this.ctx.createOscillator();
@@ -67,7 +146,6 @@ class SoundController {
         }
 
         case 'level_up': {
-          // Triumphant RPG level up chords
           const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
           notes.forEach((freq, i) => {
             if (!this.ctx) return;
@@ -86,7 +164,6 @@ class SoundController {
         }
 
         case 'item_get': {
-          // Shimmering treasure chime
           [880, 1174.66, 1760].forEach((freq, i) => {
             if (!this.ctx) return;
             const osc = this.ctx.createOscillator();
@@ -104,7 +181,6 @@ class SoundController {
         }
 
         case 'attack': {
-          // Slash / Strike
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sawtooth';
@@ -120,7 +196,6 @@ class SoundController {
         }
 
         case 'skill': {
-          // Arcane energy wave
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
@@ -136,7 +211,6 @@ class SoundController {
         }
 
         case 'craft': {
-          // Anvil hit
           [900, 300].forEach((freq, idx) => {
             if (!this.ctx) return;
             const osc = this.ctx.createOscillator();
@@ -155,7 +229,6 @@ class SoundController {
         }
 
         case 'rest': {
-          // Gentle restorative healing tone
           [261.63, 329.63, 392.00, 523.25].forEach((freq, i) => {
             if (!this.ctx) return;
             const osc = this.ctx.createOscillator();
@@ -173,7 +246,6 @@ class SoundController {
         }
 
         case 'danger': {
-          // Warning alarm siren
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sawtooth';

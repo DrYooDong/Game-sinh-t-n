@@ -1,0 +1,1127 @@
+{
+  "lawns": [
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background1.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\frontyard_day.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background2.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\dark.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background3.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\beach.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background3.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\pool.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background4.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\pool_night.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background5.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\roof.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\background6boss.jpg",
+      "dst": ".\\public\\pvz_assets\\lawns\\boss.png"
+    }
+  ],
+  "projectiles": [
+    {
+      "src": ".\\reference\\extracted_pak\\images\\ProjectilePea.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\pea.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\ProjectileSnowPea.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\pea_ice.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\Projectile_star.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\star.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\ProjectileCactus.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\cactus.png",
+      "w": 40,
+      "h": 24
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\reanim\\Melonpult_melon.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\melon.png",
+      "w": 56,
+      "h": 56
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\reanim\\WinterMelon_projectile.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\melon_ice.png",
+      "w": 56,
+      "h": 56
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\reanim\\Cornpult_butter.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\butter.png",
+      "w": 48,
+      "h": 48
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\reanim\\Cabbagepult_cabbage.png",
+      "dst": ".\\public\\pvz_assets\\projectiles\\cabbage.png",
+      "w": 48,
+      "h": 48
+    }
+  ],
+  "ui": [
+    {
+      "src": ".\\reference\\extracted_pak\\images\\SeedBank.png",
+      "dst": ".\\public\\pvz_assets\\ui\\SeedBank.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\Almanac_PlantCard.png",
+      "dst": ".\\public\\pvz_assets\\ui\\Almanac_PlantCard.png"
+    },
+    {
+      "src": ".\\reference\\extracted_pak\\images\\Almanac_ZombieCard.png",
+      "dst": ".\\public\\pvz_assets\\ui\\Almanac_ZombieCard.png"
+    }
+  ],
+  "composites": [
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_peashooter.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_backleaf.png",
+          "x": 10,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_frontleaf.png",
+          "x": 60,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_head.png",
+          "x": 20,
+          "y": 15,
+          "w": 80,
+          "h": 80
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_sunflower.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SunFlower_bottompetals.png",
+          "x": 15,
+          "y": 15,
+          "w": 90,
+          "h": 90
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SunFlower_head.png",
+          "x": 25,
+          "y": 25,
+          "w": 70,
+          "h": 70
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_twin_sunflower.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SunFlower_double_petals.png",
+          "x": 10,
+          "y": 10,
+          "w": 100,
+          "h": 100
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\TwinSunflower_leaf.png",
+          "x": 20,
+          "y": 65,
+          "w": 80,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SunFlower_head.png",
+          "x": 25,
+          "y": 20,
+          "w": 70,
+          "h": 70
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_snow_pea.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_backleaf.png",
+          "x": 10,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_frontleaf.png",
+          "x": 60,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SnowPea_crystals1.png",
+          "x": 15,
+          "y": 10,
+          "w": 45,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\SnowPea_head.png",
+          "x": 20,
+          "y": 15,
+          "w": 80,
+          "h": 80
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_repeater.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_backleaf.png",
+          "x": 10,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_frontleaf.png",
+          "x": 60,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_eyebrow.png",
+          "x": 15,
+          "y": 10,
+          "w": 35,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_head.png",
+          "x": 20,
+          "y": 15,
+          "w": 80,
+          "h": 80
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_gatling_pea.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_backleaf.png",
+          "x": 10,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_frontleaf.png",
+          "x": 60,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\GatlingPea_head.png",
+          "x": 20,
+          "y": 15,
+          "w": 80,
+          "h": 80
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\GatlingPea_helmet.png",
+          "x": 25,
+          "y": 8,
+          "w": 75,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\GatlingPea_barrel.png",
+          "x": 70,
+          "y": 35,
+          "w": 45,
+          "h": 35
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_chomper.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Chomper_groundleaf1.png",
+          "x": 10,
+          "y": 70,
+          "w": 40,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Chomper_groundleaf2.png",
+          "x": 70,
+          "y": 70,
+          "w": 40,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Chomper_Headleaf1.png",
+          "x": 25,
+          "y": 5,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Chomper_head.png",
+          "x": 15,
+          "y": 15,
+          "w": 90,
+          "h": 80
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Chomper_bottomlip.png",
+          "x": 20,
+          "y": 50,
+          "w": 80,
+          "h": 50
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_squash.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Squash_body.png",
+          "x": 15,
+          "y": 15,
+          "w": 90,
+          "h": 95
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Squash_eyes.png",
+          "x": 30,
+          "y": 35,
+          "w": 60,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Squash_eyebrows.png",
+          "x": 25,
+          "y": 25,
+          "w": 70,
+          "h": 30
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Squash_stem.png",
+          "x": 50,
+          "y": 5,
+          "w": 20,
+          "h": 25
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_cherry_bomb.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\CherryBomb_leaf1.png",
+          "x": 35,
+          "y": 5,
+          "w": 50,
+          "h": 40
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\CherryBomb_left1.png",
+          "x": 10,
+          "y": 35,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\CherryBomb_right1.png",
+          "x": 55,
+          "y": 35,
+          "w": 55,
+          "h": 55
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_jalapeno.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_body.png",
+          "x": 25,
+          "y": 15,
+          "w": 70,
+          "h": 95
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_eye1.png",
+          "x": 35,
+          "y": 35,
+          "w": 25,
+          "h": 25
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_eye2.png",
+          "x": 60,
+          "y": 35,
+          "w": 25,
+          "h": 25
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_eyebrow1.png",
+          "x": 30,
+          "y": 28,
+          "w": 30,
+          "h": 18
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_eyebrow2.png",
+          "x": 58,
+          "y": 28,
+          "w": 30,
+          "h": 18
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Jalapeno_mouth.png",
+          "x": 40,
+          "y": 58,
+          "w": 40,
+          "h": 25
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_spikeweed.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Caltrop_body.png",
+          "x": 15,
+          "y": 25,
+          "w": 90,
+          "h": 70
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Caltrop_horn1.png",
+          "x": 10,
+          "y": 10,
+          "w": 35,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Caltrop_horn2.png",
+          "x": 75,
+          "y": 10,
+          "w": 35,
+          "h": 45
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_torchwood.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Torchwood_body.png",
+          "x": 20,
+          "y": 35,
+          "w": 80,
+          "h": 75
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Torchwood_fire1a.png",
+          "x": 30,
+          "y": 5,
+          "w": 60,
+          "h": 50
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Torchwood_eyes1.png",
+          "x": 35,
+          "y": 50,
+          "w": 50,
+          "h": 30
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_tallnut.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Tallnut_body.png",
+          "x": 20,
+          "y": 10,
+          "w": 80,
+          "h": 105
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_doom_shroom.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\DoomShroom_body.png",
+          "x": 35,
+          "y": 65,
+          "w": 50,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\DoomShroom_head1.png",
+          "x": 15,
+          "y": 15,
+          "w": 90,
+          "h": 70
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_fume_shroom.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\FumeShroom_body.png",
+          "x": 30,
+          "y": 55,
+          "w": 60,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\FumeShroom_head.png",
+          "x": 15,
+          "y": 15,
+          "w": 90,
+          "h": 65
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_hypno_shroom.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\HypnoShroom_body.png",
+          "x": 35,
+          "y": 60,
+          "w": 50,
+          "h": 50
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\HypnoShroom_head.png",
+          "x": 15,
+          "y": 10,
+          "w": 90,
+          "h": 75
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_magnet_shroom.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Magnetshroom_body.png",
+          "x": 30,
+          "y": 55,
+          "w": 60,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Magnetshroom_head.png",
+          "x": 20,
+          "y": 25,
+          "w": 80,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Magnetshroom_magnet.png",
+          "x": 30,
+          "y": 5,
+          "w": 60,
+          "h": 45
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_pumpkin.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Pumpkin_back.png",
+          "x": 10,
+          "y": 15,
+          "w": 100,
+          "h": 90
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Pumpkin_front.png",
+          "x": 15,
+          "y": 35,
+          "w": 90,
+          "h": 70
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_blover.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Blover_stem1.png",
+          "x": 50,
+          "y": 60,
+          "w": 20,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Blover_petal.png",
+          "x": 15,
+          "y": 10,
+          "w": 90,
+          "h": 90
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Blover_head.png",
+          "x": 35,
+          "y": 30,
+          "w": 50,
+          "h": 50
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_plantern.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Plantern_leaf1.png",
+          "x": 15,
+          "y": 75,
+          "w": 90,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Plantern_body.png",
+          "x": 25,
+          "y": 15,
+          "w": 70,
+          "h": 80
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Plantern_eyes.png",
+          "x": 35,
+          "y": 35,
+          "w": 50,
+          "h": 30
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\plant_winter_melon.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Melonpult_body.png",
+          "x": 20,
+          "y": 40,
+          "w": 80,
+          "h": 70
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\WinterMelon_basket.png",
+          "x": 30,
+          "y": 15,
+          "w": 60,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\WinterMelon_melon.png",
+          "x": 40,
+          "y": 10,
+          "w": 40,
+          "h": 40
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\giant_walnut.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Tallnut_body.png",
+          "x": 10,
+          "y": 5,
+          "w": 100,
+          "h": 110
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\plants\\peashooter_devourer.png",
+      "w": 120,
+      "h": 120,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_backleaf.png",
+          "x": 10,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\PeaShooter_frontleaf.png",
+          "x": 60,
+          "y": 70,
+          "w": 45,
+          "h": 35
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\GatlingPea_head.png",
+          "x": 15,
+          "y": 10,
+          "w": 90,
+          "h": 90
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_normal.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 30,
+          "y": 45,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 30,
+          "y": 10,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_outerarm_lower.png",
+          "x": 20,
+          "y": 50,
+          "w": 30,
+          "h": 45
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_conehead.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 30,
+          "y": 48,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 30,
+          "y": 20,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_cone1.png",
+          "x": 35,
+          "y": 2,
+          "w": 45,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_outerarm_lower.png",
+          "x": 20,
+          "y": 52,
+          "w": 30,
+          "h": 45
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_buckethead.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 30,
+          "y": 48,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 30,
+          "y": 20,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_bucket1.png",
+          "x": 32,
+          "y": 5,
+          "w": 50,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_outerarm_lower.png",
+          "x": 20,
+          "y": 52,
+          "w": 30,
+          "h": 45
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_flag.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_flagpole.png",
+          "x": 65,
+          "y": 5,
+          "w": 35,
+          "h": 110
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_flag1.png",
+          "x": 70,
+          "y": 10,
+          "w": 45,
+          "h": 40
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 25,
+          "y": 48,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 25,
+          "y": 15,
+          "w": 55,
+          "h": 55
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_fast.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 30,
+          "y": 45,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head2.png",
+          "x": 30,
+          "y": 10,
+          "w": 55,
+          "h": 55
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_newspaper.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_paper_body.png",
+          "x": 30,
+          "y": 45,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_paper_head_look.png",
+          "x": 30,
+          "y": 12,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_paper_glasses.png",
+          "x": 40,
+          "y": 25,
+          "w": 35,
+          "h": 20
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_paper_paper1.png",
+          "x": 15,
+          "y": 50,
+          "w": 60,
+          "h": 55
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_screendoor.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_body.png",
+          "x": 30,
+          "y": 45,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 30,
+          "y": 10,
+          "w": 55,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_screendoor1.png",
+          "x": 15,
+          "y": 35,
+          "w": 65,
+          "h": 90
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_disco.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_dancer_body1.png",
+          "x": 30,
+          "y": 45,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\ZombieDancerHead_disco.png",
+          "x": 25,
+          "y": 5,
+          "w": 65,
+          "h": 60
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_dancer_colar.png",
+          "x": 32,
+          "y": 42,
+          "w": 50,
+          "h": 25
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_balloon.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_balloon_bottom.png",
+          "x": 40,
+          "y": 2,
+          "w": 50,
+          "h": 50
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_balloon_body1.png",
+          "x": 30,
+          "y": 55,
+          "w": 55,
+          "h": 65
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_head.png",
+          "x": 30,
+          "y": 30,
+          "w": 50,
+          "h": 50
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_balloon_hat.png",
+          "x": 35,
+          "y": 25,
+          "w": 40,
+          "h": 25
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_imp.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_imp_body1.png",
+          "x": 35,
+          "y": 45,
+          "w": 50,
+          "h": 55
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_imp_arm1.png",
+          "x": 25,
+          "y": 50,
+          "w": 25,
+          "h": 30
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_gargantuar.png",
+      "w": 130,
+      "h": 150,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_gargantuar_body1.png",
+          "x": 10,
+          "y": 10,
+          "w": 110,
+          "h": 125
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_gargantuar_arm1.png",
+          "x": 5,
+          "y": 30,
+          "w": 50,
+          "h": 70
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_strong_2.png",
+      "w": 130,
+      "h": 150,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_gargantuar_body1.png",
+          "x": 10,
+          "y": 10,
+          "w": 110,
+          "h": 125
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_boss_gargantuar.png",
+      "w": 130,
+      "h": 150,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_charred_gargantuar1.png",
+          "x": 10,
+          "y": 10,
+          "w": 110,
+          "h": 125
+        }
+      ]
+    },
+    {
+      "dst": ".\\public\\pvz_assets\\zombies\\zombie_boss_lion_king.png",
+      "w": 120,
+      "h": 140,
+      "layers": [
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_bossdriver_body.png",
+          "x": 25,
+          "y": 35,
+          "w": 70,
+          "h": 75
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_bossdriver_brain.png",
+          "x": 35,
+          "y": 5,
+          "w": 50,
+          "h": 45
+        },
+        {
+          "file": ".\\reference\\extracted_pak\\reanim\\Zombie_bossdriver_face.png",
+          "x": 30,
+          "y": 15,
+          "w": 60,
+          "h": 55
+        }
+      ]
+    }
+  ]
+}

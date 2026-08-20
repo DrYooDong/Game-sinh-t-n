@@ -47,6 +47,9 @@ interface PvzHUDProps {
   onOpenSurvivalCamp: () => void;
   onOpenTactics: () => void;
   onOpenCodex: () => void;
+  onOpenAlmanac?: () => void;
+  onOpenCrazyDaveShop?: () => void;
+  onOpenMinigames?: () => void;
   onReturnToWorldSelect: () => void;
   currentComment: LiveComment;
   // Wave Progress
@@ -85,6 +88,9 @@ export const PvzHUD: React.FC<PvzHUDProps> = ({
   onOpenSurvivalCamp,
   onOpenTactics,
   onOpenCodex,
+  onOpenAlmanac,
+  onOpenCrazyDaveShop,
+  onOpenMinigames,
   onReturnToWorldSelect,
   currentComment,
   waveProgressPct,
@@ -317,6 +323,52 @@ export const PvzHUD: React.FC<PvzHUDProps> = ({
             >
               <BookOpen className="w-3.5 h-3.5" />
             </button>
+
+            {/* Suburban Almanac PopCap Modal Button */}
+            {onOpenAlmanac && (
+              <button
+                onClick={() => {
+                  soundManager.play('click');
+                  onOpenAlmanac();
+                }}
+                className="px-2 py-1 bg-amber-950/90 hover:bg-amber-900 border border-amber-500 text-amber-200 text-xs font-black flex items-center gap-1 rounded-xs cursor-pointer shadow-sm"
+                title="Bách Khoa Toàn Thư Cây Trồng & Thây Ma (Almanac)"
+              >
+                <span>📖</span>
+                <span className="hidden xl:inline">Almanac</span>
+              </button>
+            )}
+
+            {/* Crazy Dave Shop Button */}
+            {onOpenCrazyDaveShop && (
+              <button
+                onClick={() => {
+                  soundManager.play('click');
+                  onOpenCrazyDaveShop();
+                }}
+                className="px-2 py-1 bg-yellow-950/90 hover:bg-yellow-900 border border-yellow-400 text-yellow-300 text-xs font-black flex items-center gap-1 rounded-xs cursor-pointer shadow-[0_0_8px_rgba(234,179,8,0.4)] animate-bounce"
+                style={{ animationDuration: '3s' }}
+                title="Tiệm Tạp Hóa Cốp Xe Crazy Dave"
+              >
+                <span>🛒</span>
+                <span className="hidden xl:inline">Dave Shop</span>
+              </button>
+            )}
+
+            {/* Minigames PopCap Modal Button */}
+            {onOpenMinigames && (
+              <button
+                onClick={() => {
+                  soundManager.play('click');
+                  onOpenMinigames();
+                }}
+                className="px-2 py-1 bg-purple-950/90 hover:bg-purple-900 border border-purple-400 text-purple-200 text-xs font-black flex items-center gap-1 rounded-xs cursor-pointer shadow-sm"
+                title="Phòng Chơi Mini-Games: Vasebreaker, Bowling, I Zombie"
+              >
+                <span>🎮</span>
+                <span className="hidden xl:inline">Minigames</span>
+              </button>
+            )}
 
             <button
               onClick={() => {
