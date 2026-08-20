@@ -70,7 +70,7 @@ export interface PlantData {
   imageUrl?: string;
   description: string;
   color: string;
-  projectileType?: 'pea' | 'ice_pea' | 'fume_wave' | 'gatling' | 'melon_ice' | 'fireball' | 'butter' | 'none';
+  projectileType?: 'pea' | 'ice_pea' | 'fume_wave' | 'gatling' | 'melon_ice' | 'fireball' | 'butter' | 'lightning' | 'laser' | 'bonk_punch' | 'none';
   specialTrait?: string;
   unlockedAtWave?: number;
   category?: 'normal' | 'instant_pi' | 'summon_zombie';

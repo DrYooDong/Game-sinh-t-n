@@ -1127,7 +1127,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
               return {
                 ...proj,
                 colPosition: nextCol,
-                type: 'fireball',
+                type: 'fireball' as const,
                 damage: Math.round(proj.damage * 2)
               };
             }

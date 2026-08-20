@@ -1,6 +1,7 @@
 import React from 'react';
 import { LocationArea, StagePhase } from '../types';
 import { soundManager } from '../utils/audio';
+import { Language, t } from '../utils/i18n';
 import {
   Compass,
   Search,
@@ -29,6 +30,7 @@ interface ExplorationViewProps {
   stamina: number;
   foodCount: number;
   waterCount: number;
+  lang?: Language;
 }
 
 export const ExplorationView: React.FC<ExplorationViewProps> = ({
@@ -43,7 +45,8 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
   currentStage,
   stamina,
   foodCount,
-  waterCount
+  waterCount,
+  lang = 'vi'
 }) => {
   const currentLoc = locations.find((l) => l.id === currentLocationId) || locations[0];
 
@@ -80,8 +83,8 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
           </div>
 
           <div className="text-left sm:text-right text-xs text-neutral-400 shrink-0 bg-neutral-950 px-3 py-1.5 border border-neutral-800 rounded-xs">
-            <div>Độ nguy hiểm: <span className="text-rose-400 font-black tracking-widest">{getDangerStars(currentLoc.danger)}</span></div>
-            <div>Tiến độ khám phá: <span className="text-cyan-400 font-black">{currentLoc.exploredPercentage}%</span></div>
+            <div>{lang === 'vi' ? 'Độ nguy hiểm' : 'Danger Level'}: <span className="text-rose-400 font-black tracking-widest">{getDangerStars(currentLoc.danger)}</span></div>
+            <div>{lang === 'vi' ? 'Tiến độ khám phá' : 'Exploration'}: <span className="text-cyan-400 font-black">{currentLoc.exploredPercentage}%</span></div>
           </div>
         </div>
 
@@ -98,11 +101,15 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
         {/* Possible drops & Threats grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-neutral-950 p-3 border border-neutral-800 rounded-xs mb-4">
           <div>
-            <span className="text-neutral-500 uppercase font-bold block mb-1 text-[10px]">Chiến lợi phẩm có thể nhặt:</span>
+            <span className="text-neutral-500 uppercase font-bold block mb-1 text-[10px]">
+              {lang === 'vi' ? 'Chiến lợi phẩm có thể nhặt:' : 'Possible Loot Drops:'}
+            </span>
             <div className="text-amber-300 font-bold leading-relaxed">{currentLoc.possibleLoots.join(' • ')}</div>
           </div>
           <div>
-            <span className="text-neutral-500 uppercase font-bold block mb-1 text-[10px]">Xác sống thường gặp:</span>
+            <span className="text-neutral-500 uppercase font-bold block mb-1 text-[10px]">
+              {lang === 'vi' ? 'Xác sống thường gặp:' : 'Encountered Threats:'}
+            </span>
             <div className="text-rose-400 font-bold leading-relaxed">{currentLoc.zombieTypes.join(' • ')}</div>
           </div>
         </div>
@@ -118,10 +125,10 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
                 className="w-full sm:flex-1 py-3 px-5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-sm uppercase tracking-widest border-b-4 border-emerald-900 flex items-center justify-center gap-2 transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.4)] rounded-xs"
               >
                 <BedDouble className="w-5 h-5" />
-                <span>Nghỉ Ngơi Qua Ngày (Hồi Phục Sinh Lực)</span>
+                <span>{lang === 'vi' ? 'Nghỉ Ngơi Qua Ngày (Hồi Phục Sinh Lực)' : 'Rest for the Day (Restore HP/SP)'}</span>
               </button>
               <div className="text-xs text-neutral-300 bg-neutral-950 px-3.5 py-2.5 border border-neutral-800 shrink-0 rounded-xs">
-                Tiêu hao: <strong className="text-amber-300">1 Thức Ăn ({foodCount})</strong> + <strong className="text-cyan-300">1 Nước ({waterCount})</strong>
+                {lang === 'vi' ? 'Tiêu hao' : 'Cost'}: <strong className="text-amber-300">1 {lang === 'vi' ? 'Thức Ăn' : 'Food'} ({foodCount})</strong> + <strong className="text-cyan-300">1 {lang === 'vi' ? 'Nước' : 'Water'} ({waterCount})</strong>
               </div>
             </div>
           ) : (
@@ -141,7 +148,7 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
                 }`}
               >
                 <Search className="w-4 h-4" />
-                <span>Lục Soát Tài Nguyên (-15 SP)</span>
+                <span>{lang === 'vi' ? 'Lục Soát Tài Nguyên (-15 SP)' : 'Scavenge Supplies (-15 SP)'}</span>
               </button>
 
               <button
@@ -158,7 +165,7 @@ export const ExplorationView: React.FC<ExplorationViewProps> = ({
                 }`}
               >
                 <Swords className="w-4 h-4" />
-                <span>Săn Zombie & Diệt Quái (-10 SP)</span>
+                <span>{lang === 'vi' ? 'Săn Zombie & Diệt Quái (-10 SP)' : 'Hunt Zombie Threats (-10 SP)'}</span>
               </button>
             </div>
           )}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Enemy, CharacterStats, Companion, Skill, Item, Equipment, CombatLog } from '../types';
 import { soundManager } from '../utils/audio';
+import { Language, t } from '../utils/i18n';
 import confetti from 'canvas-confetti';
 import { Swords, Zap, Shield, Sparkles } from 'lucide-react';
 
@@ -16,6 +17,7 @@ interface CombatModalProps {
   onDefeat: () => void;
   onEscape: () => void;
   onUseCombatItem: (item: Item) => void;
+  lang?: Language;
 }
 
 export const CombatModal: React.FC<CombatModalProps> = ({
@@ -28,7 +30,8 @@ export const CombatModal: React.FC<CombatModalProps> = ({
   onVictory,
   onDefeat,
   onEscape,
-  onUseCombatItem
+  onUseCombatItem,
+  lang = 'vi'
 }) => {
   // Local combat state
   const [enemyHp, setEnemyHp] = useState(enemy.hp);
@@ -400,7 +403,7 @@ export const CombatModal: React.FC<CombatModalProps> = ({
             }`}
           >
             <Swords className="w-3.5 h-3.5" />
-            <span>Đánh Thường</span>
+            <span>{t('action.attack', lang)}</span>
           </button>
 
           {/* Skill */}
@@ -428,7 +431,7 @@ export const CombatModal: React.FC<CombatModalProps> = ({
             }`}
           >
             <Shield className="w-3.5 h-3.5" />
-            <span>Phòng Thủ</span>
+            <span>{lang === 'vi' ? 'Phòng Thủ' : 'Defend'}</span>
           </button>
 
           {/* Items / Escape */}
@@ -438,7 +441,7 @@ export const CombatModal: React.FC<CombatModalProps> = ({
             className="py-2 px-2 bg-neutral-800 hover:bg-neutral-700 border-b-2 border-neutral-700 text-amber-300 text-xs font-bold uppercase tracking-widest flex items-center justify-center gap-1 cursor-pointer"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Vật Phẩm ({combatUsableItems.length})</span>
+            <span>{t('action.item', lang)} ({combatUsableItems.length})</span>
           </button>
         </div>
 

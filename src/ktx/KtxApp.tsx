@@ -1350,7 +1350,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] text-cyan-400 font-mono uppercase tracking-widest font-bold">
-                    [{lang === 'vi' ? 'CHỈ HUY SINH TỒN' : 'SURVIVAL COMMANDER'}]
+                    [{language === 'vi' ? 'CHỈ HUY SINH TỒN' : 'SURVIVAL COMMANDER'}]
                   </span>
                   <span className="text-neutral-600 text-xs">•</span>
                   <span className="text-xs text-amber-400 font-mono font-bold flex items-center gap-1">
@@ -1373,7 +1373,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               </div>
               <div className="h-6 w-[1px] bg-neutral-800"></div>
               <div className="text-center">
-                <span className="text-[9px] text-neutral-400 font-mono uppercase block">{lang === 'vi' ? 'Thời Gian' : 'Timeline'}</span>
+                <span className="text-[9px] text-neutral-400 font-mono uppercase block">{language === 'vi' ? 'Thời Gian' : 'Timeline'}</span>
                 <span className="text-sm font-black text-amber-400 font-mono">
                   {t('app.day', language)} 0{currentDay} • 14:24
                 </span>
@@ -1716,6 +1716,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                     stamina={stats.stamina}
                     foodCount={foodCount}
                     waterCount={waterCount}
+                    lang={language}
                   />
                 </div>
               </div>
@@ -1812,6 +1813,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               playerSkill={playerSkill}
               equipment={equipment}
               inventory={inventory}
+              lang={language}
               onVictory={handleCombatVictory}
               onDefeat={handleCombatDefeat}
               onEscape={() => setActiveEnemy(null)}
