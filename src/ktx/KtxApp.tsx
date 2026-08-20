@@ -1982,11 +1982,13 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
           )}
 
           {/* System Notification Hologram Modal */}
-          <SystemNotificationModal
-            notification={currentNotification}
-            history={notificationHistory}
-            onClose={() => setCurrentNotification(null)}
-          />
+          {currentNotification && (
+            <SystemNotificationModal
+              notification={currentNotification}
+              history={notificationHistory}
+              onClose={() => setCurrentNotification(null)}
+            />
+          )}
 
         </div>
       )}

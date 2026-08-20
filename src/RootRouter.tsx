@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import KtxApp from './ktx/KtxApp';
 import { PvzApp } from './pvz/PvzApp';
+import Pvz2App from './pvz2/App';
 import { WorldSelectScreen } from './shared/components/WorldSelectScreen';
 
-type WorldMode = 'select' | 'ktx' | 'pvz';
+export type WorldMode = 'select' | 'ktx' | 'pvz' | 'pvz2';
 
 const SELECTED_WORLD_STORAGE_KEY = 'active_survival_world_v1';
 
 export const RootRouter: React.FC = () => {
   const [world, setWorld] = useState<WorldMode>(() => {
     const saved = localStorage.getItem(SELECTED_WORLD_STORAGE_KEY) as WorldMode;
-    return saved && (saved === 'ktx' || saved === 'pvz') ? saved : 'select';
+    return saved && (saved === 'ktx' || saved === 'pvz' || saved === 'pvz2') ? saved : 'select';
   });
 
-  const handleSelectWorld = (worldId: 'ktx' | 'pvz') => {
+  const handleSelectWorld = (worldId: 'ktx' | 'pvz' | 'pvz2') => {
     setWorld(worldId);
     localStorage.setItem(SELECTED_WORLD_STORAGE_KEY, worldId);
   };
@@ -31,7 +32,12 @@ export const RootRouter: React.FC = () => {
     return <PvzApp onReturnToWorldSelect={handleReturnToSelect} />;
   }
 
+  if (world === 'pvz2') {
+    return <Pvz2App onReturnToWorldSelect={handleReturnToSelect} />;
+  }
+
   return <WorldSelectScreen onSelectWorld={handleSelectWorld} />;
 };
 
 export default RootRouter;
+

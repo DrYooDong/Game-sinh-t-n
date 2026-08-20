@@ -4,6 +4,7 @@ import { CharacterStats, LordRoomData, RoomTenant } from '../types';
 import { soundManager } from '../utils/audio';
 import { Language, t, formatNumberWithComma } from '../utils/i18n';
 import confetti from 'canvas-confetti';
+import { wasmBridge } from '../../shared/wasm/WasmBridge';
 import {
   X,
   Crown,
@@ -61,12 +62,12 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Calculate total conversion bonus
+  // Calculate total conversion bonus via C++ WebAssembly Engine
   const totalTenantBonus = roomTenants
     .filter((t) => t.isRecruited)
     .reduce((sum, t) => sum + t.conversionBonusPct, 0);
   const totalConversionRate = 100 + totalTenantBonus + lordRoomData.bedComfort;
-  const hourlyOutput = Math.floor((40 * totalConversionRate) / 100);
+  const hourlyOutput = wasmBridge.ktxCalculateHourlyCoins(40, totalTenantBonus + lordRoomData.bedComfort);
   const eightHoursOutput = hourlyOutput * 8;
 
   return (

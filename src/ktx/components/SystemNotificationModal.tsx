@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SystemNotification } from '../types';
 import { soundManager } from '../utils/audio';
-import { AlertTriangle, Sparkles, Trophy, BookOpen, ShieldAlert, X, Bell } from 'lucide-react';
+import { Sparkles, BookOpen, X, Bell } from 'lucide-react';
 
 interface SystemNotificationModalProps {
   notification: SystemNotification | null;
@@ -18,35 +18,56 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
 }) => {
   const [showHistory, setShowHistory] = React.useState(false);
 
+  // If there's no notification and user is not viewing history, do not render
+  if (!notification && !showHistory) {
+    return null;
+  }
+
+  const isHistoryExplicitOpen = notification?.id === 'history_open';
   const isLore = notification?.type === 'lore';
+  const isViewingHistory = showHistory || isHistoryExplicitOpen;
+
+  const handleClose = () => {
+    soundManager.play('click');
+    setShowHistory(false);
+    onClose();
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-mono">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-mono select-none"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
       <AnimatePresence mode="wait">
-        {!showHistory && notification ? (
+        {!isViewingHistory && notification ? (
           <motion.div
             key={notification.id}
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className={`w-full max-w-2xl bg-neutral-950/98 border-2 p-6 sm:p-8 relative shadow-[0_0_80px_rgba(6,182,212,0.3)] text-neutral-100 rounded-sm ${
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            className={`w-full max-w-2xl bg-neutral-950 border-2 p-6 sm:p-8 relative shadow-[0_0_80px_rgba(6,182,212,0.3)] text-neutral-100 rounded-sm ${
               isLore ? 'border-amber-500 shadow-[0_0_80px_rgba(245,158,11,0.3)]' : 'border-cyan-500'
             }`}
           >
             {/* System Badge */}
-            <div className={`absolute -top-4 left-7 px-4 py-1 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 rounded-xs ${
-              isLore ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-neutral-950' : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-neutral-950'
-            }`}>
+            <div
+              className={`absolute -top-4 left-7 px-4 py-1 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 rounded-xs ${
+                isLore
+                  ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-neutral-950'
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-neutral-950'
+              }`}
+            >
               {isLore ? <BookOpen className="w-3.5 h-3.5 fill-neutral-950" /> : <Sparkles className="w-3.5 h-3.5 fill-neutral-950" />}
               <span>{isLore ? 'TIẾN TRÌNH CỐT TRUYỆN TIỂU THUYẾT' : 'THÔNG BÁO HỆ THỐNG TOÀN KHÔNG GIAN'}</span>
             </div>
 
             {/* Close Button */}
             <button
-              onClick={() => {
-                soundManager.play('click');
-                onClose();
-              }}
+              onClick={handleClose}
               className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all cursor-pointer rounded-sm"
               title="Đóng thông báo"
             >
@@ -86,10 +107,7 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
 
               <button
                 type="button"
-                onClick={() => {
-                  soundManager.play('click');
-                  onClose();
-                }}
+                onClick={handleClose}
                 className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-black uppercase tracking-widest text-sm border-b-4 border-cyan-900 transition-all cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.4)]"
               >
                 {notification.actionLabel || 'XÁC NHẬN (F)'}
@@ -103,7 +121,7 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="w-full max-w-3xl bg-neutral-950/98 border-2 border-cyan-500/60 p-6 sm:p-7 shadow-[0_0_60px_rgba(6,182,212,0.25)] relative text-neutral-100 flex flex-col max-h-[85vh] rounded-sm"
+            className="w-full max-w-3xl bg-neutral-950 border-2 border-cyan-500/60 p-6 sm:p-7 shadow-[0_0_60px_rgba(6,182,212,0.25)] relative text-neutral-100 flex flex-col max-h-[85vh] rounded-sm"
           >
             <div className="absolute -top-4 left-7 bg-cyan-500 text-neutral-950 px-4 py-1 text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-md">
               <Bell className="w-3.5 h-3.5 fill-neutral-950" />
@@ -115,12 +133,9 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
                 Lịch Sử Sự Kiện ({history.length} mục)
               </h3>
               <button
-                onClick={() => {
-                  soundManager.play('click');
-                  setShowHistory(false);
-                  if (!notification) onClose();
-                }}
-                className="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all cursor-pointer"
+                onClick={handleClose}
+                className="p-1.5 text-neutral-400 hover:text-white hover:bg-neutral-800 transition-all cursor-pointer rounded-xs"
+                title="Đóng"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -131,7 +146,7 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
                 <div className="text-center py-12 text-neutral-500 text-sm">Chưa có thông báo nào được ghi nhận.</div>
               ) : (
                 history.map((h) => (
-                  <div key={h.id} className="p-4 bg-neutral-900/90 border border-neutral-800 text-sm space-y-1.5">
+                  <div key={h.id} className="p-4 bg-neutral-900/90 border border-neutral-800 text-sm space-y-1.5 rounded-xs">
                     <div className="flex justify-between items-center text-xs">
                       <span className="font-bold text-cyan-400 text-sm">{h.title}</span>
                       <span className="text-neutral-500 font-mono text-xs">{h.timestamp}</span>
