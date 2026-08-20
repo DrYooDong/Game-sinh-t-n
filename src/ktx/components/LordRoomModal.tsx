@@ -351,49 +351,68 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
               </div>
 
               {/* Selected Tenant Details */}
-              <div className="p-4 bg-neutral-900 border border-neutral-800 md:col-span-2 space-y-3">
-                <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl p-2 bg-neutral-950 border border-neutral-800">{selectedTenant.avatar}</span>
-                    <div>
-                      <h3 className="text-sm font-bold text-white uppercase">{selectedTenant.name}</h3>
-                      <p className="text-[11px] text-amber-400">{selectedTenant.title}</p>
+              {(() => {
+                const currentTenant = selectedTenant || roomTenants[0] || {
+                  id: 'tenant_default',
+                  name: 'Bạn Cùng Phòng',
+                  title: 'Cư Dân',
+                  avatar: '👤',
+                  gender: 'female' as const,
+                  conversionBonusPct: 90,
+                  comfortScore: 100,
+                  specialty: 'Thu thập tài nguyên',
+                  specialSkill: 'Hỗ trợ sinh tồn',
+                  isRecruited: true,
+                  assignedGear: 'Không có',
+                  dialogue: 'Cố gắng sinh tồn qua ngày hôm nay!'
+                };
+
+                return (
+                  <div className="p-4 bg-neutral-900 border border-neutral-800 md:col-span-2 space-y-3">
+                    <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl p-2 bg-neutral-950 border border-neutral-800">{currentTenant.avatar}</span>
+                        <div>
+                          <h3 className="text-sm font-bold text-white uppercase">{currentTenant.name}</h3>
+                          <p className="text-[11px] text-amber-400">{currentTenant.title}</p>
+                        </div>
+                      </div>
+                      <span className="text-xs px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-500/40 uppercase font-bold">
+                        Buff: +{currentTenant.conversionBonusPct}% Xu
+                      </span>
+                    </div>
+
+                    <div className="space-y-2 text-[11px]">
+                      <div className="p-2 bg-neutral-950 border border-neutral-800">
+                        <span className="text-neutral-400 block mb-0.5">Kỹ Năng / Sở Trường:</span>
+                        <strong className="text-cyan-300">{currentTenant.specialty}</strong>
+                      </div>
+                      <div className="p-2 bg-neutral-950 border border-neutral-800">
+                        <span className="text-neutral-400 block mb-0.5">Trang Bị Đang Dùng:</span>
+                        <strong className="text-amber-300">{currentTenant.assignedGear || 'Chưa trang bị'}</strong>
+                      </div>
+                      <div className="p-2.5 bg-neutral-950 border-l-2 border-amber-400 italic text-neutral-300">
+                        "{currentTenant.dialogue}"
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-neutral-800">
+                      <span className="text-[11px] text-neutral-400">
+                        Tặng quà tăng độ thoải mái (+10% sản lượng):
+                      </span>
+                      <button
+                        onClick={() => {
+                          soundManager.play('item_get');
+                          onGiftTenant(currentTenant.id);
+                        }}
+                        className="px-3.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-rose-300 border border-neutral-700 font-bold uppercase text-[11px] flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" /> Tặng Trang Phục Cao Cấp
+                      </button>
                     </div>
                   </div>
-                  <span className="text-xs px-2.5 py-1 bg-emerald-950 text-emerald-300 border border-emerald-500/40 uppercase font-bold">
-                    Buff: +{selectedTenant.conversionBonusPct}% Xu
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-[11px]">
-                  <div className="p-2 bg-neutral-950 border border-neutral-800">
-                    <span className="text-neutral-400 block mb-0.5">Kỹ Năng / Sở Trường:</span>
-                    <strong className="text-cyan-300">{selectedTenant.specialty}</strong>
-                  </div>
-                  <div className="p-2 bg-neutral-950 border border-neutral-800">
-                    <span className="text-neutral-400 block mb-0.5">Trang Bị Đang Dùng:</span>
-                    <strong className="text-amber-300">{selectedTenant.assignedGear || 'Chưa trang bị'}</strong>
-                  </div>
-                  <div className="p-2.5 bg-neutral-950 border-l-2 border-amber-400 italic text-neutral-300">
-                    "{selectedTenant.dialogue}"
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-neutral-800">
-                  <span className="text-[11px] text-neutral-400">
-                    Tặng quà tăng độ thoải mái (+10% sản lượng):
-                  </span>
-                  <button
-                    onClick={() => {
-                      soundManager.play('item_get');
-                      onGiftTenant(selectedTenant.id);
-                    }}
-                    className="px-3.5 py-1.5 bg-neutral-800 hover:bg-neutral-700 text-rose-300 border border-neutral-700 font-bold uppercase text-[11px] flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <Heart className="w-3.5 h-3.5 text-rose-400 fill-rose-400" /> Tặng Trang Phục Cao Cấp
-                  </button>
-                </div>
-              </div>
+                );
+              })()}
 
             </div>
           )}

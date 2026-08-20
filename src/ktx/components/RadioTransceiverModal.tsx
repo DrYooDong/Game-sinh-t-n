@@ -88,61 +88,80 @@ export const RadioTransceiverModal: React.FC<RadioTransceiverModalProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              {transmissions.map((tx) => (
-                <button
-                  key={tx.id}
-                  onClick={() => {
-                    soundManager.play('click');
-                    setSelectedTx(tx);
-                  }}
-                  className={`w-full p-2.5 text-left border transition-all cursor-pointer ${
-                    selectedTx.id === tx.id
-                      ? 'bg-cyan-950/60 border-cyan-400 text-white shadow-sm'
-                      : 'bg-neutral-900 border-neutral-800 text-neutral-300 hover:bg-neutral-800'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-cyan-300">{tx.sender}</span>
-                    <span className="text-[10px] text-neutral-500">{tx.frequency}</span>
-                  </div>
-                  <div className="text-[10px] text-neutral-400 truncate mt-0.5">{tx.title}</div>
-                </button>
-              ))}
+              {transmissions.map((tx) => {
+                const isSelected = (selectedTx?.id || transmissions[0]?.id) === tx.id;
+
+                return (
+                  <button
+                    key={tx.id}
+                    onClick={() => {
+                      soundManager.play('click');
+                      setSelectedTx(tx);
+                    }}
+                    className={`w-full p-2.5 text-left border transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-cyan-950/60 border-cyan-400 text-white shadow-sm'
+                        : 'bg-neutral-900 border-neutral-800 text-neutral-300 hover:bg-neutral-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-cyan-300">{tx.sender}</span>
+                      <span className="text-[10px] text-neutral-500">{tx.frequency}</span>
+                    </div>
+                    <div className="text-[10px] text-neutral-400 truncate mt-0.5">{tx.title}</div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           {/* Selected Message Detail */}
-          <div className="p-4 bg-neutral-900 border border-neutral-800 md:col-span-2 space-y-3 flex flex-col justify-between">
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
-                <div>
-                  <h3 className="text-sm font-bold text-white uppercase">{selectedTx.title}</h3>
-                  <p className="text-[11px] text-cyan-400">
-                    Người gửi: <strong>{selectedTx.sender}</strong> ({selectedTx.rank})
-                  </p>
-                </div>
-                <span className="text-[10px] text-neutral-500">{selectedTx.timestamp}</span>
-              </div>
+          {(() => {
+            const currentTx = selectedTx || transmissions[0] || {
+              id: 'tx_default',
+              sender: 'Hội Tương Trợ',
+              rank: 'Kênh Công Cộng',
+              frequency: '107.5 MHz',
+              title: 'Không có tín hiệu',
+              message: 'Đang dò tìm tín hiệu vô tuyến từ các tòa tháp...',
+              timestamp: '00:00',
+              secretIntel: ''
+            };
 
-              <div className="p-3 bg-neutral-950 border border-neutral-800 text-neutral-300 leading-relaxed text-xs">
-                {selectedTx.message}
-              </div>
-
-              {selectedTx.secretIntel && (
-                <div className="p-3 bg-amber-950/40 border border-amber-500/40 space-y-1">
-                  <div className="text-[10px] font-bold text-amber-400 uppercase flex items-center gap-1.5">
-                    <Lock className="w-3 h-3" /> Tình Báo Tuyệt Mật Giải Mã:
+            return (
+              <div className="p-4 bg-neutral-900 border border-neutral-800 md:col-span-2 space-y-3 flex flex-col justify-between">
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
+                    <div>
+                      <h3 className="text-sm font-bold text-white uppercase">{currentTx.title}</h3>
+                      <p className="text-[11px] text-cyan-400">
+                        Người gửi: <strong>{currentTx.sender}</strong> ({currentTx.rank})
+                      </p>
+                    </div>
+                    <span className="text-[10px] text-neutral-500">{currentTx.timestamp}</span>
                   </div>
-                  <p className="text-[11px] text-amber-200">{selectedTx.secretIntel}</p>
-                </div>
-              )}
-            </div>
 
-            <div className="pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 flex items-center justify-between">
-              <span>Quy tắc: Không tiết lộ tên thật hoặc vị trí tòa KTX chính thức.</span>
-              <span className="text-emerald-400 font-bold uppercase">Tín hiệu ổn định (98%)</span>
-            </div>
-          </div>
+                  <div className="p-3 bg-neutral-950 border border-neutral-800 text-neutral-300 leading-relaxed text-xs">
+                    {currentTx.message}
+                  </div>
+
+                  {currentTx.secretIntel && (
+                    <div className="p-3 bg-amber-950/40 border border-amber-500/40 space-y-1">
+                      <div className="text-[10px] font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                        <Lock className="w-3 h-3" /> Tình Báo Tuyệt Mật Giải Mã:
+                      </div>
+                      <p className="text-[11px] text-amber-200">{currentTx.secretIntel}</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-neutral-800 text-[10px] text-neutral-400 flex items-center justify-between">
+                  <span>Quy tắc: Không tiết lộ tên thật hoặc vị trí tòa KTX chính thức.</span>
+                  <span className="text-emerald-400 font-bold uppercase">Tín hiệu ổn định (98%)</span>
+                </div>
+              </div>
+            );
+          })()}
 
         </div>
 

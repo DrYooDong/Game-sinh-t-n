@@ -1,4 +1,29 @@
-import { PlantData, ZombieData, PvzWave, LiveComment, PvzCompanion, PvzDaveUpgrade, PvzTactic, PvzLoreChapter, PathologyEntry, StoryEvent } from '../types';
+import {
+  PlantData,
+  ZombieData,
+  PvzWave,
+  LiveComment,
+  PvzCompanion,
+  PvzDaveUpgrade,
+  PvzTactic,
+  PvzLoreChapter,
+  PathologyEntry,
+  StoryEvent
+} from '../types';
+
+// Core GOTY Projectile & Combat Balance Constants
+export const CHILLED_SPEED_FACTOR = 0.4; // Chilled zombies move at 40% speed
+
+export const PROJECTILE_DAMAGE: Record<string, number> = {
+  pea: 20, // Standard Peashooter bullet
+  ice_pea: 20, // Snow Pea bullet (+0.4x chill)
+  fume_wave: 20, // Spore wave (penetrating, bypasses shield)
+  gatling: 20, // Rapid-fire Gatling bullet
+  melon_ice: 80, // Winter Melon ice heavy splash bullet
+  fireball: 40, // Torchwood flaming pea
+  butter: 40, // Kernelpult butter (+ stun)
+  laser: 50
+};
 
 export const PVZ_PLANTS: PlantData[] = [
   {
@@ -8,12 +33,19 @@ export const PVZ_PLANTS: PlantData[] = [
     cooldownSec: 4,
     maxHp: 300,
     attackDmg: 0,
-    attackIntervalSec: 5.5,
+    attackIntervalSec: 5.0,
     icon: '🌻',
-    description: 'Sản xuất +25 Ánh Nắng mỗi 5.5 giây để duy trì hỏa lực toàn đội.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/e/e2/Sunflower1.png/revision/latest?cb=20151016104534&path-prefix=vi',
+    description: 'Sản xuất +25 Ánh Nắng mỗi 5 giây để duy trì hỏa lực toàn đội.',
     color: 'border-amber-400 bg-amber-950/40 text-amber-300',
     specialTrait: 'Sản xuất Ánh Nắng',
-    unlockedAtWave: 1
+    unlockedAtWave: 1,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Bùng Nổ Mặt Trời',
+      description: 'Phun trào ngay lập tức 150 Ánh Nắng!',
+      icon: '☀️💥'
+    }
   },
   {
     id: 'plant_peashooter',
@@ -21,14 +53,21 @@ export const PVZ_PLANTS: PlantData[] = [
     sunCost: 100,
     cooldownSec: 4.5,
     maxHp: 300,
-    attackDmg: 25,
+    attackDmg: 20,
     attackIntervalSec: 1.4,
     icon: '🟢',
-    description: 'Bắn viên đậu nén cao áp liên tục về phía trước khi có zombie.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/8/85/Peashooter1.png/revision/latest?cb=20151016104307&path-prefix=vi',
+    description: 'Bắn viên đậu nén cao áp chuẩn 20 sát thương liên tục về phía trước.',
     color: 'border-emerald-400 bg-emerald-950/40 text-emerald-300',
     projectileType: 'pea',
-    specialTrait: 'Hỏa lực căn bản',
-    unlockedAtWave: 1
+    specialTrait: 'Hỏa lực căn bản (20 DMG)',
+    unlockedAtWave: 1,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Đại Bác Xả Đạn',
+      description: 'Bắn liên hoàn 60 viên đậu cao áp cực mạnh quét sạch hàng!',
+      icon: '🟢💨'
+    }
   },
   {
     id: 'plant_snow_pea',
@@ -36,14 +75,82 @@ export const PVZ_PLANTS: PlantData[] = [
     sunCost: 175,
     cooldownSec: 6,
     maxHp: 320,
-    attackDmg: 30,
+    attackDmg: 20,
     attackIntervalSec: 1.5,
     icon: '❄️',
-    description: 'Bắn hạt đậu băng giá làm chậm 50% tốc độ di chuyển và tấn công của quái.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/c/cd/Snow_Pea1.png/revision/latest?cb=20151016104308&path-prefix=vi',
+    description: 'Bắn hạt đậu băng giá gây 20 sát thương và làm chậm 60% tốc độ (0.4x).',
     color: 'border-cyan-400 bg-cyan-950/40 text-cyan-300',
     projectileType: 'ice_pea',
-    specialTrait: 'Làm chậm tốc độ 50%',
-    unlockedAtWave: 3
+    specialTrait: 'Làm chậm tốc độ (0.4x factor)',
+    unlockedAtWave: 2,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Đại Bão Tuyết',
+      description: 'Đóng băng toàn bộ Zombie trên sân trong 5 giây và phủ tuyết toàn hàng!',
+      icon: '❄️🌪️'
+    }
+  },
+  {
+    id: 'plant_chomper',
+    name: 'Hoa Ăn Thịt (Chomper)',
+    sunCost: 150,
+    cooldownSec: 7.5,
+    maxHp: 300,
+    attackDmg: 9999,
+    attackIntervalSec: 1.0,
+    icon: '🐊🌺',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/3/35/Chomper1.png/revision/latest?cb=20151016103949&path-prefix=vi',
+    description: 'Đớp và nuốt trọn 1 zombie nguyên vẹn ngay lập tức! Cần 20 giây để nhai và tiêu hóa trước khi ăn tiếp.',
+    color: 'border-purple-500 bg-purple-950/40 text-purple-300',
+    projectileType: 'none',
+    specialTrait: 'Nuốt chửng zombie tức thì',
+    unlockedAtWave: 2,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Đại Hấp Thu',
+      description: 'Hút và nuốt trọn 3 zombie cùng hàng một lúc rồi ợ ra đạn xương!',
+      icon: '🌺🌪️'
+    }
+  },
+  {
+    id: 'plant_squash',
+    name: 'Bí Ngô Nghiền Nát (Squash)',
+    sunCost: 50,
+    cooldownSec: 12,
+    maxHp: 300,
+    attackDmg: 1800,
+    attackIntervalSec: 1.0,
+    icon: '🎃💥',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/1/12/Squash1.png/revision/latest?cb=20151016104310&path-prefix=vi',
+    description: 'Quan sát zombie lân cận rồi nhảy vọt lên cao đè bẹp nát toàn bộ với 1800 sát thương cực đại!',
+    color: 'border-emerald-500 bg-emerald-950/50 text-emerald-300',
+    projectileType: 'none',
+    specialTrait: 'Nhảy đè bẹp 1800 DMG',
+    unlockedAtWave: 3,
+    category: 'instant_pi'
+  },
+  {
+    id: 'plant_spikeweed',
+    name: 'Bẫy Chông Gai Sắt',
+    sunCost: 100,
+    cooldownSec: 6,
+    maxHp: 400,
+    attackDmg: 20,
+    attackIntervalSec: 0.8,
+    icon: '🌵',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/b/bf/Spikeweed1.png/revision/latest?cb=20151016104309&path-prefix=vi',
+    description: 'Bẫy chông sắt đặt dưới chân, cào xé liên tục zombie đi qua và không bị cắn!',
+    color: 'border-lime-500 bg-lime-950/40 text-lime-300',
+    projectileType: 'none',
+    specialTrait: 'Sát thương dẫm chân & Miễn cắn',
+    unlockedAtWave: 2,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Rừng Gai Thép',
+      description: 'Mọc gai thép khổng lồ kéo toàn bộ zombie cùng hàng về và đâm nát!',
+      icon: '🗡️🌵'
+    }
   },
   {
     id: 'plant_fume_shroom',
@@ -51,127 +158,383 @@ export const PVZ_PLANTS: PlantData[] = [
     sunCost: 150,
     cooldownSec: 6.5,
     maxHp: 350,
-    attackDmg: 35,
-    attackIntervalSec: 1.8,
+    attackDmg: 20,
+    attackIntervalSec: 1.6,
     icon: '🍄',
-    description: 'Phun luồng sóng bào tử tím xuyên thấu tất cả zombie và phá hủy vảy sừng kháng đạn.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/8/89/Fume-shroom1.png/revision/latest?cb=20151016103951&path-prefix=vi',
+    description: 'Phun luồng sóng bào tử tím xuyên thấu tất cả zombie và bỏ qua khiên chắn (Shield).',
     color: 'border-fuchsia-400 bg-fuchsia-950/40 text-fuchsia-300',
     projectileType: 'fume_wave',
-    specialTrait: 'Bắn xuyên thấu & Phá giáp',
-    unlockedAtWave: 4
+    specialTrait: 'Bắn xuyên thấu & Bỏ qua khiên',
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Sóng Thần Bào Tử',
+      description: 'Phun luồng sóng bào tử tím cực đại thổi bay zombie lùi lại 3 ô!',
+      icon: '🟣🌊'
+    }
   },
   {
     id: 'plant_hypno_shroom',
     name: 'Nấm Mê Hoặc',
     sunCost: 125,
-    cooldownSec: 12,
+    cooldownSec: 10,
     maxHp: 200,
     attackDmg: 0,
     attackIntervalSec: 0,
     icon: '🌀',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/9/99/Hypno-shroom1.png/revision/latest?cb=20151016104306&path-prefix=vi',
     description: 'Khi bị zombie ăn phải, zombie sẽ bị thôi miên quay đầu cắn xé đồng loại!',
     color: 'border-pink-400 bg-pink-950/40 text-pink-300',
     specialTrait: 'Thôi miên zombie địch',
-    unlockedAtWave: 5
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Mê Hoặc Quần Thể',
+      description: 'Phát sóng mê hoặc biến 3 zombie gần nhất thành đồng minh!',
+      icon: '💖🌀'
+    }
+  },
+  {
+    id: 'plant_magnet_shroom',
+    name: 'Nấm Nam Châm',
+    sunCost: 100,
+    cooldownSec: 8,
+    maxHp: 300,
+    attackDmg: 0,
+    attackIntervalSec: 4.0,
+    icon: '🧲',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/4/4c/Magnet-shroom1.png/revision/latest?cb=20151016104241&path-prefix=vi',
+    description: 'Hút phăng xô sắt, nón kim loại và vũ khí của zombie trong phạm vi 3x3, xóa bỏ lớp Mũ (Helm)!',
+    color: 'border-sky-400 bg-sky-950/40 text-sky-300',
+    specialTrait: 'Tước đoạt giáp kim loại',
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Từ Trường Tối Thượng',
+      description: 'Hút sạch kim loại toàn bộ bản đồ và ném ngược lại gây 300 sát thương!',
+      icon: '🧲💥'
+    }
   },
   {
     id: 'plant_gatling_pea',
-    name: 'Xạ Thủ Súng Máy',
+    name: 'Xạ Thủ Súng Máy (4 Nòng)',
     sunCost: 250,
     cooldownSec: 10,
     maxHp: 450,
-    attackDmg: 28,
-    attackIntervalSec: 0.6,
+    attackDmg: 20,
+    attackIntervalSec: 0.45,
     icon: '🔫',
-    description: '4 nòng xả đạn cực hạn, tạo cơn mưa đậu áp chế mọi quái vật cơ bắp và Boss.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/f/ff/Gatling_Pea1.png/revision/latest?cb=20151016103935&path-prefix=vi',
+    description: '4 nòng xả đạn cực hạn 20 DMG/viên với tốc độ siêu nhanh, áp chế mọi quái vật.',
     color: 'border-lime-400 bg-lime-950/40 text-lime-300',
     projectileType: 'gatling',
     specialTrait: 'Tốc độ xả đạn siêu cấp',
-    unlockedAtWave: 5
+    unlockedAtWave: 4,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Bão Đạn Gatling Vô Tận',
+      description: 'Xả 120 viên đạn đậu siêu nén quét sạch mọi chướng ngại vật!',
+      icon: '🔫🔥'
+    }
   },
   {
     id: 'plant_pumpkin',
     name: 'Khiên Bí Ngô',
     sunCost: 125,
     cooldownSec: 7,
-    maxHp: 800,
+    maxHp: 900,
     attackDmg: 0,
     attackIntervalSec: 0,
     icon: '🎃',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/3/35/Pumpkin1.png/revision/latest?cb=20151016104243&path-prefix=vi',
     description: 'Vỏ bí ngô kim cương che chở hàng thủ, chịu đòn cực trâu bò.',
     color: 'border-orange-400 bg-orange-950/40 text-orange-300',
     specialTrait: 'Hàng phòng thủ cao cấp',
-    unlockedAtWave: 2
+    unlockedAtWave: 2,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Vỏ Bọc Kim Cương',
+      description: 'Hồi phục 100% HP và tạo khiên phản sát thương 50%!',
+      icon: '💎🎃'
+    }
   },
   {
     id: 'plant_cherry_bomb',
     name: 'Bom Anh Đào Cảm Ứng',
     sunCost: 150,
-    cooldownSec: 11,
+    cooldownSec: 12,
     maxHp: 100,
-    attackDmg: 450,
+    attackDmg: 500,
     attackIntervalSec: 1,
     icon: '🍒',
-    description: 'Nổ tung sau 1 giây trồng, tiêu diệt toàn bộ zombie trên hàng và ô lân cận.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/0/0d/Cherry_Bomb1.png/revision/latest?cb=20151016103949&path-prefix=vi',
+    description: 'Nổ tung sau 1 giây trồng, tiêu diệt toàn bộ zombie trên hàng và ô lân cận (3x3).',
     color: 'border-rose-400 bg-rose-950/40 text-rose-300',
     specialTrait: 'Sát thương nổ diện rộng 3x3',
-    unlockedAtWave: 2
+    unlockedAtWave: 2,
+    category: 'instant_pi'
+  },
+  {
+    id: 'plant_jalapeno',
+    name: 'Ớt Cay Nổ Tung (Jalapeno)',
+    sunCost: 125,
+    cooldownSec: 14,
+    maxHp: 100,
+    attackDmg: 800,
+    attackIntervalSec: 1,
+    icon: '🌶️',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/8/8b/Jalapeno1.png/revision/latest?cb=20151016104306&path-prefix=vi',
+    description: 'Thẻ Pi dùng 1 lần! Nổ tung tạo ra cột lửa thiêu rụi toàn bộ zombie trên cả hàng!',
+    color: 'border-red-500 bg-red-950/50 text-red-300',
+    specialTrait: 'Quét sạch cả hàng bằng lửa',
+    unlockedAtWave: 4,
+    category: 'instant_pi'
   },
   {
     id: 'plant_zombie_wall',
     name: 'Thây Ma Chướng Ngại',
     sunCost: 100,
     cooldownSec: 6,
-    maxHp: 650,
-    attackDmg: 18,
+    maxHp: 700,
+    attackDmg: 20,
     attackIntervalSec: 1.8,
     icon: '🧟‍♂️',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/c/c0/Wall-nut1.png/revision/latest?cb=20151016104536&path-prefix=vi',
     description: 'Thây ma cầm xẻng thu phục bởi Tuyết Mộc, dùng thân mình chặn và cào zombie địch.',
     color: 'border-purple-400 bg-purple-950/40 text-purple-300',
     specialTrait: 'Đỡ đòn và phản công cận chiến',
-    unlockedAtWave: 2
+    unlockedAtWave: 2,
+    category: 'summon_zombie',
+    plantFoodUlt: {
+      name: 'Quân Đoàn Khiên Xương',
+      description: 'Nhận giáp gai sắt và tăng 100% tốc độ cào cấu!',
+      icon: '🛡️🧟'
+    }
+  },
+  {
+    id: 'plant_newspaper_zombie',
+    name: 'Thây Ma Đọc Báo (Nhị Gia)',
+    sunCost: 150,
+    cooldownSec: 10,
+    maxHp: 600,
+    attackDmg: 45,
+    attackIntervalSec: 1.2,
+    icon: '📰🧟',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/2/29/Tall-nut1.png/revision/latest?cb=20151016104535&path-prefix=vi',
+    description: 'Nhị Gia mặc quần lót hồng! Lá báo cản sát thương, khi báo rách sẽ cuồng nộ xé xác zombie địch!',
+    color: 'border-pink-500 bg-pink-950/40 text-pink-300',
+    specialTrait: 'Cuồng nộ khi rách báo',
+    unlockedAtWave: 4,
+    category: 'summon_zombie',
+    plantFoodUlt: {
+      name: 'Nhị Gia Cuồng Bạo',
+      description: 'Hóa khổng lồ, vung xẻng xoay tròn chém nát quái vật phía trước!',
+      icon: '💥📰'
+    }
   },
   {
     id: 'plant_tallnut',
     name: 'Tượng Đá Bất Hoại',
     sunCost: 175,
     cooldownSec: 14,
-    maxHp: 1800,
+    maxHp: 2000,
     attackDmg: 0,
     attackIntervalSec: 0,
     icon: '🗿',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/2/29/Tall-nut1.png/revision/latest?cb=20151016104535&path-prefix=vi',
     description: 'Tượng đá linh hồn khổng lồ, chặn đứng mọi đợt xung kích điên cuồng của Boss.',
     color: 'border-yellow-400 bg-yellow-950/40 text-yellow-300',
     specialTrait: 'Máu tối đa cực lớn',
-    unlockedAtWave: 4
+    unlockedAtWave: 4,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Pháo Đài Kim Cang',
+      description: 'Hóa thép bất hoại, không thể bị ăn hay xuyên thủng trong 12 giây!',
+      icon: '🛡️🗿'
+    }
   },
   {
-    id: 'plant_doom_shroom',
-    name: 'Nấm Hủy Diệt (Hạt Nhân)',
-    sunCost: 275,
-    cooldownSec: 25,
-    maxHp: 100,
-    attackDmg: 1200,
-    attackIntervalSec: 1.2,
-    icon: '☢️',
-    description: 'Vũ khí hủy diệt tối thượng! Nổ hạt nhân quét sạch toàn bộ Zombie trên toàn bản đồ!',
-    color: 'border-violet-500 bg-violet-950/60 text-violet-300',
-    specialTrait: 'Xóa sổ toàn bộ bản đồ',
-    unlockedAtWave: 6
+    id: 'plant_winter_melon',
+    name: 'Dưa Hấu Băng Giá',
+    sunCost: 300,
+    cooldownSec: 12,
+    maxHp: 400,
+    attackDmg: 80,
+    attackIntervalSec: 2.2,
+    icon: '🍉❄️',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/d/d1/Winter_Melon1.png/revision/latest?cb=20151016104537&path-prefix=vi',
+    description: 'Ném quả dưa hấu băng chuẩn 80 DMG (gấp 4 lần đạn đậu) gây nổ lan diện rộng 3x3 và làm chậm 60%!',
+    color: 'border-blue-400 bg-blue-950/40 text-blue-200',
+    projectileType: 'melon_ice',
+    specialTrait: 'Sát thương lan 80 DMG & Làm chậm 3x3',
+    unlockedAtWave: 5,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Mưa Dưa Hấu Băng',
+      description: 'Bắn loạt dưa hấu băng đóng băng toàn bộ zombie trên sân!',
+      icon: '🍉🌨️'
+    }
   },
   {
     id: 'plant_plantern',
     name: 'Hoa Đèn Đường',
     sunCost: 75,
     cooldownSec: 8,
-    maxHp: 400,
+    maxHp: 450,
     attackDmg: 0,
     attackIntervalSec: 0,
     icon: '🏮',
-    description: 'Chiếu rọi sương mù độc bào tử, tăng 25% tốc độ tấn công cho tất cả thực vật cùng hàng.',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/4/4e/Plantern1.png/revision/latest?cb=20151016104242&path-prefix=vi',
+    description: 'Chiếu rọi xua tan sương mù độc bào tử, tăng 30% tốc độ tấn công cho tất cả thực vật cùng hàng.',
     color: 'border-amber-300 bg-amber-950/30 text-amber-200',
     specialTrait: 'Xua tan bào tử & Buff hỏa lực',
-    unlockedAtWave: 6
+    unlockedAtWave: 5,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Hào Quang Thánh Địa',
+      description: 'Phát quang toàn bộ sân, tăng 50% hỏa lực cho toàn đội trong 8 giây!',
+      icon: '✨🏮'
+    }
+  },
+  {
+    id: 'plant_doom_shroom',
+    name: 'Nấm Hạt Nhân Diệt Thế (Pi)',
+    sunCost: 275,
+    cooldownSec: 25,
+    maxHp: 100,
+    attackDmg: 1500,
+    attackIntervalSec: 1.2,
+    icon: '☢️',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/e/e1/Doom-shroom1.png/revision/latest?cb=20151016103950&path-prefix=vi',
+    description: 'Vũ khí hủy diệt tối thượng! Nổ hạt nhân quét sạch toàn bộ Zombie trên toàn bản đồ!',
+    color: 'border-violet-500 bg-violet-950/60 text-violet-300',
+    specialTrait: 'Xóa sổ toàn bộ bản đồ',
+    unlockedAtWave: 6,
+    category: 'instant_pi'
+  },
+  {
+    id: 'plant_twin_sunflower',
+    name: 'Sinh Đôi Hướng Dương',
+    sunCost: 150,
+    cooldownSec: 6,
+    maxHp: 350,
+    attackDmg: 0,
+    attackIntervalSec: 5.0,
+    icon: '🌻🌻',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/1/18/Twin_Sunflower1.png/revision/latest?cb=20151016104535&path-prefix=vi',
+    description: 'Sản xuất gấp đôi ánh nắng (+50 Nắng) mỗi đợt, cung cấp năng lượng dồi dào cho cả chiến trường!',
+    color: 'border-yellow-400 bg-yellow-950/50 text-yellow-300',
+    specialTrait: 'Sản xuất +50 Nắng/lần',
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Siêu Nắng Hoàng Kim',
+      description: 'Phun trào ngay lập tức 250 Ánh Nắng khổng lồ!',
+      icon: '☀️👑'
+    }
+  },
+  {
+    id: 'plant_repeater',
+    name: 'Đậu Hai Nòng (Repeater)',
+    sunCost: 200,
+    cooldownSec: 5.0,
+    maxHp: 320,
+    attackDmg: 20,
+    attackIntervalSec: 1.3,
+    icon: '🟢🟢',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/4/4b/Repeater1.png/revision/latest?cb=20151016104308&path-prefix=vi',
+    description: 'Bắn liên tiếp 2 viên đạn đậu trong mỗi đợt tấn công (tổng 40 DMG), tăng gấp đôi hỏa lực cơ bản.',
+    color: 'border-emerald-500 bg-emerald-950/50 text-emerald-300',
+    projectileType: 'pea',
+    specialTrait: 'Bắn 2 phát liên tiếp (40 DMG)',
+    unlockedAtWave: 2,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Bão Đậu Cao Áp',
+      description: 'Bắn 90 viên đạn đậu siêu cấp và bắn kết liễu 1 quả đậu khổng lồ 600 DMG!',
+      icon: '🟢💥'
+    }
+  },
+  {
+    id: 'plant_torchwood',
+    name: 'Cây Đuốc Lửa (Torchwood)',
+    sunCost: 175,
+    cooldownSec: 6.0,
+    maxHp: 500,
+    attackDmg: 0,
+    attackIntervalSec: 0,
+    icon: '🪵🔥',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/3/30/Torchwood1.png/revision/latest?cb=20151016104535&path-prefix=vi',
+    description: 'Biến tất cả đạn đậu bay qua thành Hỏa Cầu (Đậu Lửa), nhân đôi sát thương (20 -> 40 DMG) và gây sát thương lan!',
+    color: 'border-orange-500 bg-orange-950/50 text-orange-300',
+    specialTrait: 'Đốt cháy đạn đậu x2 DMG',
+    unlockedAtWave: 4,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Hỏa Ngục Lam Quang',
+      description: 'Tự cường hóa thành Lửa Xanh Lam vĩnh viễn, tăng x3 sát thương đạn đậu (60 DMG)!',
+      icon: '🔥💙'
+    }
+  },
+  {
+    id: 'plant_lightning_reed',
+    name: 'Lúa Sét (Lightning Reed)',
+    sunCost: 125,
+    cooldownSec: 4.5,
+    maxHp: 300,
+    attackDmg: 15,
+    attackIntervalSec: 0.9,
+    icon: '⚡🌾',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/a/a2/Lightning_Reed1.png/revision/latest?cb=20151016104240&path-prefix=vi',
+    description: 'Phóng tia sấm sét giật xuyên qua nhiều hàng và lan truyền sang 3 mục tiêu lân cận!',
+    color: 'border-cyan-300 bg-cyan-950/50 text-cyan-200',
+    projectileType: 'lightning',
+    specialTrait: 'Tia sét lan 3 mục tiêu đa hàng',
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Bão Sấm Chớp Toàn Sân',
+      description: 'Triệu hồi mây sấm sét truy đuổi và giáng điện giật liên hoàn tiêu diệt bầy zombie!',
+      icon: '🌩️⚡'
+    }
+  },
+  {
+    id: 'plant_bonk_choy',
+    name: 'Cải Đấm Bốc (Bonk Choy)',
+    sunCost: 150,
+    cooldownSec: 4.0,
+    maxHp: 450,
+    attackDmg: 30,
+    attackIntervalSec: 0.35,
+    icon: '🥊🥬',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/1/11/Bonk_Choy1.png/revision/latest?cb=20151016103948&path-prefix=vi',
+    description: 'Võ sĩ cận chiến thượng thừa! Tung quyền cước liên hoàn cực nhanh 30 DMG/0.35s cả phía trước và phía sau.',
+    color: 'border-lime-400 bg-lime-950/50 text-lime-200',
+    specialTrait: 'Đấm liên hoàn cận chiến 2 hướng',
+    unlockedAtWave: 3,
+    category: 'normal',
+    plantFoodUlt: {
+      name: 'Bách Liệt Thần Quyền',
+      description: 'Xoay tròn tung hàng trăm cú đấm xung quanh 3x3 gây 1200 sát thương cực đại!',
+      icon: '🥊🌪️'
+    }
+  },
+  {
+    id: 'plant_blover',
+    name: 'Cỏ Ba Lá Xoay (Blover)',
+    sunCost: 100,
+    cooldownSec: 10.0,
+    maxHp: 100,
+    attackDmg: 999,
+    attackIntervalSec: 0.5,
+    icon: '🍀💨',
+    imageUrl: 'https://static.wikia.nocookie.net/plantsvszombies/images/4/4e/Blover1.png/revision/latest?cb=20151016103947&path-prefix=vi',
+    description: 'Quạt cánh xoay tạo luồng gió bão cực mạnh, thổi bay ngay lập tức TẤT CẢ Zombie Bóng Bay, Hải Âu và giải trừ Sương Mù!',
+    color: 'border-teal-400 bg-teal-950/50 text-teal-200',
+    specialTrait: 'Thổi bay toàn bộ zombie bay & sương mù',
+    unlockedAtWave: 4,
+    category: 'instant_pi'
   }
 ];
 
@@ -180,8 +543,9 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_normal',
     name: 'Zombie Phố Đi Bộ',
     title: 'Thây Ma Cơ Bản',
+    bodyHp: 100,
     maxHp: 100,
-    speed: 0.18,
+    speed: 0.16,
     attackDmg: 20,
     attackIntervalSec: 1.2,
     icon: '🧟',
@@ -193,8 +557,9 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_fast',
     name: 'Zombie Tốc Độ Cấp 1',
     title: 'Thích Khách Quần Thể',
+    bodyHp: 80,
     maxHp: 80,
-    speed: 0.35,
+    speed: 0.32,
     attackDmg: 25,
     attackIntervalSec: 1.0,
     icon: '🏃',
@@ -202,25 +567,62 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     rewardEnergy: 4,
     description: 'Chạy nhanh lao thẳng vào phòng tuyến thực vật.'
   },
+  zombie_newspaper: {
+    id: 'zombie_newspaper',
+    name: 'Zombie Đọc Báo Địch',
+    title: 'Kẻ Gắt Gỏng Cầm Báo',
+    bodyHp: 100,
+    shieldHp: 120,
+    shieldType: 'newspaper',
+    maxHp: 220,
+    speed: 0.18,
+    attackDmg: 35,
+    attackIntervalSec: 1.1,
+    icon: '📰',
+    rewardSun: 25,
+    rewardEnergy: 5,
+    description: 'Cầm tờ báo che chắn (120 HP Khiên). Khi báo rách sẽ cuồng nộ chạy nhanh gấp đôi!'
+  },
+  zombie_bucket_cone: {
+    id: 'zombie_bucket_cone',
+    name: 'Zombie Mũ Sắt Kim Loại',
+    title: 'Thiết Giáp Tiên Phong',
+    bodyHp: 100,
+    helmHp: 280,
+    helmType: 'bucket',
+    maxHp: 380,
+    speed: 0.15,
+    attackDmg: 35,
+    attackIntervalSec: 1.3,
+    icon: '🪖',
+    rewardSun: 35,
+    rewardEnergy: 8,
+    hasMetalArmor: true,
+    description: 'Đội xô sắt cản 280 sát thương. Nấm Nam Châm có thể hút phăng chiếc xô ngay lập tức!'
+  },
   zombie_strong_1: {
     id: 'zombie_strong_1',
     name: 'Zombie Sức Mạnh Cấp 1',
     title: 'Đao Phủ Cơ Bắp',
-    maxHp: 280,
-    speed: 0.15,
-    attackDmg: 40,
+    bodyHp: 200,
+    helmHp: 120,
+    helmType: 'cone',
+    maxHp: 320,
+    speed: 0.14,
+    attackDmg: 45,
     attackIntervalSec: 1.5,
     icon: '💪',
     rewardSun: 35,
     rewardEnergy: 8,
-    description: 'Cơ bắp cuồn cuộn chịu được nhiều đợt bắn đậu.'
+    description: 'Cơ bắp cuồn cuộn kết hợp nón bảo hộ chịu được nhiều đợt bắn đậu.'
   },
   zombie_fast_2: {
     id: 'zombie_fast_2',
     name: 'Zombie Tốc Độ Cấp 2',
     title: 'Vuốt Quỷ Hầm Ga',
-    maxHp: 170,
-    speed: 0.45,
+    bodyHp: 190,
+    maxHp: 190,
+    speed: 0.42,
     attackDmg: 50,
     attackIntervalSec: 0.8,
     icon: '⚡',
@@ -232,21 +634,25 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_strong_2',
     name: 'Zombie Sức Mạnh Cấp 2',
     title: 'Thống Lĩnh Đập Phá',
-    maxHp: 580,
-    speed: 0.16,
+    bodyHp: 350,
+    helmHp: 300,
+    helmType: 'football',
+    maxHp: 650,
+    speed: 0.15,
     attackDmg: 75,
     attackIntervalSec: 1.4,
     icon: '👹',
     rewardSun: 80,
     rewardEnergy: 25,
-    description: 'Dùng thi thể zombie khác làm vũ khí đập bẹp thực vật.',
+    description: 'Dùng thi thể zombie khác làm vũ khí đập bẹp thực vật, đội mũ giáp bóng đá cực trâu.',
     isBoss: true
   },
   zombie_flag: {
     id: 'zombie_flag',
-    name: 'Zombie Cầm Cờ',
+    name: 'Zombie Cầm Cờ Lệnh',
     title: 'Chỉ Huy Quân Đoàn',
-    maxHp: 150,
+    bodyHp: 180,
+    maxHp: 180,
     speed: 0.22,
     attackDmg: 30,
     attackIntervalSec: 1.0,
@@ -259,22 +665,28 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_armored_spore',
     name: 'Zombie Vảy Sừng Bào Tử',
     title: 'Biến Dị Đột Biến Cấp 2',
-    maxHp: 420,
-    speed: 0.2,
+    bodyHp: 200,
+    helmHp: 260,
+    helmType: 'spore_scale',
+    maxHp: 460,
+    speed: 0.18,
     attackDmg: 45,
     attackIntervalSec: 1.2,
     icon: '🦏',
     rewardSun: 50,
     rewardEnergy: 15,
-    description: 'Lớp sừng cứng kháng đạn thường 50%. Chỉ Nấm Phun Lớn và Băng Giá mới xuyên thủng!',
+    description: 'Lớp sừng cứng 260 HP kháng đạn thường 50%. Chỉ Nấm Phun Lớn và Băng Giá mới xuyên thủng!',
     armorType: 'spore_scale'
   },
   zombie_mutant_cat: {
     id: 'zombie_mutant_cat',
     name: 'Mèo Cam Biến Dị Khổng Lồ',
     title: 'Hung Thú Đột Biến Nông Nghiệp',
-    maxHp: 750,
-    speed: 0.38,
+    bodyHp: 550,
+    helmHp: 300,
+    helmType: 'spore_scale',
+    maxHp: 850,
+    speed: 0.35,
     attackDmg: 80,
     attackIntervalSec: 0.9,
     icon: '🐯',
@@ -288,8 +700,9 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_disco',
     name: 'Võ Vương Thây Ma (Disco)',
     title: 'Vua Khiêu Vũ Chiến Trường',
-    maxHp: 600,
-    speed: 0.24,
+    bodyHp: 650,
+    maxHp: 650,
+    speed: 0.22,
     attackDmg: 55,
     attackIntervalSec: 1.1,
     icon: '🕺',
@@ -301,8 +714,11 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_rival_yamamoto',
     name: 'Yamamoto & Đao Phủ Sakura',
     title: 'Đại Diện Phản Diện Quốc Vận',
-    maxHp: 900,
-    speed: 0.3,
+    bodyHp: 500,
+    helmHp: 600,
+    helmType: 'football',
+    maxHp: 1100,
+    speed: 0.28,
     attackDmg: 95,
     attackIntervalSec: 1.0,
     icon: '🥷',
@@ -311,19 +727,99 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     description: 'Đại diện Sakura Quốc mang kiếm Katana và đàn tay sai ép bức sinh viên.',
     isBoss: true
   },
+  zombie_polevaulter: {
+    id: 'zombie_polevaulter',
+    name: 'Zombie Nhảy Sào',
+    title: 'Vận Động Viên Điền Kinh',
+    bodyHp: 100,
+    helmHp: 120,
+    maxHp: 220,
+    speed: 0.36,
+    attackDmg: 30,
+    attackIntervalSec: 1.0,
+    icon: '🏃‍♂️🦯',
+    rewardSun: 30,
+    rewardEnergy: 6,
+    description: 'Cầm cây sào chạy cực nhanh và nhảy vụt qua cây đầu tiên nó gặp! Tượng Đá (Tall-nut) có thể chặn đứng cú nhảy sào.'
+  },
+  zombie_balloon: {
+    id: 'zombie_balloon',
+    name: 'Zombie Bóng Bay',
+    title: 'Lính Dù Không Gian',
+    bodyHp: 100,
+    maxHp: 120,
+    speed: 0.22,
+    attackDmg: 25,
+    attackIntervalSec: 1.2,
+    icon: '🎈🧟',
+    rewardSun: 35,
+    rewardEnergy: 8,
+    description: 'Buộc bóng bay lơ lửng trên không trung, bay qua mọi cây cối. Khi bóng bị nổ (20 HP) sẽ rơi xuống đất thành thây ma thường!'
+  },
+  zombie_pogo: {
+    id: 'zombie_pogo',
+    name: 'Zombie Nhảy Lò Cò',
+    title: 'Thợ Nhảy Bất Bại',
+    bodyHp: 140,
+    helmHp: 180,
+    helmType: 'bucket',
+    maxHp: 320,
+    speed: 0.35,
+    attackDmg: 35,
+    attackIntervalSec: 1.1,
+    icon: '🦘🧟',
+    rewardSun: 45,
+    rewardEnergy: 12,
+    hasMetalArmor: true,
+    description: 'Nhảy lò cò liên tục vượt qua mọi hàng rào cây xanh. Tượng Đá sẽ làm gãy lò cò, Nấm Nam Châm có thể hút lò cò kim loại!'
+  },
+  zombie_digger: {
+    id: 'zombie_digger',
+    name: 'Zombie Đào Hầm',
+    title: 'Thợ Mỏ Đột Kích',
+    bodyHp: 120,
+    helmHp: 150,
+    helmType: 'bucket',
+    maxHp: 270,
+    speed: 0.38,
+    attackDmg: 40,
+    attackIntervalSec: 1.0,
+    icon: '⛏️🧟',
+    rewardSun: 50,
+    rewardEnergy: 15,
+    hasMetalArmor: true,
+    description: 'Đào hầm chui thẳng ra sau nhà, sau đó ngoi lên và cắn lén toàn bộ cây từ sau lưng! Nấm Nam Châm có thể tước đoạt cuốc chim.'
+  },
+  zombie_imp: {
+    id: 'zombie_imp',
+    name: 'Zombie Quỷ Nhỏ (Imp)',
+    title: 'Tiểu Quỷ Đột Kích',
+    bodyHp: 60,
+    maxHp: 60,
+    speed: 0.45,
+    attackDmg: 25,
+    attackIntervalSec: 0.8,
+    icon: '👶🧟',
+    rewardSun: 20,
+    rewardEnergy: 4,
+    description: 'Quỷ nhỏ tinh nghịch được Gargantuar ném thẳng vào giữa sân phòng tuyến khi máu Boss giảm dưới 50%!'
+  },
   zombie_boss_lion_king: {
     id: 'zombie_boss_lion_king',
     name: 'Vua Sư Tử & Gargantuar Cấp 3',
     title: 'Bá Chủ Sân Vận Động Đại Học',
-    maxHp: 2200,
-    speed: 0.13,
-    attackDmg: 140,
+    bodyHp: 1600,
+    helmHp: 1000,
+    helmType: 'spore_scale',
+    maxHp: 2600,
+    speed: 0.12,
+    attackDmg: 150,
     attackIntervalSec: 1.8,
     icon: '🦁',
     rewardSun: 250,
     rewardEnergy: 150,
     rewardBeastCore: 3,
-    description: 'Vua Sư Tử cưỡi trên vai quái vật khổng lồ ném cột điện đập nát toàn bộ phòng tuyến.',
+    description: 'Vua Sư Tử cưỡi trên vai quái vật khổng lồ ném cột điện đập nát toàn bộ phòng tuyến và ném Imp khi còn 50% HP.',
     isBoss: true,
     armorType: 'boss_armor'
   },
@@ -331,17 +827,113 @@ export const PVZ_ZOMBIES: Record<string, ZombieData> = {
     id: 'zombie_boss_gargantuar',
     name: 'Chúa Tể Đa Vũ Trụ Cấp EX',
     title: 'Trùm Cuối Vận Mệnh Quốc Gia',
-    maxHp: 3200,
-    speed: 0.12,
-    attackDmg: 180,
+    bodyHp: 2000,
+    helmHp: 1800,
+    helmType: 'spore_scale',
+    maxHp: 3800,
+    speed: 0.11,
+    attackDmg: 190,
     attackIntervalSec: 2.0,
     icon: '👑',
     rewardSun: 400,
     rewardEnergy: 300,
     rewardBeastCore: 5,
-    description: 'Thực thể Ma Thần tối thượng đe dọa trực tiếp sự tồn vong của 10 tỷ người.',
+    description: 'Thực thể Ma Thần tối thượng đe dọa trực tiếp sự tồn vong của 10 tỷ người, ném đàn Imp đột kích phòng tuyến.',
     isBoss: true,
     armorType: 'boss_armor'
+  },
+  zombie_pyramid: {
+    id: 'zombie_pyramid',
+    name: 'Zombie Kim Tự Tháp (Ai Cập)',
+    title: 'Thủ Hộ Giả Kim Tự Tháp',
+    bodyHp: 180,
+    helmHp: 450,
+    helmType: 'cone',
+    maxHp: 630,
+    speed: 0.18,
+    attackDmg: 35,
+    attackIntervalSec: 1.1,
+    icon: '🔺🧟',
+    rewardSun: 50,
+    rewardEnergy: 15,
+    description: 'Đội khối đá kim tự tháp nghìn năm 450 HP siêu bền vững, chống chịu hỏa lực cực tốt.'
+  },
+  zombie_seagull: {
+    id: 'zombie_seagull',
+    name: 'Zombie Hải Âu Cướp Biển',
+    title: 'Phi Đội Hải Tặc Không Gian',
+    bodyHp: 110,
+    maxHp: 110,
+    speed: 0.36,
+    attackDmg: 25,
+    attackIntervalSec: 1.0,
+    icon: '🦅🧟',
+    rewardSun: 40,
+    rewardEnergy: 10,
+    description: 'Được hải âu cắp bay lơ lửng trên không trung, bay qua mọi chướng ngại vật mặt đất!'
+  },
+  zombie_knight: {
+    id: 'zombie_knight',
+    name: 'Zombie Kỵ Sĩ Giáp Sắt',
+    title: 'Kỵ Binh Thiết Giáp Trung Cổ',
+    bodyHp: 200,
+    helmHp: 750,
+    helmType: 'bucket',
+    maxHp: 950,
+    speed: 0.15,
+    attackDmg: 50,
+    attackIntervalSec: 1.2,
+    icon: '🛡️🧟',
+    rewardSun: 80,
+    rewardEnergy: 25,
+    hasMetalArmor: true,
+    description: 'Mũ giáp sắt rèn cổ đại 750 HP dày đặc. Nấm Nam Châm hoặc Nấm Phun Bào Tử là khắc tinh hoàn hảo!'
+  },
+  zombie_pirate: {
+    id: 'zombie_pirate',
+    name: 'Zombie Thuyền Trưởng Vẹt',
+    title: 'Thuyền Trưởng Biển Sâu',
+    bodyHp: 250,
+    helmHp: 200,
+    helmType: 'football',
+    maxHp: 450,
+    speed: 0.24,
+    attackDmg: 45,
+    attackIntervalSec: 1.0,
+    icon: '🦜🏴‍☠️',
+    rewardSun: 60,
+    rewardEnergy: 20,
+    description: 'Chỉ huy cướp biển hung hãn, liên tục thúc đẩy đàn zombie phía sau tiến công.'
+  },
+  zombie_mermaid_imp: {
+    id: 'zombie_mermaid_imp',
+    name: 'Zombie Quỷ Nhỏ Tiên Cá',
+    title: 'Tiểu Yêu Thủy Tộc',
+    bodyHp: 70,
+    maxHp: 70,
+    speed: 0.48,
+    attackDmg: 20,
+    attackIntervalSec: 0.7,
+    icon: '🧜‍♂️🧟',
+    rewardSun: 25,
+    rewardEnergy: 5,
+    description: 'Nhỏ bé linh hoạt, bơi lội và luồn lách cực nhanh qua các khe hở phòng ngự!'
+  },
+  zombie_surfer: {
+    id: 'zombie_surfer',
+    name: 'Zombie Lướt Ván',
+    title: 'Kỵ Sĩ Sóng Biển',
+    bodyHp: 160,
+    helmHp: 250,
+    helmType: 'cone',
+    maxHp: 410,
+    speed: 0.38,
+    attackDmg: 60,
+    attackIntervalSec: 0.9,
+    icon: '🏄‍♂️🧟',
+    rewardSun: 65,
+    rewardEnergy: 22,
+    description: 'Cầm ván lướt sóng tốc độ cao, khi chạm cây đầu tiên sẽ cắm ván đè bẹp cây và chuyển thành đi bộ!'
   }
 };
 
@@ -350,15 +942,35 @@ export const PVZ_WAVES: PvzWave[] = [
     waveNumber: 1,
     chapterTitle: 'Chương 1: Kỷ Nguyên Vận Mệnh Quốc Gia',
     name: 'Vòng 1: Bình Minh Tàn Thế & Khởi Đầu Nông Dân',
-    stageName: 'Đường Phố Tân Thủ & Công Viên',
-    description: 'Hàng chục Zombie đơn lẻ bắt đầu tiến tới khu đất 10m² của Tuyết Mộc. Hãy trồng Hoa Hướng Dương và Đậu Pháo!',
+    stageName: 'Đường Phố Tân Thủ & Cổng Công Viên',
+    description: 'Bầy zombie phố đi bộ bắt đầu di chuyển. Hãy trồng Hoa Hướng Dương nhả nắng và đặt Đậu Pháo!',
+    totalDurationSec: 110,
+    weatherCondition: 'clear',
+    phases: [
+      { phaseNumber: 1, title: 'Trinh Sát Tân Thủ', startDelaySec: 2 },
+      { phaseNumber: 2, title: 'Đợt Công Kích Đầu Tiên', startDelaySec: 35 },
+      { phaseNumber: 3, title: '⚠️ BÃO ZOMBIE ĐANG TIẾP CẬN!', startDelaySec: 70, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_normal', delaySec: 2 },
-      { zombieId: 'zombie_normal', delaySec: 6 },
+      // Phase 1 (0 - 30s)
+      { zombieId: 'zombie_normal', delaySec: 3 },
       { zombieId: 'zombie_normal', delaySec: 10 },
-      { zombieId: 'zombie_fast', delaySec: 14 },
       { zombieId: 'zombie_normal', delaySec: 18 },
-      { zombieId: 'zombie_strong_1', delaySec: 22 }
+      { zombieId: 'zombie_fast', delaySec: 26 },
+      // Phase 2 (35 - 65s)
+      { zombieId: 'zombie_normal', delaySec: 36 },
+      { zombieId: 'zombie_fast', delaySec: 42 },
+      { zombieId: 'zombie_newspaper', delaySec: 48 },
+      { zombieId: 'zombie_normal', delaySec: 54 },
+      { zombieId: 'zombie_strong_1', delaySec: 60 },
+      // Phase 3 Huge Wave (70 - 100s)
+      { zombieId: 'zombie_flag', delaySec: 72 },
+      { zombieId: 'zombie_fast', delaySec: 75 },
+      { zombieId: 'zombie_normal', delaySec: 77 },
+      { zombieId: 'zombie_newspaper', delaySec: 80 },
+      { zombieId: 'zombie_strong_1', delaySec: 84 },
+      { zombieId: 'zombie_fast', delaySec: 88 },
+      { zombieId: 'zombie_normal', delaySec: 92 }
     ],
     nationalReward: {
       title: 'QUỐC DÂN TĂNG TUỔI THỌ',
@@ -374,15 +986,38 @@ export const PVZ_WAVES: PvzWave[] = [
     name: 'Vòng 2: Càn Quét Siêu Thị & Thu Phục Anh Em Dương Siêu',
     stageName: 'Khu Siêu Thị Tiện Lợi & Nắp Cống Ngầm',
     description: 'Bầy zombie đông đúc vây kín cửa siêu thị. Đậu Pháo cần bắn đồng loạt để hạ gục Zombie Sức Mạnh!',
+    totalDurationSec: 130,
+    weatherCondition: 'clear',
+    phases: [
+      { phaseNumber: 1, title: 'Dọn Sạch Vỉa Hè Siêu Thị', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO ZOMBIE ĐỢT 1', startDelaySec: 45, isHugeWave: true },
+      { phaseNumber: 3, title: 'Côn Đồ & Quái Đột Biến Xông Vào', startDelaySec: 75 },
+      { phaseNumber: 4, title: '⚠️ ĐỢT SÓNG CUỐI CÙNG!', startDelaySec: 100, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_normal', delaySec: 2 },
-      { zombieId: 'zombie_fast', delaySec: 5 },
-      { zombieId: 'zombie_normal', delaySec: 8 },
-      { zombieId: 'zombie_fast', delaySec: 12 },
-      { zombieId: 'zombie_strong_1', delaySec: 15 },
-      { zombieId: 'zombie_normal', delaySec: 18 },
-      { zombieId: 'zombie_strong_1', delaySec: 22 },
-      { zombieId: 'zombie_flag', delaySec: 26 }
+      // Phase 1
+      { zombieId: 'zombie_normal', delaySec: 3 },
+      { zombieId: 'zombie_fast', delaySec: 10 },
+      { zombieId: 'zombie_newspaper', delaySec: 18 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 28 },
+      { zombieId: 'zombie_normal', delaySec: 36 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 46 },
+      { zombieId: 'zombie_polevaulter', delaySec: 48 },
+      { zombieId: 'zombie_strong_1', delaySec: 52 },
+      { zombieId: 'zombie_newspaper', delaySec: 58 },
+      { zombieId: 'zombie_normal', delaySec: 64 },
+      // Phase 3
+      { zombieId: 'zombie_bucket_cone', delaySec: 76 },
+      { zombieId: 'zombie_polevaulter', delaySec: 82 },
+      { zombieId: 'zombie_strong_1', delaySec: 88 },
+      // Phase 4 Final Wave
+      { zombieId: 'zombie_flag', delaySec: 101 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 104 },
+      { zombieId: 'zombie_polevaulter', delaySec: 108 },
+      { zombieId: 'zombie_fast', delaySec: 112 },
+      { zombieId: 'zombie_newspaper', delaySec: 115 },
+      { zombieId: 'zombie_normal', delaySec: 120 }
     ],
     nationalReward: {
       title: 'TĂNG LÃNH THỔ 25 KM²',
@@ -397,15 +1032,39 @@ export const PVZ_WAVES: PvzWave[] = [
     chapterTitle: 'Chương 3: Đồng Minh & Thế Lực',
     name: 'Vòng 3: Đường Hầm Tàu Điện Ngầm & Gặp Gỡ Đường Long',
     stageName: 'Đường Ray Ngầm & Trạm Ga Thứ 5',
-    description: 'Zombie Tốc Độ Cấp 2 móng vuốt kim loại ẩn hiện trong bóng tối đường hầm!',
+    description: 'Bóng tối đường hầm làm giảm tầm nhìn. Zombie Bóng Bay và Zombie Nhảy Sào luồn sâu vào phòng tuyến!',
+    totalDurationSec: 150,
+    weatherCondition: 'night',
+    phases: [
+      { phaseNumber: 1, title: 'Bóng Đêm Hầm Ga', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO ZOMBIE BĂNG QUA ĐƯỜNG RAY', startDelaySec: 50, isHugeWave: true },
+      { phaseNumber: 3, title: 'Thích Khách Móng Vuốt & Zombie Bóng Bay', startDelaySec: 85 },
+      { phaseNumber: 4, title: '⚠️ TRÙM THỐNG LĨNH ĐẬP PHÁ XUẤT HIỆN!', startDelaySec: 115, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_fast', delaySec: 2 },
-      { zombieId: 'zombie_fast_2', delaySec: 5 },
-      { zombieId: 'zombie_strong_1', delaySec: 9 },
-      { zombieId: 'zombie_fast_2', delaySec: 13 },
-      { zombieId: 'zombie_normal', delaySec: 16 },
-      { zombieId: 'zombie_strong_2', delaySec: 20 },
-      { zombieId: 'zombie_flag', delaySec: 25 }
+      // Phase 1
+      { zombieId: 'zombie_fast', delaySec: 3 },
+      { zombieId: 'zombie_balloon', delaySec: 12 },
+      { zombieId: 'zombie_polevaulter', delaySec: 22 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 32 },
+      { zombieId: 'zombie_strong_1', delaySec: 42 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 52 },
+      { zombieId: 'zombie_balloon', delaySec: 55 },
+      { zombieId: 'zombie_fast_2', delaySec: 60 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 66 },
+      { zombieId: 'zombie_strong_1', delaySec: 74 },
+      // Phase 3
+      { zombieId: 'zombie_balloon', delaySec: 87 },
+      { zombieId: 'zombie_polevaulter', delaySec: 94 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 102 },
+      // Phase 4 Final Wave & Boss
+      { zombieId: 'zombie_flag', delaySec: 116 },
+      { zombieId: 'zombie_strong_2', delaySec: 120 },
+      { zombieId: 'zombie_balloon', delaySec: 125 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 130 },
+      { zombieId: 'zombie_fast', delaySec: 135 },
+      { zombieId: 'zombie_normal', delaySec: 140 }
     ],
     nationalReward: {
       title: 'TOÀN DÂN TĂNG 8% SỨC MẠNH',
@@ -420,15 +1079,40 @@ export const PVZ_WAVES: PvzWave[] = [
     chapterTitle: 'Chương 4: Đụng Độ Quái Vật & Phe Phái',
     name: 'Vòng 4: Đột Kích Đại Học Nông Nghiệp & Đối Đầu Yamamoto',
     stageName: 'Đại Học Nông Nghiệp Lương Tử Hồ',
-    description: 'Yamamoto ép sinh viên làm tay sai. Hãy dùng bầy thực vật áp đảo và đánh lui Yamamoto!',
+    description: 'Yamamoto điều động Zombie Nhảy Lò Cò và Zombie Đào Hầm! Dùng Tượng Đá và Nấm Nam Châm để khắc chế!',
+    totalDurationSec: 170,
+    weatherCondition: 'clear',
+    phases: [
+      { phaseNumber: 1, title: 'Bảo Vệ Viện Nghiên Cứu Giống', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO QUÂN ĐOÀN TAY SAI SAKURA', startDelaySec: 55, isHugeWave: true },
+      { phaseNumber: 3, title: 'Đội Nhảy Lò Cò & Zombie Thiết Giáp', startDelaySec: 95 },
+      { phaseNumber: 4, title: '⚠️ YAMAMOTO TỔNG LỰC TẤN CÔNG!', startDelaySec: 130, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_flag', delaySec: 2 },
-      { zombieId: 'zombie_fast_2', delaySec: 5 },
-      { zombieId: 'zombie_strong_1', delaySec: 8 },
-      { zombieId: 'zombie_fast_2', delaySec: 12 },
-      { zombieId: 'zombie_strong_2', delaySec: 16 },
-      { zombieId: 'zombie_rival_yamamoto', delaySec: 20 },
-      { zombieId: 'zombie_fast_2', delaySec: 25 }
+      // Phase 1
+      { zombieId: 'zombie_pogo', delaySec: 4 },
+      { zombieId: 'zombie_fast_2', delaySec: 14 },
+      { zombieId: 'zombie_balloon', delaySec: 26 },
+      { zombieId: 'zombie_strong_1', delaySec: 38 },
+      { zombieId: 'zombie_polevaulter', delaySec: 48 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 57 },
+      { zombieId: 'zombie_pogo', delaySec: 60 },
+      { zombieId: 'zombie_fast_2', delaySec: 65 },
+      { zombieId: 'zombie_strong_1', delaySec: 72 },
+      { zombieId: 'zombie_newspaper', delaySec: 80 },
+      { zombieId: 'zombie_strong_2', delaySec: 88 },
+      // Phase 3
+      { zombieId: 'zombie_pogo', delaySec: 98 },
+      { zombieId: 'zombie_balloon', delaySec: 106 },
+      { zombieId: 'zombie_strong_1', delaySec: 115 },
+      // Phase 4 Final Wave & Boss Yamamoto
+      { zombieId: 'zombie_flag', delaySec: 132 },
+      { zombieId: 'zombie_rival_yamamoto', delaySec: 136 },
+      { zombieId: 'zombie_pogo', delaySec: 142 },
+      { zombieId: 'zombie_balloon', delaySec: 148 },
+      { zombieId: 'zombie_strong_1', delaySec: 154 },
+      { zombieId: 'zombie_newspaper', delaySec: 160 }
     ],
     nationalReward: {
       title: 'TIẾP NHẬN NGUỒN GEN NÔNG NGHIỆP',
@@ -443,14 +1127,41 @@ export const PVZ_WAVES: PvzWave[] = [
     chapterTitle: 'Chương 5: Thảm Họa Biến Dị & Tiến Hóa',
     name: 'Vòng 5: Bào Tử Độc & Mèo Cam Biến Dị Khổng Lồ',
     stageName: 'Vườn Thực Nghiệm Bào Tử Biến Dị',
-    description: 'Zombie sinh ra lớp vảy sừng kháng đạn! Dùng Nấm Phun Lớn và Đậu Băng, săn Mèo Cam lấy Tinh Hạch!',
+    description: 'Zombie Đào Hầm chui ra sau nhà! Cần Hoa Đèn Đường chiếu rọi và Nấm Nam Châm tước đoạt cuốc chim!',
+    totalDurationSec: 190,
+    weatherCondition: 'fog',
+    phases: [
+      { phaseNumber: 1, title: 'Sương Mù Bào Tử Lan Rộng', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO ZOMBIE ĐÀO HẦM & VẢY SỪNG', startDelaySec: 60, isHugeWave: true },
+      { phaseNumber: 3, title: 'Tiếng Gầm Mèo Cam Trong Sương Mù', startDelaySec: 105 },
+      { phaseNumber: 4, title: '⚠️ HUNG THÚ MÈO CAM KHỔNG LỒ XUẤT ĐỘNG!', startDelaySec: 145, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_armored_spore', delaySec: 2 },
-      { zombieId: 'zombie_fast_2', delaySec: 6 },
-      { zombieId: 'zombie_armored_spore', delaySec: 10 },
-      { zombieId: 'zombie_mutant_cat', delaySec: 15 },
-      { zombieId: 'zombie_armored_spore', delaySec: 20 },
-      { zombieId: 'zombie_disco', delaySec: 24 }
+      // Phase 1
+      { zombieId: 'zombie_digger', delaySec: 5 },
+      { zombieId: 'zombie_armored_spore', delaySec: 16 },
+      { zombieId: 'zombie_balloon', delaySec: 28 },
+      { zombieId: 'zombie_pogo', delaySec: 40 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 52 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 62 },
+      { zombieId: 'zombie_digger', delaySec: 65 },
+      { zombieId: 'zombie_disco', delaySec: 72 },
+      { zombieId: 'zombie_balloon', delaySec: 80 },
+      { zombieId: 'zombie_armored_spore', delaySec: 88 },
+      { zombieId: 'zombie_strong_1', delaySec: 96 },
+      // Phase 3
+      { zombieId: 'zombie_digger', delaySec: 108 },
+      { zombieId: 'zombie_pogo', delaySec: 118 },
+      { zombieId: 'zombie_fast_2', delaySec: 128 },
+      { zombieId: 'zombie_armored_spore', delaySec: 138 },
+      // Phase 4 Final Wave & Boss Mutant Cat
+      { zombieId: 'zombie_flag', delaySec: 147 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 152 },
+      { zombieId: 'zombie_digger', delaySec: 158 },
+      { zombieId: 'zombie_disco', delaySec: 165 },
+      { zombieId: 'zombie_pogo', delaySec: 172 },
+      { zombieId: 'zombie_armored_spore', delaySec: 180 }
     ],
     nationalReward: {
       title: 'MỞ KHÓA TINH HẠCH MA THÚ & BỆNH LÝ',
@@ -466,13 +1177,40 @@ export const PVZ_WAVES: PvzWave[] = [
     name: 'Vòng 6: Huyết Chiến Vua Sư Tử & Đường Tướng Quân Thức Tỉnh',
     stageName: 'Sân Vận Động Trung Tâm Hàng Vạn Zombie',
     description: 'Vua Sư Tử cưỡi Gargantuar Cấp 3! Triển khai Đường Tướng Quân giáp xương và Nấm Hủy Diệt Nổ Hạt Nhân!',
+    totalDurationSec: 210,
+    weatherCondition: 'clear',
+    phases: [
+      { phaseNumber: 1, title: 'Hàng Vạn Zombie Xung Kích', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO QUÂN ĐOÀN KHIÊU VŨ DISCO & THIẾT GIÁP', startDelaySec: 65, isHugeWave: true },
+      { phaseNumber: 3, title: 'Đường Long Hi Sinh - Đường Tướng Quân Thức Tỉnh', startDelaySec: 115 },
+      { phaseNumber: 4, title: '⚠️ VUA SƯ TỬ CƯỠI GARGANTUAR TỔNG TẤN CÔNG!', startDelaySec: 160, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_flag', delaySec: 2 },
-      { zombieId: 'zombie_armored_spore', delaySec: 5 },
-      { zombieId: 'zombie_disco', delaySec: 9 },
-      { zombieId: 'zombie_boss_lion_king', delaySec: 14 },
-      { zombieId: 'zombie_mutant_cat', delaySec: 20 },
-      { zombieId: 'zombie_armored_spore', delaySec: 25 }
+      // Phase 1
+      { zombieId: 'zombie_armored_spore', delaySec: 4 },
+      { zombieId: 'zombie_disco', delaySec: 16 },
+      { zombieId: 'zombie_fast_2', delaySec: 28 },
+      { zombieId: 'zombie_bucket_cone', delaySec: 40 },
+      { zombieId: 'zombie_strong_2', delaySec: 54 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 67 },
+      { zombieId: 'zombie_disco', delaySec: 70 },
+      { zombieId: 'zombie_armored_spore', delaySec: 76 },
+      { zombieId: 'zombie_fast_2', delaySec: 84 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 92 },
+      { zombieId: 'zombie_armored_spore', delaySec: 102 },
+      // Phase 3
+      { zombieId: 'zombie_disco', delaySec: 118 },
+      { zombieId: 'zombie_armored_spore', delaySec: 128 },
+      { zombieId: 'zombie_strong_2', delaySec: 140 },
+      { zombieId: 'zombie_fast_2', delaySec: 150 },
+      // Phase 4 Final Wave & Boss Lion King
+      { zombieId: 'zombie_flag', delaySec: 162 },
+      { zombieId: 'zombie_boss_lion_king', delaySec: 168 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 175 },
+      { zombieId: 'zombie_disco', delaySec: 182 },
+      { zombieId: 'zombie_armored_spore', delaySec: 190 },
+      { zombieId: 'zombie_fast_2', delaySec: 198 }
     ],
     nationalReward: {
       title: 'CHIẾT XUẤT HUYẾT THANH THANH TẨY',
@@ -488,13 +1226,40 @@ export const PVZ_WAVES: PvzWave[] = [
     name: 'Vòng 7: Chung Kết Bá Chủ & Đại Chiến Đa Vũ Trụ',
     stageName: 'Căn Cứ Đảo Giữa Hồ & Đấu Trường Quốc Vận',
     description: 'Thắp sáng Hoa Đèn Đường, dẫn dắt Đường Tướng Quân và quân đoàn tối thượng diệt Chúa Tể EX!',
+    totalDurationSec: 240,
+    weatherCondition: 'clear',
+    phases: [
+      { phaseNumber: 1, title: 'Khai Mở Đấu Trường Quốc Vận', startDelaySec: 2 },
+      { phaseNumber: 2, title: '⚠️ BÃO QUÂN ĐOÀN MA THÚ ĐA VŨ TRỤ', startDelaySec: 70, isHugeWave: true },
+      { phaseNumber: 3, title: 'Yamamoto & Vua Sư Tử Hồi Sinh Hợp Lực', startDelaySec: 130 },
+      { phaseNumber: 4, title: '⚠️ CHÚA TỂ ĐA VŨ TRỤ EX XUẤT HIỆN!', startDelaySec: 180, isHugeWave: true, isFinalWave: true }
+    ],
     zombieSpawns: [
-      { zombieId: 'zombie_flag', delaySec: 2 },
-      { zombieId: 'zombie_rival_yamamoto', delaySec: 6 },
-      { zombieId: 'zombie_armored_spore', delaySec: 10 },
-      { zombieId: 'zombie_boss_gargantuar', delaySec: 15 },
-      { zombieId: 'zombie_boss_lion_king', delaySec: 22 },
-      { zombieId: 'zombie_disco', delaySec: 27 }
+      // Phase 1
+      { zombieId: 'zombie_armored_spore', delaySec: 5 },
+      { zombieId: 'zombie_disco', delaySec: 18 },
+      { zombieId: 'zombie_fast_2', delaySec: 32 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 46 },
+      { zombieId: 'zombie_strong_2', delaySec: 58 },
+      // Phase 2 (Flag 1)
+      { zombieId: 'zombie_flag', delaySec: 72 },
+      { zombieId: 'zombie_rival_yamamoto', delaySec: 76 },
+      { zombieId: 'zombie_disco', delaySec: 84 },
+      { zombieId: 'zombie_armored_spore', delaySec: 94 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 104 },
+      { zombieId: 'zombie_boss_lion_king', delaySec: 116 },
+      // Phase 3
+      { zombieId: 'zombie_armored_spore', delaySec: 134 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 144 },
+      { zombieId: 'zombie_disco', delaySec: 156 },
+      { zombieId: 'zombie_strong_2', delaySec: 168 },
+      // Phase 4 Final Wave & Gargantuar EX
+      { zombieId: 'zombie_flag', delaySec: 182 },
+      { zombieId: 'zombie_boss_gargantuar', delaySec: 188 },
+      { zombieId: 'zombie_boss_lion_king', delaySec: 196 },
+      { zombieId: 'zombie_mutant_cat', delaySec: 206 },
+      { zombieId: 'zombie_disco', delaySec: 216 },
+      { zombieId: 'zombie_armored_spore', delaySec: 226 }
     ],
     nationalReward: {
       title: 'ĐĂNG QUANG BÁ CHỦ VẬN MỆNH TOÀN CẦU',
@@ -576,7 +1341,8 @@ export const PVZ_COMPANIONS: PvzCompanion[] = [
     skillDesc: 'Hát vang bài hát gia truyền, thu hút toàn bộ zombie về phía trước hàng Đậu Pháo.',
     isUnlocked: true,
     dialogue: 'Anh Tuyết cứ yên tâm! Việc dẫn dụ zombie này là sở trường của tôi, chạy một vòng là gom đủ cả bầy!',
-    heroType: 'support'
+    heroType: 'support',
+    assignedTask: 'Trinh sát thu thập hạt giống & ánh nắng'
   },
   {
     id: 'comp_dung_me_nhi',
@@ -587,10 +1353,41 @@ export const PVZ_COMPANIONS: PvzCompanion[] = [
     level: 1,
     loyalty: 100,
     specialSkill: 'Bữa Ăn Năng Lượng Siêu Thị',
-    skillDesc: 'Chế biến đồ ăn vặt càn quét từ siêu thị, tăng 20% lượng Năng Lượng thu được từ Zombie.',
+    skillDesc: 'Chế biến đồ ăn vặt càn quét từ siêu thị, tăng 20% lượng Năng Lượng thu được từ Zombie và hồi phục thể lực trại.',
     isUnlocked: true,
     dialogue: 'Anh Tuyết và anh hai cứ tập trung chiến đấu, việc nấu nướng và dọn dẹp em lo hết ạ!',
-    heroType: 'support'
+    heroType: 'support',
+    assignedTask: 'Nấu súp năng lượng tăng thể lực'
+  },
+  {
+    id: 'comp_la_quan',
+    name: 'La Quân (Gậy Sắt)',
+    title: 'Cựu Binh Quân Đội & Quản Lý Trại',
+    avatar: '🎖️',
+    role: 'Chỉ Huy Phòng Tuyến & Cương Hóa',
+    level: 2,
+    loyalty: 95,
+    specialSkill: 'Thiết Huyết Quân Lực',
+    skillDesc: 'Cường hóa toàn bộ hàng thủ, tăng 20% HP cho Bí Ngô và Hạt Dẻ.',
+    isUnlocked: true,
+    dialogue: 'Báo cáo Tuyết Mộc Đại Nhân! Phòng tuyến hậu cần Vĩnh Hằng Gia Viên vững như bàn thạch!',
+    heroType: 'combat',
+    assignedTask: 'Canh gác pháo đài & Luyện quân'
+  },
+  {
+    id: 'comp_yosuke',
+    name: 'Yagu Yosuke (Võ Sĩ Samurai)',
+    title: 'Kiếm Sĩ Đảo Quốc & Nghiện Dưa Hấu',
+    avatar: '⚔️🍉',
+    role: 'Vệ Sĩ Cận Chiến Chủ Lực',
+    level: 3,
+    loyalty: 90,
+    specialSkill: 'Nhất Đao Trảm Dưa Hấu',
+    skillDesc: 'Chém gục bất kỳ quái vật tinh anh nào tiếp cận hàng đầu đổi lấy thẻ bài hệ trái cây.',
+    isUnlocked: false,
+    dialogue: 'Chỉ cần Tuyết huynh cung cấp Dưa Hấu Băng cho em gái ta, thanh katana này sẽ chém tan mọi ác quỷ!',
+    heroType: 'combat',
+    assignedTask: 'Tiêu diệt quái vật tinh anh'
   },
   {
     id: 'comp_duong_long',
@@ -604,7 +1401,8 @@ export const PVZ_COMPANIONS: PvzCompanion[] = [
     skillDesc: 'Vung Đường Đao chém đứt móng vuốt và đầu Zombie Tốc Độ Cấp 2 chỉ trong 1 chiêu.',
     isUnlocked: false,
     dialogue: 'Tại hạ Đường Long, thề dùng thanh Đường Đao này đi theo Tiên Bối Tuyết Mộc trảm sát vạn quỷ!',
-    heroType: 'combat'
+    heroType: 'combat',
+    assignedTask: 'Luyện đao & Trảm sát quái vật'
   },
   {
     id: 'comp_duong_tuong_quan',
@@ -618,7 +1416,8 @@ export const PVZ_COMPANIONS: PvzCompanion[] = [
     skillDesc: 'Dung hợp chuỗi virus sinh học, sở hữu ý thức độc lập, chém sập hàng thủ Boss và triệu hồi bạn chiến đấu.',
     isUnlocked: false,
     dialogue: 'Dù thân xác hóa thành Thây Ma, linh hồn ta vẫn là mũi kiếm bảo vệ Vĩnh Hằng Gia Viên và Cửu Châu!',
-    heroType: 'zombie_hero'
+    heroType: 'zombie_hero',
+    assignedTask: 'Thống lĩnh quân đoàn thây ma phản công'
   },
   {
     id: 'comp_sinh_vien_nong_nghiep',
@@ -632,23 +1431,89 @@ export const PVZ_COMPANIONS: PvzCompanion[] = [
     skillDesc: 'Giảm 25% thời gian hồi chiêu của các loại hạt giống cao cấp như Xạ Thủ Súng Máy và Nấm Hủy Diệt.',
     isUnlocked: false,
     dialogue: 'Cảm ơn anh Tuyết đã cứu chúng em khỏi tay tên Yamamoto độc ác! Chúng em sẽ dốc hết sức lai tạo giống cây mới!',
-    heroType: 'support'
+    heroType: 'support',
+    assignedTask: 'Ươm mầm lai tạo giống cây cao cấp'
   }
 ];
 
 export const PVZ_DAVE_UPGRADES: PvzDaveUpgrade[] = [
+  // Land Expansions
   {
-    id: 'up_corn_bread',
-    name: 'Bánh Ngô Thần Kỳ Bác Sĩ Dave',
-    costEnergy: 80,
-    icon: '🌽',
+    id: 'up_land_expansion_1',
+    name: 'Sổ Đỏ Đất Vườn Cấp 1 (25m²)',
+    costEnergy: 60,
+    icon: '📜🏡',
     level: 0,
     maxLevel: 1,
-    description: 'Vật phẩm tối cao của Bác Sĩ Dave, mở khóa toàn bộ chức năng ẩn và bảng chỉ số trung thành.',
-    effect: 'Mở khóa chức năng Bác Sĩ Dave Vô Hạn',
+    description: 'Mở rộng khu đất vườn từ 10m² lên 25m² (4 Hàng × 6 Cột), bổ sung thêm 1 máy cắt cỏ bảo vệ!',
+    effect: 'Mở rộng bàn cờ thành 4 Hàng × 6 Cột',
+    isUnlocked: true,
+    category: 'land'
+  },
+  {
+    id: 'up_land_expansion_2',
+    name: 'Sổ Đỏ Đất Vườn Cấp 2 (50m²)',
+    costEnergy: 120,
+    icon: '📜🏰',
+    level: 0,
+    maxLevel: 1,
+    description: 'Mở rộng khu đất vườn lên 50m² (4 Hàng × 7 Cột), gia tăng chiều sâu phòng tuyến.',
+    effect: 'Mở rộng bàn cờ thành 4 Hàng × 7 Cột',
     isUnlocked: false,
+    category: 'land'
+  },
+  {
+    id: 'up_land_expansion_3',
+    name: 'Sổ Đỏ Đất Vườn Cấp 3 (100m²)',
+    costEnergy: 200,
+    costBeastCore: 1,
+    icon: '📜🏯',
+    level: 0,
+    maxLevel: 1,
+    description: 'Mở rộng khu đất vườn lên 100m² (5 Hàng × 8 Cột), thêm hàng phòng ngự thứ 5!',
+    effect: 'Mở rộng bàn cờ thành 5 Hàng × 8 Cột',
+    isUnlocked: false,
+    category: 'land'
+  },
+  {
+    id: 'up_land_expansion_4',
+    name: 'Sổ Đỏ Siêu Pháo Đài (500m²)',
+    costEnergy: 350,
+    costBeastCore: 2,
+    icon: '🌟🏯',
+    level: 0,
+    maxLevel: 1,
+    description: 'Quy mô đất vườn cực hạn 500m² (5 Hàng × 9 Cột) - Bàn cờ huyền thoại tối thượng!',
+    effect: 'Mở rộng bàn cờ thành 5 Hàng × 9 Cột chuẩn thi đấu',
+    isUnlocked: false,
+    category: 'land'
+  },
+  // Golden Watering Can & Plant Food
+  {
+    id: 'up_golden_watering_can',
+    name: 'Bình Tưới Vàng Thần Kỳ (Cổ Vật)',
+    costEnergy: 80,
+    icon: '🫖✨',
+    level: 0,
+    maxLevel: 3,
+    description: 'Cổ vật cung cấp nước thần vô hạn: Tưới hồi phục 100% HP cho cây và buff 50% tốc đánh trong 10 giây!',
+    effect: 'Mở khóa công cụ Bình Tưới Vàng trên thanh HUD',
+    isUnlocked: true,
     category: 'garden'
   },
+  {
+    id: 'up_plant_food_capacity',
+    name: 'Túi Hạt Năng Lượng Thần Kỳ',
+    costEnergy: 50,
+    icon: '⚡🌿',
+    level: 0,
+    maxLevel: 3,
+    description: 'Tăng sức chứa Hạt Năng Lượng (Plant Food) tối đa từ 3 lên 5 hạt.',
+    effect: '+1 Sức chứa Hạt Năng Lượng mỗi cấp',
+    isUnlocked: true,
+    category: 'garden'
+  },
+  // Sun & Damage Upgrades
   {
     id: 'up_sun_efficiency',
     name: 'Phân Bón Quang Hợp Siêu Cấp',
@@ -757,6 +1622,26 @@ export const PVZ_PATHOLOGY_DATA: PathologyEntry[] = [
     weakness: 'Phần đầu chưa có bảo vệ, dễ bị Đậu Pháo bắn rơi.',
     counterStrategy: 'Trồng 1 Đậu Pháo trên mỗi hàng là đủ tiêu diệt.',
     extractedFormula: 'Kháng virus cơ bản: +1%',
+    isDiscovered: true
+  },
+  {
+    id: 'path_newspaper',
+    zombieId: 'zombie_newspaper',
+    name: 'Zombie Đọc Báo',
+    mutationTrait: 'Bản tính cáu gắt, dùng tờ báo dã chiến để đỡ đạn.',
+    weakness: 'Khi mất báo sẽ cuồng loạn nhưng mất phòng thủ.',
+    counterStrategy: 'Dùng Xạ Thủ Băng Giá kìm chân hoặc Bom Anh Đào tiêu diệt nhanh.',
+    extractedFormula: 'Gia tăng tốc độ phản xạ: +3%',
+    isDiscovered: true
+  },
+  {
+    id: 'path_bucket',
+    zombieId: 'zombie_bucket_cone',
+    name: 'Zombie Mũ Sắt Kim Loại',
+    mutationTrait: 'Đội xô sắt dày cản 60% lực sát thương đạn đậu.',
+    weakness: 'Kim loại có tính từ tính cực cao.',
+    counterStrategy: 'Sử dụng Nấm Nam Châm để tước đoạt mũ sắt ngay lập tức.',
+    extractedFormula: 'Hút kim loại: Phá giáp sắt toàn quân +15%',
     isDiscovered: true
   },
   {
@@ -1042,7 +1927,7 @@ export const PVZ_STORY_EVENTS: StoryEvent[] = [
     speakerRole: 'Nghiên Cứu Lai Tạo Gen',
     avatar: '🔬👨‍💼',
     title: 'YAMAMOTO THÁO CHẠY - TIẾP NHẬN PHÒNG THÍ NGHIỆM GEN',
-    subtitle: 'Đại diện Sakura Quốc thất bại thảm hại - Mở khóa Nấm Phun Lớn',
+    subtitle: 'Đại diện Sakura Quốc thất bại thảm hại - Mở khóa Nấm Phun Lớn & Ớt Cay',
     badge: 'THU PHỤC TRÍ THỨC',
     dialogue: [
       'Yamamoto: "Khốn kiếp... Thực vật của hắn quá đông, đạn bắn rụng cả kiếm đạo của ta! Rút quân mau!"',
@@ -1060,12 +1945,12 @@ export const PVZ_STORY_EVENTS: StoryEvent[] = [
     speaker: 'Bác Sĩ Dave & Hệ Thống Sân Vườn',
     speakerRole: 'Cảnh Báo Đột Biến Gen',
     avatar: '⚠️☣️',
-    title: 'CẢNH BÁO: VIRUS TIẾN HÓA - VẢY SỪNG KHÁNG ĐẠN',
-    subtitle: 'Zombie mọc vảy sừng cản đạn đậu & Mèo Cam Biến Dị khổng lồ',
+    title: 'CẢNH BÁO: VIRUS TIẾN HÓA - VẢY SỪNG KHÁNG ĐẠN & SƯƠNG MÙ',
+    subtitle: 'Zombie mọc vảy sừng cản đạn đậu, sương mù che khuất tầm nhìn & Mèo Cam Biến Dị',
     badge: 'CHƯƠNG 5: BIẾN DỊ',
     dialogue: [
       'Bác Sĩ Dave: "🎩 Wabby Wabbo! Cực kỳ nguy hiểm! Do ngươi xả đạn Đậu Pháo quá nhiều, chủng virus Zombie đã tiến hóa sinh ra vảy sừng kháng 50% sát thương đạn đậu!"',
-      'Hệ Thống Sân Vườn: "Kích hoạt mô-đun [Phân Tích Bệnh Lý]! Khuyên dùng: Nấm Phun Lớn (sóng bào tử tím bắn xuyên thấu phá giáp) và Nấm Mê Hoặc (thôi miên quái vật cắn nhau)!"',
+      'Hệ Thống Sân Vườn: "Kích hoạt mô-đun [Phân Tích Bệnh Lý]! Khuyên dùng: Nấm Phun Lớn (sóng bào tử tím bắn xuyên thấu phá giáp) và Hoa Đèn Đường xua tan sương mù độc!"',
       'Tuyết Mộc: "Cả những con Mèo Cam Biến Dị cũng xuất hiện! Tiêu diệt chúng để đoạt lấy TINH HẠCH MA THÚ nâng cấp viện nghiên cứu!"'
     ],
     systemNotice: '🔮 Mở khóa hệ thống Tinh Hạch Ma Thú & Phân Tích Bệnh Lý Virus trong Menu HUD!',

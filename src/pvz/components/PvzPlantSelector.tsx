@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { soundManager } from '../../utils/audio';
-import { PlantData, PlantId } from '../types';
+import { PlantId } from '../types';
 import { PVZ_PLANTS } from '../data/pvzData';
-import { Sun, Lock } from 'lucide-react';
+import { Sun, Lock, Sparkles, Filter, Zap } from 'lucide-react';
 
 interface PvzPlantSelectorProps {
   selectedPlantId: PlantId | null;
@@ -10,79 +10,206 @@ interface PvzPlantSelectorProps {
   sunlight: number;
   cooldowns: Record<PlantId, number>; // remaining seconds
   currentWave: number;
+  isPlantFoodPrimed?: boolean;
 }
+
+type FilterCategory = 'all' | 'attack' | 'sun' | 'defense' | 'instant';
 
 export const PvzPlantSelector: React.FC<PvzPlantSelectorProps> = ({
   selectedPlantId,
   onSelectPlant,
   sunlight,
   cooldowns,
-  currentWave
+  currentWave,
+  isPlantFoodPrimed = false
 }) => {
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>('all');
+  const [hoveredPlantId, setHoveredPlantId] = useState<PlantId | null>(null);
+
+  const filteredPlants = PVZ_PLANTS.filter((p) => {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'attack') return p.attackDmg > 0 && p.category !== 'instant_pi';
+    if (activeFilter === 'sun') return p.id.includes('sunflower');
+    if (activeFilter === 'defense') return p.id.includes('wall') || p.id.includes('pumpkin') || p.id.includes('tallnut');
+    if (activeFilter === 'instant') return p.category === 'instant_pi' || p.id.includes('cherry') || p.id.includes('jalapeno') || p.id.includes('squash');
+    return true;
+  });
+
+  const hoveredPlant = PVZ_PLANTS.find((p) => p.id === hoveredPlantId);
+
   return (
-    <div className="w-full flex items-center gap-2 p-2 bg-neutral-950/90 border border-neutral-800 rounded-xs select-none font-mono overflow-x-auto scrollbar-thin scrollbar-thumb-emerald-700">
-      {PVZ_PLANTS.map((plant) => {
-        const isUnlocked = (plant.unlockedAtWave || 1) <= currentWave + 1;
-        const isSelected = selectedPlantId === plant.id;
-        const cooldown = cooldowns[plant.id] || 0;
-        const canAfford = isUnlocked && sunlight >= plant.sunCost && cooldown <= 0;
+    <div className="w-full flex flex-col gap-1.5 p-2 sm:p-2.5 bg-neutral-950/95 border-2 border-emerald-500/40 rounded-xs select-none font-mono shadow-2xl backdrop-blur-md">
+      {/* Top Deck Header & Filters */}
+      <div className="flex items-center justify-between gap-2 px-1 text-xs">
+        <div className="flex items-center gap-1.5 font-black text-amber-300 uppercase tracking-wider">
+          <span className="text-base">🌱</span>
+          <span className="hidden sm:inline">KHAY THẺ CÂY TRỒNG (SEED PACKETS)</span>
+        </div>
 
-        if (!isUnlocked) {
-          return (
-            <div
-              key={plant.id}
-              className="relative flex flex-col items-center justify-center p-2 min-w-[80px] sm:min-w-[90px] h-[95px] border border-neutral-800/60 bg-neutral-950/40 rounded-xs opacity-40 shrink-0"
-              title={`Mở khóa sau Vòng 0${(plant.unlockedAtWave || 1) - 1}`}
-            >
-              <Lock className="w-5 h-5 text-neutral-500 mb-1" />
-              <div className="text-[9px] text-neutral-500 font-bold text-center truncate w-full">
-                Vòng 0{plant.unlockedAtWave}
-              </div>
-            </div>
-          );
-        }
-
-        return (
-          <button
-            key={plant.id}
-            disabled={!canAfford && !isSelected}
-            onClick={() => {
-              if (isSelected) {
-                onSelectPlant(null);
-              } else if (canAfford) {
+        {/* Category Filters */}
+        <div className="flex items-center gap-1 overflow-x-auto text-[10px] font-bold">
+          {(
+            [
+              { id: 'all', label: 'Tất Cả' },
+              { id: 'attack', label: '⚔️ Tấn Công' },
+              { id: 'sun', label: '☀️ Năng Lượng' },
+              { id: 'defense', label: '🛡️ Phòng Ngự' },
+              { id: 'instant', label: '💥 Tức Thì' }
+            ] as const
+          ).map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => {
                 soundManager.play('click');
-                onSelectPlant(plant.id);
-              }
-            }}
-            className={`relative flex flex-col items-center justify-between p-2 min-w-[80px] sm:min-w-[92px] h-[95px] border-2 rounded-xs transition-all cursor-pointer shrink-0 ${
-              isSelected
-                ? 'bg-emerald-900/60 border-emerald-400 scale-105 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
-                : canAfford
-                ? 'bg-neutral-900/90 border-neutral-700 hover:border-emerald-500/70 hover:bg-neutral-800'
-                : 'bg-neutral-950/60 border-neutral-800 opacity-45 cursor-not-allowed'
-            }`}
-          >
-            {/* Cooldown Overlay */}
-            {cooldown > 0 && (
-              <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-xs font-black text-amber-400 rounded-xs z-10">
-                {cooldown.toFixed(0)}s
+                setActiveFilter(cat.id);
+              }}
+              className={`px-2 py-0.5 rounded-xs transition-all cursor-pointer border ${
+                activeFilter === cat.id
+                  ? 'bg-emerald-600 text-white border-emerald-300 shadow-[0_0_8px_rgba(16,185,129,0.6)] font-black'
+                  : 'bg-neutral-900 text-neutral-400 border-neutral-700 hover:text-white hover:bg-neutral-800'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Seed Packets Carousel */}
+      <div className="w-full flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-emerald-700">
+        {filteredPlants.map((plant) => {
+          const isUnlocked = (plant.unlockedAtWave || 1) <= currentWave + 1;
+          const isSelected = selectedPlantId === plant.id;
+          const cooldown = cooldowns[plant.id] || 0;
+          const maxCooldown = plant.cooldownSec || 5;
+          const cooldownPct = cooldown > 0 ? (cooldown / maxCooldown) * 100 : 0;
+          const canAfford = isUnlocked && sunlight >= plant.sunCost && cooldown <= 0;
+
+          if (!isUnlocked) {
+            return (
+              <div
+                key={plant.id}
+                className="relative flex flex-col items-center justify-center p-2 min-w-[76px] sm:min-w-[86px] h-[100px] border border-neutral-800/60 bg-neutral-950/60 rounded-xs opacity-40 shrink-0"
+                title={`Mở khóa sau Vòng 0${(plant.unlockedAtWave || 1) - 1}`}
+              >
+                <Lock className="w-4 h-4 text-neutral-500 mb-1" />
+                <div className="text-[8px] text-neutral-500 font-bold text-center truncate w-full">
+                  Khóa (V{plant.unlockedAtWave})
+                </div>
               </div>
-            )}
+            );
+          }
 
-            {/* Plant Icon & Name */}
-            <div className="text-2xl sm:text-3xl my-0.5">{plant.icon}</div>
-            <div className="text-[10px] sm:text-[11px] font-black text-white text-center truncate w-full">
-              {plant.name.split(' ')[0]}
-            </div>
+          return (
+            <button
+              key={plant.id}
+              disabled={!canAfford && !isSelected}
+              onMouseEnter={() => setHoveredPlantId(plant.id)}
+              onMouseLeave={() => setHoveredPlantId(null)}
+              onClick={() => {
+                if (isSelected) {
+                  onSelectPlant(null);
+                } else if (canAfford) {
+                  soundManager.play('click');
+                  onSelectPlant(plant.id);
+                }
+              }}
+              className={`relative flex flex-col items-center justify-between p-1 min-w-[76px] sm:min-w-[86px] h-[100px] border-2 rounded-xs transition-all cursor-pointer shrink-0 overflow-hidden shadow-md ${
+                isSelected
+                  ? 'bg-gradient-to-b from-emerald-800 to-emerald-950 border-emerald-300 scale-105 shadow-[0_0_15px_rgba(16,185,129,0.7)] ring-2 ring-emerald-400'
+                  : isPlantFoodPrimed && plant.plantFoodUlt
+                  ? 'bg-emerald-950/90 border-emerald-400 ring-1 ring-emerald-300 animate-pulse'
+                  : canAfford
+                  ? 'bg-neutral-900 border-neutral-700 hover:border-emerald-500 hover:bg-neutral-800/90'
+                  : 'bg-neutral-950/80 border-neutral-800 opacity-50 cursor-not-allowed'
+              }`}
+            >
+              {/* Radial / Top-down Cooldown Shade Overlay */}
+              {cooldown > 0 && (
+                <div
+                  className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-15 pointer-events-none transition-all"
+                  style={{
+                    clipPath: `inset(0 0 ${100 - cooldownPct}% 0)`
+                  }}
+                >
+                  <span className="text-xs font-black text-amber-300 drop-shadow-[0_1px_4px_rgba(0,0,0,1)]">
+                    {cooldown.toFixed(1)}s
+                  </span>
+                </div>
+              )}
 
-            {/* Sun Cost Badge */}
-            <div className="flex items-center gap-1 text-[10px] font-black text-amber-300 bg-black/60 px-1.5 py-0.2 rounded-full border border-amber-500/40">
-              <Sun className="w-3 h-3 text-amber-400 fill-amber-400" />
-              <span>{plant.sunCost}</span>
+              {/* Plant Card Header Category */}
+              <div className="w-full flex items-center justify-between px-1">
+                <span className="text-[7px] text-neutral-400 font-bold uppercase truncate max-w-[50px]">
+                  {plant.specialTrait ? plant.specialTrait.split(' ')[0] : 'Thực Vật'}
+                </span>
+                {plant.plantFoodUlt && (
+                  <span className="text-[8px] text-emerald-400" title="Có Chiêu Cuối Hạt Năng Lượng">⚡</span>
+                )}
+              </div>
+
+              {/* Plant Icon / Image */}
+              <div className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center my-0.5 relative">
+                {plant.imageUrl ? (
+                  <img
+                    src={plant.imageUrl}
+                    alt={plant.name}
+                    className="w-full h-full object-contain filter drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'inline';
+                    }}
+                  />
+                ) : null}
+                <span
+                  className="text-2xl sm:text-3xl"
+                  style={{ display: plant.imageUrl ? 'none' : 'inline' }}
+                >
+                  {plant.icon}
+                </span>
+              </div>
+
+              {/* Plant Short Name */}
+              <div className="text-[9px] sm:text-[10px] font-black text-white text-center truncate w-full px-0.5">
+                {plant.name.split(' ')[0]}
+              </div>
+
+              {/* Sun Cost Badge */}
+              <div className="w-full flex items-center justify-center gap-1 text-[10px] font-black text-amber-300 bg-black/80 py-0.5 rounded-xs border border-amber-500/50 shadow-inner">
+                <Sun className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
+                <span>{plant.sunCost}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Hovered Plant Card Tooltip Preview */}
+      {hoveredPlant && (
+        <div className="bg-neutral-900/95 border border-emerald-500/50 p-2 rounded-xs text-xs flex items-center justify-between gap-3 text-neutral-200">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">{hoveredPlant.icon}</span>
+            <div>
+              <div className="font-black text-white flex items-center gap-1.5">
+                <span>{hoveredPlant.name}</span>
+                <span className="text-[10px] text-amber-300 font-bold">({hoveredPlant.sunCost} ☀️)</span>
+              </div>
+              <div className="text-[11px] text-neutral-300">{hoveredPlant.description}</div>
             </div>
-          </button>
-        );
-      })}
+          </div>
+
+          {hoveredPlant.plantFoodUlt && (
+            <div className="hidden md:flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/60 px-2 py-1 rounded-xs text-[10px] shrink-0">
+              <span className="text-sm">{hoveredPlant.plantFoodUlt.icon}</span>
+              <div>
+                <span className="font-black text-emerald-300">Chiêu Cuối: </span>
+                <span className="text-neutral-300">{hoveredPlant.plantFoodUlt.description}</span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

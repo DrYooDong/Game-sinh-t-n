@@ -189,7 +189,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
   const [currentNotification, setCurrentNotification] = useState<SystemNotification | null>(null);
   const [notificationHistory, setNotificationHistory] = useState<SystemNotification[]>([]);
 
-  // Load Saved Game
+  // Load Saved Game with Schema Migration
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -197,10 +197,18 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
         const data = JSON.parse(saved);
         if (data.gameStarted) {
           setGameStarted(true);
-          setPlayerName(data.playerName || 'Tiết Mộc');
+          setPlayerName(data.playerName || 'Tuyết Mộc');
           setPlayerSkill(data.playerSkill || SKILL_POOL[0]);
           setCompanion(data.companion || companion);
-          setStats(data.stats || stats);
+          
+          const loadedStats = data.stats || stats;
+          setStats({
+            ...loadedStats,
+            lordCoins: loadedStats.lordCoins ?? 180,
+            aggroScore: loadedStats.aggroScore ?? 350,
+            mutationPoints: loadedStats.mutationPoints ?? 6
+          });
+
           setEquipment(data.equipment || equipment);
           setInventory(data.inventory || INITIAL_ITEMS);
           setCurrentDay(data.currentDay || 2);
@@ -213,10 +221,42 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
           setPets(data.pets || INITIAL_PETS);
           setTalents(data.talents || INITIAL_TALENTS);
           setBestiary(data.bestiary || INITIAL_BESTIARY);
-          setLoreChapters(data.loreChapters || WORLD_LORE_CHAPTERS);
-          if (data.roomTenants) setRoomTenants(data.roomTenants);
-          if (data.lordRoomData) setLordRoomData(data.lordRoomData);
-          if (data.radioTransmissions) setRadioTransmissions(data.radioTransmissions);
+
+          // Merge lore chapters to ensure all 7 chapters are present
+          if (data.loreChapters && Array.isArray(data.loreChapters)) {
+            const mergedChapters = WORLD_LORE_CHAPTERS.map((initCh) => {
+              const found = data.loreChapters.find((c: any) => c.id === initCh.id);
+              return found ? { ...initCh, isUnlocked: found.isUnlocked } : initCh;
+            });
+            setLoreChapters(mergedChapters);
+          } else {
+            setLoreChapters(WORLD_LORE_CHAPTERS);
+          }
+
+          // Merge room tenants to ensure all 6 tenants are present
+          if (data.roomTenants && Array.isArray(data.roomTenants)) {
+            const mergedTenants = INITIAL_ROOM_TENANTS.map((initT) => {
+              const found = data.roomTenants.find((t: any) => t.id === initT.id);
+              return found ? { ...initT, comfortScore: found.comfortScore || initT.comfortScore, isRecruited: found.isRecruited ?? true } : initT;
+            });
+            setRoomTenants(mergedTenants);
+          } else {
+            setRoomTenants(INITIAL_ROOM_TENANTS);
+          }
+
+          if (data.lordRoomData) setLordRoomData({ ...INITIAL_LORD_ROOM_DATA, ...data.lordRoomData });
+          
+          // Merge radio transmissions
+          if (data.radioTransmissions && Array.isArray(data.radioTransmissions)) {
+            const mergedRadio = RADIO_TRANSMISSIONS.map((initR) => {
+              const found = data.radioTransmissions.find((r: any) => r.id === initR.id);
+              return found ? { ...initR, isUnlocked: found.isUnlocked ?? initR.isUnlocked } : initR;
+            });
+            setRadioTransmissions(mergedRadio);
+          } else {
+            setRadioTransmissions(RADIO_TRANSMISSIONS);
+          }
+
           setNotificationHistory(data.notificationHistory || []);
         }
       }

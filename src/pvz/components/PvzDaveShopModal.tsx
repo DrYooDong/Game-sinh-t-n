@@ -2,7 +2,19 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { soundManager } from '../../utils/audio';
 import { PvzDaveUpgrade } from '../types';
-import { ShoppingBag, Zap, X, Check, ArrowUpRight, Sparkles, Dna, Sprout, ShieldCheck } from 'lucide-react';
+import {
+  ShoppingBag,
+  Zap,
+  X,
+  Check,
+  ArrowUpRight,
+  Sparkles,
+  Dna,
+  Sprout,
+  ShieldCheck,
+  MapPin,
+  LandPlot
+} from 'lucide-react';
 
 interface PvzDaveShopModalProps {
   energy: number;
@@ -19,7 +31,7 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
   onUpgrade,
   onClose
 }) => {
-  const [activeCategory, setActiveCategory] = useState<'all' | 'garden' | 'genetics' | 'purification'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'land' | 'garden' | 'genetics' | 'purification'>('all');
 
   const filteredUpgrades = upgrades.filter(
     (u) => activeCategory === 'all' || u.category === activeCategory
@@ -41,10 +53,10 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black text-white uppercase flex items-center gap-2">
-                <span>CỬA HÀNG SÂN VƯỜN & VIỆN Y SINH BÁC SĨ DAVE</span>
+                <span>CỬA HÀNG SÂN VƯỜN & MỞ RỘNG ĐẤT BÁC SĨ DAVE</span>
               </h3>
               <p className="text-xs text-neutral-400">
-                Tiêu hao Năng Lượng ⚡ và Tinh Hạch Ma Thú 🔮 để nâng cấp vũ khí sinh học
+                Mở rộng đất vườn từ 10m² lên 500m² và nâng cấp vũ khí sinh học
               </p>
             </div>
           </div>
@@ -73,7 +85,7 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
         </div>
 
         {/* Category Filters */}
-        <div className="flex items-center gap-2 pb-3 mb-3 border-b border-neutral-800">
+        <div className="flex items-center gap-2 pb-3 mb-3 border-b border-neutral-800 flex-wrap">
           <button
             onClick={() => {
               soundManager.play('click');
@@ -90,6 +102,20 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
           <button
             onClick={() => {
               soundManager.play('click');
+              setActiveCategory('land');
+            }}
+            className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all flex items-center gap-1 ${
+              activeCategory === 'land'
+                ? 'bg-yellow-500 text-neutral-950 font-black'
+                : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+            }`}
+          >
+            <span>📜</span>
+            <span>Mở Rộng Đất (10m² - 500m²)</span>
+          </button>
+          <button
+            onClick={() => {
+              soundManager.play('click');
               setActiveCategory('garden');
             }}
             className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all flex items-center gap-1 ${
@@ -99,7 +125,7 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
             }`}
           >
             <Sprout className="w-3.5 h-3.5" />
-            <span>Sân Vườn</span>
+            <span>Sân Vườn & Cổ Vật</span>
           </button>
           <button
             onClick={() => {
@@ -172,7 +198,7 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
                   {isMax ? (
                     <span className="px-3 py-1.5 bg-neutral-800 text-neutral-400 text-xs font-bold rounded-xs flex items-center gap-1">
                       <Check className="w-3.5 h-3.5" />
-                      <span>TỐI ĐA</span>
+                      <span>ĐÃ MỞ RỘNG</span>
                     </span>
                   ) : (
                     <button
@@ -189,7 +215,7 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
                       <span>
-                        {costEnergy} ⚡ {costCores > 0 ? `+ ${costCores} 🔮` : ''} NÂNG CẤP
+                        {costEnergy} ⚡ {costCores > 0 ? `+ ${costCores} 🔮` : ''} MUA
                       </span>
                     </button>
                   )}

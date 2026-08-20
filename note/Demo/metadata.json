@@ -1,0 +1,6 @@
+{
+  "name": "Plants vs Zombies: Kỷ Nguyên Vận Mệnh Quốc Gia",
+  "description": "Game sinh tồn thẻ bài nhập vai bám sát cốt truyện Tuyết Mộc xuyên không vào thế giới Bí Cảnh với Hệ Thống Sân Vườn Bác Sĩ (PvZ).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

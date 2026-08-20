@@ -109,8 +109,25 @@ export const PvzCodexModal: React.FC<PvzCodexModalProps> = ({ currentWave, onClo
                   key={plant.id}
                   className="p-3.5 bg-neutral-900 border border-emerald-500/40 rounded-xs flex gap-3 items-start"
                 >
-                  <div className="w-12 h-12 bg-neutral-950 border border-emerald-600 flex items-center justify-center text-3xl rounded-xs shrink-0">
-                    {plant.icon}
+                  <div className="w-12 h-12 bg-neutral-950 border border-emerald-600 flex items-center justify-center p-1 rounded-xs shrink-0 relative">
+                    {plant.imageUrl ? (
+                      <img
+                        src={plant.imageUrl}
+                        alt={plant.name}
+                        className="w-full h-full object-contain filter drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                          if (fallback) fallback.style.display = 'inline';
+                        }}
+                      />
+                    ) : null}
+                    <span
+                      className="text-3xl"
+                      style={{ display: plant.imageUrl ? 'none' : 'inline' }}
+                    >
+                      {plant.icon}
+                    </span>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
