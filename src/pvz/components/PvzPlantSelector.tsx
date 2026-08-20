@@ -2,27 +2,45 @@ import React from 'react';
 import { soundManager } from '../../utils/audio';
 import { PlantData, PlantId } from '../types';
 import { PVZ_PLANTS } from '../data/pvzData';
-import { Sun } from 'lucide-react';
+import { Sun, Lock } from 'lucide-react';
 
 interface PvzPlantSelectorProps {
   selectedPlantId: PlantId | null;
   onSelectPlant: (plantId: PlantId | null) => void;
   sunlight: number;
   cooldowns: Record<PlantId, number>; // remaining seconds
+  currentWave: number;
 }
 
 export const PvzPlantSelector: React.FC<PvzPlantSelectorProps> = ({
   selectedPlantId,
   onSelectPlant,
   sunlight,
-  cooldowns
+  cooldowns,
+  currentWave
 }) => {
   return (
-    <div className="w-full flex items-center justify-center gap-2 p-2 bg-neutral-950/90 border border-neutral-800 rounded-xs select-none font-mono overflow-x-auto">
+    <div className="w-full flex items-center gap-2 p-2 bg-neutral-950/90 border border-neutral-800 rounded-xs select-none font-mono overflow-x-auto scrollbar-thin scrollbar-thumb-emerald-700">
       {PVZ_PLANTS.map((plant) => {
+        const isUnlocked = (plant.unlockedAtWave || 1) <= currentWave + 1;
         const isSelected = selectedPlantId === plant.id;
         const cooldown = cooldowns[plant.id] || 0;
-        const canAfford = sunlight >= plant.sunCost && cooldown <= 0;
+        const canAfford = isUnlocked && sunlight >= plant.sunCost && cooldown <= 0;
+
+        if (!isUnlocked) {
+          return (
+            <div
+              key={plant.id}
+              className="relative flex flex-col items-center justify-center p-2 min-w-[80px] sm:min-w-[90px] h-[95px] border border-neutral-800/60 bg-neutral-950/40 rounded-xs opacity-40 shrink-0"
+              title={`Mở khóa sau Vòng 0${(plant.unlockedAtWave || 1) - 1}`}
+            >
+              <Lock className="w-5 h-5 text-neutral-500 mb-1" />
+              <div className="text-[9px] text-neutral-500 font-bold text-center truncate w-full">
+                Vòng 0{plant.unlockedAtWave}
+              </div>
+            </div>
+          );
+        }
 
         return (
           <button
@@ -36,7 +54,7 @@ export const PvzPlantSelector: React.FC<PvzPlantSelectorProps> = ({
                 onSelectPlant(plant.id);
               }
             }}
-            className={`relative flex flex-col items-center justify-between p-2 min-w-[80px] sm:min-w-[95px] h-[95px] border-2 rounded-xs transition-all cursor-pointer ${
+            className={`relative flex flex-col items-center justify-between p-2 min-w-[80px] sm:min-w-[92px] h-[95px] border-2 rounded-xs transition-all cursor-pointer shrink-0 ${
               isSelected
                 ? 'bg-emerald-900/60 border-emerald-400 scale-105 shadow-[0_0_12px_rgba(16,185,129,0.5)]'
                 : canAfford
@@ -46,7 +64,7 @@ export const PvzPlantSelector: React.FC<PvzPlantSelectorProps> = ({
           >
             {/* Cooldown Overlay */}
             {cooldown > 0 && (
-              <div className="absolute inset-0 bg-black/70 flex items-center justify-center text-xs font-black text-amber-400 rounded-xs z-10">
+              <div className="absolute inset-0 bg-black/75 flex items-center justify-center text-xs font-black text-amber-400 rounded-xs z-10">
                 {cooldown.toFixed(0)}s
               </div>
             )}

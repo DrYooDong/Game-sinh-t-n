@@ -2,9 +2,10 @@
 
 @layer base {
   body {
-    background-color: #0a0a0a;
+    background-color: #050508;
     color: #f5f5f5;
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    overflow-x: hidden;
   }
 }
 
@@ -55,4 +56,155 @@
 
 .hud-glow {
   animation: hud-glow 3s ease-in-out infinite;
+}
+
+/* Plant Floating Sway */
+@keyframes plant-sway {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(2deg);
+  }
+}
+
+.animate-plant-sway {
+  animation: plant-sway 2.4s ease-in-out infinite;
+}
+
+/* Plant Firing Recoil */
+@keyframes plant-recoil {
+  0% {
+    transform: scale(1) translateX(0);
+  }
+  30% {
+    transform: scale(1.15) translateX(-4px);
+  }
+  100% {
+    transform: scale(1) translateX(0);
+  }
+}
+
+.animate-plant-recoil {
+  animation: plant-recoil 0.3s ease-out;
+}
+
+/* Sun Glow Spin */
+@keyframes sun-halo-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.8), inset 0 0 10px rgba(254, 240, 138, 0.9);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.08);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 1), inset 0 0 15px rgba(254, 240, 138, 1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.8), inset 0 0 10px rgba(254, 240, 138, 0.9);
+  }
+}
+
+.animate-sun-halo {
+  animation: sun-halo-spin 6s linear infinite;
+}
+
+/* Zombie Walk Wobble */
+@keyframes zombie-wobble {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-2px) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-1px) rotate(3deg);
+  }
+}
+
+.animate-zombie-wobble {
+  animation: zombie-wobble 1.2s ease-in-out infinite;
+}
+
+/* Damage Float Text */
+@keyframes damage-float-up {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(0.8);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -18px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -32px) scale(1);
+  }
+}
+
+.animate-damage-float {
+  animation: damage-float-up 0.8s ease-out forwards;
+}
+
+/* Screen Shake (Small & Heavy) */
+@keyframes screen-shake-sm {
+  0%, 100% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, 3px); }
+  80% { transform: translate(2px, -1px); }
+}
+
+.animate-screen-shake-sm {
+  animation: screen-shake-sm 0.3s ease-in-out;
+}
+
+@keyframes screen-shake-lg {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  15% { transform: translate(-8px, 6px) scale(1.02); }
+  30% { transform: translate(8px, -6px) scale(0.99); }
+  45% { transform: translate(-6px, 8px) scale(1.01); }
+  60% { transform: translate(6px, -4px) scale(1); }
+  75% { transform: translate(-3px, 2px) scale(1); }
+}
+
+.animate-screen-shake-lg {
+  animation: screen-shake-lg 0.5s ease-in-out;
+}
+
+/* Ambient Spore Drift */
+@keyframes spore-drift {
+  0% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateY(-20px) translateX(15px);
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-40px) translateX(-10px);
+    opacity: 0;
+  }
+}
+
+.animate-spore-drift {
+  animation: spore-drift 4s ease-in-out infinite;
+}
+
+/* Lawnmower Smoke Rush */
+@keyframes mower-rush {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.animate-mower-rush {
+  animation: mower-rush 0.2s linear infinite;
 }

@@ -1,10 +1,16 @@
 export type PlantId =
   | 'plant_sunflower'
   | 'plant_peashooter'
-  | 'plant_cherry_bomb'
+  | 'plant_snow_pea'
+  | 'plant_fume_shroom'
+  | 'plant_hypno_shroom'
+  | 'plant_gatling_pea'
   | 'plant_pumpkin'
+  | 'plant_cherry_bomb'
   | 'plant_zombie_wall'
-  | 'plant_tallnut';
+  | 'plant_tallnut'
+  | 'plant_doom_shroom'
+  | 'plant_plantern';
 
 export type ZombieId =
   | 'zombie_normal'
@@ -13,6 +19,11 @@ export type ZombieId =
   | 'zombie_fast_2'
   | 'zombie_strong_2'
   | 'zombie_flag'
+  | 'zombie_armored_spore'
+  | 'zombie_mutant_cat'
+  | 'zombie_disco'
+  | 'zombie_rival_yamamoto'
+  | 'zombie_boss_lion_king'
   | 'zombie_boss_gargantuar';
 
 export interface PlantData {
@@ -26,6 +37,9 @@ export interface PlantData {
   icon: string;
   description: string;
   color: string;
+  projectileType?: 'pea' | 'ice_pea' | 'fume_wave' | 'gatling';
+  specialTrait?: string;
+  unlockedAtWave?: number;
 }
 
 export interface ZombieData {
@@ -39,8 +53,10 @@ export interface ZombieData {
   icon: string;
   rewardSun: number;
   rewardEnergy: number;
+  rewardBeastCore?: number;
   description: string;
   isBoss?: boolean;
+  armorType?: 'none' | 'spore_scale' | 'heavy_plate' | 'boss_armor';
 }
 
 export interface PlacedPlant {
@@ -52,6 +68,7 @@ export interface PlacedPlant {
   maxHp: number;
   lastAttackTime: number;
   lastSunTime?: number;
+  createdTime?: number;
 }
 
 export interface ActiveZombie {
@@ -65,6 +82,9 @@ export interface ActiveZombie {
   lastAttackTime: number;
   isAttacking: boolean;
   targetPlantId: string | null;
+  slowTimerSec?: number; // slowed by ice
+  isCharmed?: boolean; // hypnotized to fight for player
+  armorType?: 'none' | 'spore_scale' | 'heavy_plate' | 'boss_armor';
 }
 
 export interface Projectile {
@@ -73,6 +93,9 @@ export interface Projectile {
   colPosition: number;
   damage: number;
   speed: number;
+  type?: 'pea' | 'ice_pea' | 'fume_wave' | 'gatling';
+  penetrating?: boolean;
+  hitZombieIds?: string[];
 }
 
 export interface SunDrop {
@@ -85,15 +108,19 @@ export interface SunDrop {
 
 export interface PvzWave {
   waveNumber: number;
+  chapterTitle: string;
   name: string;
   stageName: string;
   description: string;
+  locationBg?: string;
   zombieSpawns: { zombieId: ZombieId; delaySec: number; row?: number }[];
   nationalReward: {
     title: string;
     description: string;
     territoryBonusKm2: number;
     statBonusPct: number;
+    populationBonusMonths?: number;
+    specialBonus?: string;
   };
 }
 
@@ -113,6 +140,8 @@ export interface NationalStats {
   populationLifeBonusMonths: number;
   nationalStrengthBonusPct: number;
   worldRank: number;
+  beastCores: number;
+  purificationSerumLevel: number;
 }
 
 export interface PvzCompanion {
@@ -127,12 +156,15 @@ export interface PvzCompanion {
   skillDesc: string;
   isUnlocked: boolean;
   dialogue: string;
+  heroType?: 'support' | 'combat' | 'zombie_hero';
+  cooldownRemaining?: number;
 }
 
 export interface PvzDaveUpgrade {
   id: string;
   name: string;
   costEnergy: number;
+  costBeastCore?: number;
   costSun?: number;
   icon: string;
   level: number;
@@ -140,6 +172,7 @@ export interface PvzDaveUpgrade {
   description: string;
   effect: string;
   isUnlocked: boolean;
+  category?: 'garden' | 'genetics' | 'purification';
 }
 
 export interface PvzTactic {
@@ -153,9 +186,57 @@ export interface PvzTactic {
 
 export interface PvzLoreChapter {
   id: string;
+  chapterNumber: number;
   title: string;
   stageNumber: number;
   isUnlocked: boolean;
+  summary: string;
   content: string;
+}
+
+export interface PathologyEntry {
+  id: string;
+  zombieId: ZombieId;
+  name: string;
+  mutationTrait: string;
+  weakness: string;
+  counterStrategy: string;
+  extractedFormula: string;
+  isDiscovered: boolean;
+}
+
+export interface DamagePopup {
+  id: string;
+  row: number;
+  colPosition: number;
+  text: string;
+  color: string;
+  isCrit?: boolean;
+  createdAt: number;
+}
+
+export interface LawnMowerState {
+  row: number;
+  active: boolean;
+  colPosition: number;
+  isTriggered: boolean;
+}
+
+export type StoryEventTrigger = 'wave_start' | 'wave_clear' | 'mid_wave' | 'game_start';
+
+export interface StoryEvent {
+  id: string;
+  waveIndex: number; // 0 to 6
+  trigger: StoryEventTrigger;
+  speaker: string;
+  speakerRole: string;
+  avatar: string;
+  title: string;
+  subtitle?: string;
+  dialogue: string[];
+  systemNotice?: string;
+  badge?: string;
+  soundEffect?: 'dialogue' | 'danger' | 'level_up' | 'victory' | 'item_get';
+  portraitBorderColor?: string;
 }
 

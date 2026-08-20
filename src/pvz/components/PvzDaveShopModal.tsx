@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { soundManager } from '../../utils/audio';
 import { PvzDaveUpgrade } from '../types';
-import { ShoppingBag, Zap, X, Check, ArrowUpRight, Sparkles } from 'lucide-react';
+import { ShoppingBag, Zap, X, Check, ArrowUpRight, Sparkles, Dna, Sprout, ShieldCheck } from 'lucide-react';
 
 interface PvzDaveShopModalProps {
   energy: number;
+  beastCores: number;
   upgrades: PvzDaveUpgrade[];
   onUpgrade: (upgradeId: string) => void;
   onClose: () => void;
@@ -13,17 +14,24 @@ interface PvzDaveShopModalProps {
 
 export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
   energy,
+  beastCores,
   upgrades,
   onUpgrade,
   onClose
 }) => {
+  const [activeCategory, setActiveCategory] = useState<'all' | 'garden' | 'genetics' | 'purification'>('all');
+
+  const filteredUpgrades = upgrades.filter(
+    (u) => activeCategory === 'all' || u.category === activeCategory
+  );
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-sm font-mono select-none">
       <motion.div
         initial={{ opacity: 0, scale: 0.93 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.93 }}
-        className="w-full max-w-2xl bg-neutral-950 border-2 border-amber-500/60 p-5 shadow-2xl text-neutral-100 flex flex-col max-h-[90vh] relative rounded-xs"
+        className="w-full max-w-3xl bg-neutral-950 border-2 border-amber-500/60 p-5 shadow-2xl text-neutral-100 flex flex-col max-h-[90vh] relative rounded-xs"
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-neutral-800 pb-3 mb-4">
@@ -33,10 +41,10 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
             </div>
             <div>
               <h3 className="text-sm sm:text-base font-black text-white uppercase flex items-center gap-2">
-                <span>CỬA HÀNG SÂN VƯỜN BÁC SĨ ĐÉP (CRAZY DAVE)</span>
+                <span>CỬA HÀNG SÂN VƯỜN & VIỆN Y SINH BÁC SĨ DAVE</span>
               </h3>
               <p className="text-xs text-neutral-400">
-                Tiêu hao Năng Lượng ⚡ thu được từ Zombie để nâng cấp công nghệ sinh học
+                Tiêu hao Năng Lượng ⚡ và Tinh Hạch Ma Thú 🔮 để nâng cấp vũ khí sinh học
               </p>
             </div>
           </div>
@@ -52,21 +60,84 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
           </button>
         </div>
 
-        {/* Current Energy Bar */}
-        <div className="flex items-center justify-between p-3 bg-neutral-900 border border-neutral-800 rounded-xs mb-3">
-          <span className="text-xs text-neutral-300 font-bold">Năng Lượng Hiện Có:</span>
-          <div className="flex items-center gap-1.5 text-cyan-400 font-black text-sm">
-            <Zap className="w-4 h-4 fill-current" />
-            <span>{energy} ⚡</span>
+        {/* Resources Bars */}
+        <div className="grid grid-cols-2 gap-3 p-3 bg-neutral-900 border border-neutral-800 rounded-xs mb-3 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-neutral-400 font-bold">Năng Lượng ⚡:</span>
+            <span className="text-cyan-400 font-black text-sm">{energy} ⚡</span>
+          </div>
+          <div className="flex items-center justify-between border-l border-neutral-800 pl-3">
+            <span className="text-neutral-400 font-bold">Tinh Hạch Ma Thú 🔮:</span>
+            <span className="text-fuchsia-400 font-black text-sm">{beastCores} 🔮</span>
           </div>
         </div>
 
+        {/* Category Filters */}
+        <div className="flex items-center gap-2 pb-3 mb-3 border-b border-neutral-800">
+          <button
+            onClick={() => {
+              soundManager.play('click');
+              setActiveCategory('all');
+            }}
+            className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all ${
+              activeCategory === 'all'
+                ? 'bg-amber-500 text-neutral-950 font-black'
+                : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+            }`}
+          >
+            Tất Cả
+          </button>
+          <button
+            onClick={() => {
+              soundManager.play('click');
+              setActiveCategory('garden');
+            }}
+            className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all flex items-center gap-1 ${
+              activeCategory === 'garden'
+                ? 'bg-emerald-500 text-neutral-950 font-black'
+                : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+            }`}
+          >
+            <Sprout className="w-3.5 h-3.5" />
+            <span>Sân Vườn</span>
+          </button>
+          <button
+            onClick={() => {
+              soundManager.play('click');
+              setActiveCategory('genetics');
+            }}
+            className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all flex items-center gap-1 ${
+              activeCategory === 'genetics'
+                ? 'bg-fuchsia-500 text-neutral-950 font-black'
+                : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+            }`}
+          >
+            <Dna className="w-3.5 h-3.5" />
+            <span>Gen & Tinh Hạch</span>
+          </button>
+          <button
+            onClick={() => {
+              soundManager.play('click');
+              setActiveCategory('purification');
+            }}
+            className={`px-3 py-1 text-xs font-bold rounded-xs cursor-pointer transition-all flex items-center gap-1 ${
+              activeCategory === 'purification'
+                ? 'bg-cyan-500 text-neutral-950 font-black'
+                : 'bg-neutral-900 text-neutral-400 hover:text-white border border-neutral-800'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Huyết Thanh</span>
+          </button>
+        </div>
+
         {/* Upgrade List */}
-        <div className="overflow-y-auto space-y-2.5 flex-1 pr-1 max-h-[55vh]">
-          {upgrades.map((item) => {
+        <div className="overflow-y-auto space-y-2.5 flex-1 pr-1 max-h-[50vh]">
+          {filteredUpgrades.map((item) => {
             const isMax = item.level >= item.maxLevel;
-            const cost = item.costEnergy * (item.level + 1);
-            const canAfford = energy >= cost && !isMax;
+            const costEnergy = item.costEnergy * (item.level + 1);
+            const costCores = item.costBeastCore ? item.costBeastCore * (item.level + 1) : 0;
+            const canAfford = energy >= costEnergy && beastCores >= costCores && !isMax;
 
             return (
               <div
@@ -117,7 +188,9 @@ export const PvzDaveShopModal: React.FC<PvzDaveShopModalProps> = ({
                       }`}
                     >
                       <ArrowUpRight className="w-3.5 h-3.5" />
-                      <span>{cost} ⚡ NÂNG CẤP</span>
+                      <span>
+                        {costEnergy} ⚡ {costCores > 0 ? `+ ${costCores} 🔮` : ''} NÂNG CẤP
+                      </span>
                     </button>
                   )}
                 </div>

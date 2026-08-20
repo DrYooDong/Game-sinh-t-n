@@ -95,7 +95,7 @@ export const PvzCodexModal: React.FC<PvzCodexModalProps> = ({ currentWave, onClo
             }`}
           >
             <BookOpen className="w-4 h-4" />
-            <span>5 Chương Cốt Truyện</span>
+            <span>7 Chương Cốt Truyện</span>
           </button>
         </div>
 

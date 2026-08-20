@@ -4,11 +4,17 @@ import { soundManager } from '../../utils/audio';
 import { Sprout, Tv, Users, ShieldAlert, Sparkles, ChevronRight, Globe } from 'lucide-react';
 
 interface PvzPrologueIntroProps {
-  onComplete: () => void;
+  onComplete?: () => void;
+  onClose?: () => void;
 }
 
-export const PvzPrologueIntro: React.FC<PvzPrologueIntroProps> = ({ onComplete }) => {
+export const PvzPrologueIntro: React.FC<PvzPrologueIntroProps> = ({ onComplete, onClose }) => {
   const [step, setStep] = useState<number>(0);
+
+  const finishPrologue = () => {
+    if (onClose) onClose();
+    else if (onComplete) onComplete();
+  };
 
   const storySteps = [
     {
@@ -23,10 +29,10 @@ export const PvzPrologueIntro: React.FC<PvzPrologueIntroProps> = ({ onComplete }
       subtitle: 'Phòng livestream Hoa Quốc chấn động trước lựa chọn của Tuyết Mộc',
       icon: '👨‍🌾',
       content:
-        'Tuyết Mộc xuất hiện giữa con phố đầy Zombie nhưng thời gian đang bị đóng băng 70 phút. Trong khi các tuyển thủ nước ngoài chọn Súng, Kiếm, Khiên, Tuyết Mộc kích hoạt "Hệ Thống Sân Vườn Bác Sĩ Đép" và lập tức chọn nghề NÔNG DÂN. Cả thế giới sững sờ cho rằng Hoa Quốc sắp diệt vong!'
+        'Tuyết Mộc xuất hiện giữa con phố đầy Zombie nhưng thời gian đang bị đóng băng 70 phút. Trong khi các tuyển thủ nước ngoài chọn Súng, Kiếm, Khiên, Tuyết Mộc kích hoạt "Hệ Thống Sân Vườn Bác Sĩ Dave" và lập tức chọn nghề NÔNG DÂN. Cả thế giới sững sờ cho rằng Hoa Quốc sắp diệt vong!'
     },
     {
-      title: 'GÓI QUÀ TÂN THỦ & HOA HƯỚNG DƯƠNG ĐẦU TIÊN',
+      title: 'GÓI QUÀ TÂN THỦ & CHIẾC XẺNG DIỆT QUÁI',
       subtitle: 'Mở ra Thẻ Hoa Hướng Dương và Chiếc Xẻng Sắt',
       icon: '🌻',
       content:
@@ -38,6 +44,13 @@ export const PvzPrologueIntro: React.FC<PvzPrologueIntroProps> = ({ onComplete }
       icon: '🟢',
       content:
         'Đậu Pháo bắn nát bầy Zombie chỉ sau 3 phát! Cứ mỗi xác zombie chôn vào đất lại mọc lên Thây Ma chướng ngại cầm xẻng bảo vệ chủ nhân. Từ một con phố nhỏ, Tuyết Mộc sẵn sàng quét sạch ngày tận thế, mang lại tuổi thọ và đất đai màu mỡ cho toàn thể quốc dân!'
+    },
+    {
+      title: 'VĨNH HẰNG GIA VIÊN & CHIẾN DỊCH 7 CHƯƠNG',
+      subtitle: 'Dẫn dắt Cửu Châu vươn lên vị thế Bá Chủ Toàn Cầu',
+      icon: '👑',
+      content:
+        'Vượt qua 7 chương chiến dịch: từ Cổng Công Viên, Siêu Thị Tiện Lợi, Ga Tàu Điện Ngầm, Đại Học Nông Nghiệp, đối đầu Yamamoto Sakura Quốc, trảm sát Trùm Vua Sư Tử và chiết xuất Huyết Thanh Thanh Tẩy cứu rỗi toàn thể nhân loại!'
     }
   ];
 
@@ -49,7 +62,7 @@ export const PvzPrologueIntro: React.FC<PvzPrologueIntroProps> = ({ onComplete }
       setStep(step + 1);
     } else {
       soundManager.play('level_up');
-      onComplete();
+      finishPrologue();
     }
   };
 
