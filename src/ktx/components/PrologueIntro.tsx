@@ -81,7 +81,7 @@ export const PrologueIntro: React.FC<PrologueIntroProps> = ({ onComplete }) => {
         </div>
 
         <AnimatePresence mode="wait">
-          {/* STEP 1: Cốt truyện & Biến cố dịch chuyển */}
+              {/* STEP 1: Cốt truyện & Biến cố dịch chuyển */}
           {step === 1 && (
             <motion.div
               key="step1"
@@ -90,18 +90,24 @@ export const PrologueIntro: React.FC<PrologueIntroProps> = ({ onComplete }) => {
               exit={{ opacity: 0, y: -15 }}
               className="space-y-4"
             >
-              <div className="p-4 bg-neutral-900/90 border border-neutral-800 text-xs leading-relaxed text-neutral-300 space-y-2.5">
-                <p className="text-amber-300 font-bold uppercase flex items-center gap-1.5">
-                  <Sparkles className="w-4 h-4" /> [CẢNH BÁO THẦN THỨC TOÀN KHÔNG GIAN]
+              <div className="p-4 bg-neutral-900/90 border border-neutral-800 text-xs leading-relaxed text-neutral-300 space-y-3">
+                <p className="text-amber-300 font-bold uppercase flex items-center gap-1.5 border-b border-amber-500/20 pb-1.5">
+                  <Sparkles className="w-4 h-4" /> [CHƯƠNG 1: KHỞI ĐẦU HỖN LOẠN – THỨC TỈNH THIÊN PHÚ CHÚA TỂ]
                 </p>
                 <p>
-                  Bạn (Tiết Mộc) và hoa khôi cùng lớp (Tinh Thần) đang ở trong lớp học thì bất ngờ tối sầm mắt lại, khi tỉnh dậy đã thấy mình bị nhốt chung trong căn phòng ký túc xá 200 tồi tàn giữa thế giới quỷ dị và xác sống hoành hành!
+                  Tiếng chuông báo động rền vang như xé toạc màng nhĩ. <strong>Tuyết Mộc</strong> mở choàng mắt trong căn phòng ký túc xá 200 ẩm mốc. Ngồi co ro ở góc giường tầng ọp ẹp là <strong>Tinh Thần</strong> – hoa khôi nổi tiếng lạnh lùng của lớp đang kinh hoàng tột độ.
                 </p>
+                <div className="bg-cyan-950/60 border-l-4 border-cyan-400 p-2.5 text-cyan-200 text-[11px] font-mono space-y-1">
+                  <div className="font-bold text-cyan-300">★ [KÍCH HOẠT THIÊN PHÚ ẨN: CHÚA TỂ DUNG HỢP (CẤP 1)]</div>
+                  <div>• Duy trì trạng thái nghỉ ngơi / ngủ để sản sinh <strong>Tiền Chúa Tể</strong> (40 xu/giờ).</div>
+                  <div>• Tiền Chúa Tể có thể cường hóa, tái cấu trúc và dung hợp vạn vật trong ký túc xá!</div>
+                  <div className="text-emerald-300 font-bold">• Đồng đội chất lượng cao Tinh Thần gia tăng: <strong>+96% tốc độ sản xuất</strong>!</div>
+                </div>
                 <p>
-                  [CHÚC MỪNG KÝ CHỦ ĐÃ THỨC TỈNH <strong>THIÊN PHÚ CHÚA TỂ (SSS)</strong>]: Chỉ cần nằm ngủ là có thể tự động sản xuất <strong>Tiền Chúa Tể</strong>! Tiền Chúa Tể có thể cường hóa vạn vật, biến cửa gỗ mục thành cửa hợp kim, máy lọc nước hỏng thành thần khí, nâng cấp vũ khí vô song.
+                  *RẦM!* Tên côn đồ <strong>Vương Đại Tráng</strong> dẫn đàn em đá mạnh vào cánh cửa gỗ mục nát phòng 200 hòng cướp đoạt gói quà tân thủ. Tuyết Mộc lập tức kích hoạt Tiền Chúa Tể: <em>"Cường hóa Cửa Gỗ -&gt; Cửa Hợp Kim Ánh Kim!"</em>. Một tia sáng lam quét qua, cánh cửa biến thành khối kim loại lạnh lẽo, hất văng Vương Đại Tráng gãy xương ống chân!
                 </p>
-                <p className="text-emerald-300">
-                  Phát hiện bạn cùng phòng chất lượng cao <strong>Tinh Thần</strong>: Tỉ lệ chuyển đổi Tiền Chúa Tể tăng vọt <strong>+96%</strong>! 100 người chơi cùng tòa nhà đang tranh giành sinh tồn trước các đợt quái vật húc cửa ban đêm...
+                <p className="text-rose-400 text-[11px]">
+                  Còi báo động rít lên: Màn đêm buông xuống, đợt Zombie sơ cấp tràn vào hành lang xé toạc các phòng yếu ớt... Cuộc đại chiến sinh tồn chính thức bắt đầu!
                 </p>
               </div>
 

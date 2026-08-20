@@ -1244,12 +1244,29 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
     );
   };
 
+  const [scanAttempts, setScanAttempts] = useState<number>(0);
+
   const handleScanFrequency = () => {
-    triggerNotification(
-      'DÒ TẦN SỐ THÀNH CÔNG',
-      'Máy Thu Thanh Kênh Huyết Vụ 107.5MHz: Tín hiệu từ Hội Tương Trợ KTX Tinh Anh hoạt động ổn định.',
-      'event'
-    );
+    const nextAttempts = scanAttempts + 1;
+    setScanAttempts(nextAttempts);
+
+    if (nextAttempts >= 47) {
+      setRadioTransmissions((prev) =>
+        prev.map((tx) => (tx.id === 'radio_1' ? { ...tx, isUnlocked: true } : tx))
+      );
+      triggerNotification(
+        '🎯 GIẢI MÃ THÀNH CÔNG SÓNG 107.5MHz (LẦN DÒ 47/47)',
+        'Bạn đã giải mã thành công tần số tuyệt mật của [HỘI TƯƠNG TRỢ HUYẾT VỤ] từ Đao Khách Dạ Vũ (Top 97 Toàn Cầu)!\n\n• Bí mật: 1000 Tế Đàn KTX trong Thế Giới Sương Mù\n• Cảnh báo: Xả kho Da Sói trước khi hạ gục Song Quỷ Chi Vương Asith!',
+        'lore',
+        'ĐỌC TÌNH BÁO TỐI MẬT'
+      );
+    } else {
+      triggerNotification(
+        `ĐANG DÒ TẦN SỐ HUYẾT VỤ (LẦN ${nextAttempts}/47)`,
+        `Tiêu hao 50 kim tệ lọc nhiễu sóng vô tuyến... Tín hiệu tần số 107.5MHz đang dần được định vị (${((nextAttempts / 47) * 100).toFixed(0)}%).`,
+        'event'
+      );
+    }
   };
 
   const currentStageObj = STAGES.find((s) => s.id === currentStageId) || STAGES[0];

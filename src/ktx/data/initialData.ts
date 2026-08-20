@@ -107,6 +107,48 @@ export const SKILL_POOL: Skill[] = [
     flavor: 'Ngọn lửa cổ xưa được tìm thấy dưới đáy hồ tăm tối.'
   },
   {
+    id: 'skill_ss_bach_quy_huyet_khe',
+    name: 'Bách Quỷ Huyết Khế (SS)',
+    tier: 'SS',
+    description: 'Thiên phú thức tỉnh đỉnh cao của Vương Như Huyên (Ngự Quỷ Sư), thu phục 3 tiểu quỷ và 2 Song Quỷ Đại Pháp Sư, tạo trận địa ma pháp bảo hộ phòng 200.',
+    icon: '🔮',
+    mpCost: 12,
+    cooldownTurns: 2,
+    effectType: 'control',
+    power: 260,
+    level: 1,
+    maxLevel: 8,
+    flavor: 'Huyết khế dung hợp linh hồn, biến vạn u linh thành hộ vệ trung thành tuyệt đối.'
+  },
+  {
+    id: 'skill_s_sinh_ton_truc_giac',
+    name: 'Sinh Tồn Siêu Trực Giác (S)',
+    tier: 'S',
+    description: 'Dị năng của Liễu Như Yên, cảm nhận trước ý đồ tấn công, giải mã điểm thù hận và phát hiện điểm yếu chí mạng của quái vật.',
+    icon: '👁️‍🗨️',
+    mpCost: 6,
+    cooldownTurns: 2,
+    effectType: 'buff',
+    power: 200,
+    level: 1,
+    maxLevel: 6,
+    flavor: 'Trải qua vô số phó bản tôi luyện thành trực giác siêu phàm nhìn thấu sinh tử.'
+  },
+  {
+    id: 'skill_sss_bat_tu',
+    name: 'Bất Tử Thần Khảm (SSS)',
+    tier: 'SSS',
+    description: 'Hệ thống đặc dị của Kế Thư An, hồi sinh tức thì khi nhận sát thương chí mạng và tăng 50% phòng ngự toàn diện.',
+    icon: '🛡️',
+    mpCost: 0,
+    cooldownTurns: 5,
+    effectType: 'passive',
+    power: 350,
+    level: 1,
+    maxLevel: 10,
+    flavor: 'Quy luật bất tử bí ẩn vượt qua giới hạn của các tòa tháp sinh tồn.'
+  },
+  {
     id: 'skill_a_thanhluc',
     name: 'Thanh Linh Kiếm Quyết (A)',
     tier: 'A',
@@ -160,12 +202,12 @@ export const SKILL_POOL: Skill[] = [
     power: 90,
     level: 1,
     maxLevel: 5,
-    flavor: 'Kỹ năng y tế dã chiến do Lạc Nương và các bác sĩ truyền dạy.'
+    flavor: 'Kỹ năng y tế dã chiến do Lô Nương và các bác sĩ truyền dạy.'
   }
 ];
 
 // ==========================================
-// 2. PHÒNG CHÚA TỂ & BẠN CÙNG PHÒNG CHẤT LƯỢNG CAO
+// 2. PHÒNG CHÚA TỂ & BẠN CÙNG PHÒNG CHẤT LƯỢNG CAO (THEO 7 CHƯƠNG)
 // ==========================================
 export const INITIAL_ROOM_TENANTS: RoomTenant[] = [
   {
@@ -176,67 +218,81 @@ export const INITIAL_ROOM_TENANTS: RoomTenant[] = [
     gender: 'female',
     conversionBonusPct: 96,
     comfortScore: 105,
-    specialty: 'Thu thập thông tin, Xạ thủ Súng Lôi Đình & Song Súng',
+    specialty: 'Thu thập thông tin, Xạ thủ Súng Lôi Đình & Song Súng Galax',
     specialSkill: 'Bắn Tỉa Tinh Chuẩn & Khéo Tay',
     isRecruited: true,
     assignedGear: 'Súng G17 Lôi Đình Bạc',
-    dialogue: 'Tiết Mộc, cửa phòng của chúng ta thật kiên cố, em tin tưởng anh sẽ dẫn dắt mọi người sống sót!'
+    dialogue: 'Tuyết Mộc, cửa phòng của chúng ta thật kiên cố, em tin tưởng anh sẽ dẫn dắt mọi người sống sót!'
   },
   {
     id: 'tenant_nhu_huyen',
     name: 'Vương Như Huyên',
-    title: 'Nữ Sinh Cứu Được (Thức Tỉnh Ngự Quỷ)',
+    title: 'Ngự Quỷ Sư SS (Chương 2)',
     avatar: '👧',
     gender: 'female',
     conversionBonusPct: 90,
     comfortScore: 100,
-    specialty: 'Thao túng Ngự Quỷ Linh, Quản lý vật tư & Kênh Giao Dịch',
-    specialSkill: 'Ngự Quỷ Thao Túng & Minh Hỏa',
+    specialty: 'Câu hồn, phong ấn và điều khiển linh thể hắc ám, Bách Quỷ Huyết Khế',
+    specialSkill: 'Ngự Quỷ Thao Túng & Minh Hỏa Băng Diễm',
     isRecruited: true,
     assignedGear: 'Ngự Quỷ Linh Hắc Quang',
-    dialogue: 'Cảm ơn anh Tuyết đã cứu em khỏi đàn zombie. Em đã thu phục được 2 Đại Pháp Sư hỗ trợ rồi!'
+    dialogue: 'Cảm ơn anh Tuyết đã cứu em khỏi đàn zombie. Em đã thu phục được 3 tiểu quỷ và 2 Song Quỷ Đại Pháp Sư bảo hộ phòng!'
   },
   {
     id: 'tenant_thanh_nhien',
     name: 'Hứa Thanh Nhiên',
-    title: 'Kiếm Khách Thanh Linh (Tuyệt Mỹ Chiến Nữ)',
+    title: 'Kiếm Khách Thanh Linh (Chương 3)',
     avatar: '👩‍🦳',
     gender: 'female',
     conversionBonusPct: 93,
     comfortScore: 108,
-    specialty: 'Cận chiến kiếm thuật, Luyện Khí Quyết, Băng Giao Thủy Trận',
+    specialty: 'Cận chiến kiếm thuật võ học cổ truyền, Luyện Khí Quyết, Độc Thi Trảm',
     specialSkill: 'Thanh Linh Kiếm Pháp Đột Phá',
     isRecruited: true,
     assignedGear: 'Thanh Kiếm Cấp 3 Độc Thi',
-    dialogue: 'Tiết ca, chỉ cần anh vung đao dẫn đầu, thanh kiếm này nguyện cùng anh xông pha vạn dặm tà ma!'
-  },
-  {
-    id: 'tenant_lac_nuong',
-    name: 'Lạc Nương (Sona)',
-    title: 'Cô Giáo Ngoại Ngữ Dị Năng',
-    avatar: '👩‍🏫',
-    gender: 'female',
-    conversionBonusPct: 97,
-    comfortScore: 112,
-    specialty: 'Trị liệu y tế cao cấp, Ngoại ngữ giao dịch, Thuật hồi phục',
-    specialSkill: 'Trị Liệu Dã Chiến Toàn Năng',
-    isRecruited: true,
-    assignedGear: 'Hộp Y Tế Dã Chiến Quân Y',
-    dialogue: 'Thế giới cũ quá nhàm chán, cùng Tiết Mộc sinh tồn trong Ký Túc Xá này kích thích hơn nhiều!'
+    dialogue: 'Tuyết ca, chỉ cần anh vung đao dẫn đầu, thanh kiếm này nguyện cùng anh xông pha vạn dặm tà ma!'
   },
   {
     id: 'tenant_lieu_nhu_yen',
     name: 'Liễu Như Yên',
-    title: 'Thích Khách Mặt Nạ (Kỳ Cựu Top 3 Tầng 10)',
+    title: 'Thích Khách Mặt Nạ & Bậc Thầy Thù Hận (Chương 3)',
     avatar: '🥷',
     gender: 'female',
     conversionBonusPct: 98,
     comfortScore: 115,
-    specialty: 'Âm Ảnh Độ Thân, Trực giác điểm thù hận, Bẫy quỷ',
-    specialSkill: 'Ám Sát Hư Không & Thôi Miên',
+    specialty: 'Âm Ảnh Độ Thân, Trực giác điểm thù hận, Bẫy quỷ, Điểm yếu quái vật',
+    specialSkill: 'Ám Sát Hư Không & Cảnh Báo Thù Hận',
     isRecruited: true,
     assignedGear: 'Đao Khiêu Ngư Cấp 3 & Cửa Chu Sa',
-    dialogue: 'Tôi đã trải qua 3 mùa sinh tồn và đều vào Top 10. Đi theo Tiết Mộc là quyết định sáng suốt nhất.'
+    dialogue: 'Cẩn thận điểm thù hận. Giết người bừa bãi sẽ biến anh thành mồi nhử số 1 của toàn bộ quái vật!'
+  },
+  {
+    id: 'tenant_lo_nuong',
+    name: 'Lô Nương (Sona)',
+    title: 'Cựu Giảng Viên Ngoại Ngữ Dị Năng (Chương 5)',
+    avatar: '👩‍🏫',
+    gender: 'female',
+    conversionBonusPct: 97,
+    comfortScore: 112,
+    specialty: 'Tăng sản lượng Tiền Chúa Tể 500 xu/ngày, Trị liệu dã chiến cao cấp, Ngoại ngữ',
+    specialSkill: 'Trị Liệu Dã Chiến Toàn Năng & An Thần',
+    isRecruited: true,
+    assignedGear: 'Hộp Y Tế Dã Chiến Quân Y',
+    dialogue: 'Cùng Tuyết Mộc sinh tồn trong Ký Túc Xá này kích thích và bình yên hơn bất kỳ nơi nào!'
+  },
+  {
+    id: 'tenant_ke_thu_an',
+    name: 'Kế Thư An',
+    title: 'Kẻ Nắm Giữ Hệ Thống Bất Tử (Chương 7)',
+    avatar: '🧙‍♂️',
+    gender: 'male',
+    conversionBonusPct: 120,
+    comfortScore: 120,
+    specialty: 'Hệ thống Bất Tử, Tái sinh vô hạn, Trấn thủ cổng Minh Phủ',
+    specialSkill: 'Bất Tử Trùng Sinh & Phá Giới Thần Uy',
+    isRecruited: true,
+    assignedGear: 'Chiến Giáp Thập Nhật Linh',
+    dialogue: 'Cậu đã giết được Asith... Trò chơi thực sự bây giờ mới bắt đầu. Hãy cùng tôi bước vào Thành Phố Hoang Tàn!'
   }
 ];
 
@@ -485,6 +541,103 @@ export const INITIAL_ITEMS: Item[] = [
     quantity: 1,
     stackable: true,
     value: 5000
+  },
+  {
+    id: 'item_co_thu_di_van',
+    name: 'Cổ Thư Dị Văn Dân Gian (Cấp S)',
+    description: 'Cuốn sách cổ ghi chép tường tận nguồn gốc, tập tính sinh học và điểm yếu chí mạng của 10 con Boss Thập Đại Ác Nhân cai quản 10 tầng lầu.',
+    rarity: 'epic',
+    tier: 'S',
+    category: 'special',
+    icon: '📖',
+    quantity: 1,
+    stackable: true,
+    value: 1200
+  },
+  {
+    id: 'item_map_sector09',
+    name: 'Bản Đồ Khu Vực: Sương Mù Máu – Phân Vùng 09',
+    description: 'Bản đồ quân sự rơi ra từ tay Boss Asith, hiển thị vị trí 8 Tế Đàn Ký Túc Xá lân cận đang sáp nhập vào Chiến Trường Thành Phố Hoang Tàn.',
+    rarity: 'legendary',
+    tier: 'SS',
+    category: 'special',
+    icon: '🗺️',
+    quantity: 1,
+    stackable: true,
+    value: 2500
+  },
+  {
+    id: 'item_khien_tru_phan_xa',
+    name: 'Khiên Trụ Phản Xạ Cấp 3',
+    description: 'Khiên phòng thủ đặc chế vớt từ đáy hồ Đồng Hồ, hấp thụ và phản xạ 35% sát thương ma pháp băng hỏa.',
+    rarity: 'rare',
+    tier: 'A',
+    category: 'armor',
+    icon: '🛡️',
+    quantity: 1,
+    stackable: false,
+    value: 400,
+    stats: { def: 42, hp: 60 }
+  },
+  {
+    id: 'item_mau_cho_muc',
+    name: 'Máu Chó Mực Pha Thi Độc',
+    description: 'Vật phẩm dân gian chuyên khắc chế Cương Thi / Thi Khôi Tầng 10, tạt vào ngực sẽ phá hủy hoàn toàn Kim Cương Thân.',
+    rarity: 'rare',
+    tier: 'A',
+    category: 'consumable',
+    icon: '🩸',
+    quantity: 3,
+    stackable: true,
+    value: 120
+  },
+  {
+    id: 'item_guong_dong_bat_quai',
+    name: 'Gương Đồng Bát Quái Chiếu Yêu',
+    description: 'Phản chiếu chân dung tà ma, khiến Hồng Nương Tử (Tầng 4) tự nhìn thấy hình bóng thật mà hoảng loạn tan biến.',
+    rarity: 'rare',
+    tier: 'A',
+    category: 'special',
+    icon: '🪞',
+    quantity: 1,
+    stackable: true,
+    value: 150
+  },
+  {
+    id: 'item_huong_me_than',
+    name: 'Hương Mê Thần Thôi Miên',
+    description: 'Khói hương cổ xưa làm tê liệt thần kinh của Quỷ Thư Sinh (Tầng 8), phong tỏa kỹ năng đọc chú.',
+    rarity: 'uncommon',
+    tier: 'B',
+    category: 'consumable',
+    icon: '💨',
+    quantity: 2,
+    stackable: true,
+    value: 90
+  },
+  {
+    id: 'item_bay_thu_an_nac',
+    name: 'Bẫy Thú Ẩn Nặc Bản Mệnh',
+    description: 'Bẫy thép đặt ở lối rẽ, giẫm phải sẽ kích nổ sâu độc bản mệnh dưới lòng bàn chân Huyết Cốt Tử (Tầng 6).',
+    rarity: 'rare',
+    tier: 'A',
+    category: 'special',
+    icon: '🪤',
+    quantity: 2,
+    stackable: true,
+    value: 160
+  },
+  {
+    id: 'item_moc_tam_phien',
+    name: 'Mộc Tâm Phiến Thanh Tâm',
+    description: 'Quạt gỗ tâm linh thanh lọc khí tức, miễn nhiễm hoàn toàn mị hương quyến rũ của Hồ Yêu (Tầng 2).',
+    rarity: 'rare',
+    tier: 'A',
+    category: 'special',
+    icon: '🪭',
+    quantity: 1,
+    stackable: true,
+    value: 140
   }
 ];
 
@@ -663,18 +816,19 @@ export const STAGES: StagePhase[] = [
 // 5. QUÁI VẬT & BOSS THEO KỊCH BẢN NGUYÊN TÁC
 // ==========================================
 export const ENEMIES: Enemy[] = [
-  // Boss Stage 1
+  // Stage 1 Boss
   {
     id: 'enemy_boss_giant_zombie',
     name: 'Zombie Khổng Lồ Đột Kích (Cấp 3)',
-    title: 'Thôn Phệ Đồng Loại Biến Dị',
-    hp: 250,
-    maxHp: 250,
+    title: 'Thôn Phệ Đồng Loại Biến Dị - Chương 2',
+    hp: 260,
+    maxHp: 260,
     attack: 28,
     defense: 18,
     speed: 12,
     expReward: 180,
     stageId: 1,
+    floor: 'Nhà Thi Đấu',
     isBoss: true,
     icon: '🧟',
     description: 'Con Zombie cấp 3 húc đổ cửa sắt các phòng yếu, hai cánh tay đột biến to như cột đình đập nát mọi chướng ngại vật.',
@@ -682,92 +836,414 @@ export const ENEMIES: Enemy[] = [
       { name: 'Nện Đất Cuồng Bạo', damageMultiplier: 1.4, description: 'Đập mạnh xuống sàn gây chấn động diện rộng.' },
       { name: 'Húc Cửa Tử Thần', damageMultiplier: 1.6, description: 'Gây sát thương cực lớn lên lá chắn phòng thủ.' }
     ],
+    weakness: {
+      description: 'Bắn phá chính xác vào hốc mắt bằng Súng Lục G17 Lôi Đình.',
+      counterItemName: 'Súng Lục G17 Lôi Đình Bạc',
+      counterItemId: 'weapon_g17_thunder',
+      damageMultiplier: 2.0,
+      folkLoreHint: 'Mắt là tử huyệt yếu nhất khi nó đang gầm thét lao tới.'
+    },
     drops: [
-      { itemId: 'weapon_g17_thunder', name: 'Súng Lục G17 Lôi Đình', chance: 1.0, count: 1 },
+      { itemId: 'weapon_g17_thunder', name: 'Súng Lục G17 Lôi Đình Bạc', chance: 1.0, count: 1 },
+      { itemId: 'item_golden_serum', name: 'Dược Tề Gen Hoàng Kim', chance: 1.0, count: 1 },
       { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 50 },
       { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 3 }
     ]
   },
 
-  // Boss Stage 2
+  // Stage 2 Boss
   {
     id: 'enemy_boss_ac_linh_hoang_dung',
-    name: 'Ác Linh Hoàng Dũng & Quỷ Sai',
-    title: 'Oán Linh Kiếm Sĩ Đêm Hồi Hồn',
-    hp: 380,
-    maxHp: 380,
-    attack: 38,
-    defense: 25,
+    name: 'Ác Linh Hoàng Dũng & Âm Sai Minh Phủ',
+    title: 'Oán Linh Kiếm Sĩ Đêm Hồi Hồn - Chương 3',
+    hp: 400,
+    maxHp: 400,
+    attack: 40,
+    defense: 26,
     speed: 18,
-    expReward: 300,
+    expReward: 320,
     stageId: 2,
+    floor: 'Tầng 10',
     isBoss: true,
     icon: '👻',
-    description: 'Người chơi đã chết hóa thành Ác Linh cầm trường kiếm đòi nợ máu, triệu hồi bầy u linh bao vây phòng 200.',
+    description: 'Người chơi Hoàng Dũng dẫn đàn em cướp phòng 200 bị tiêu diệt, đêm hồi hồn hóa ác linh quay lại báo thù.',
     skills: [
       { name: 'Kiếm Khí Oán Linh', damageMultiplier: 1.5, description: 'Phóng luồng hắc kiếm khí xuyên thấu phòng thủ.' },
       { name: 'Xích Sắt Đoạt Hồn', damageMultiplier: 1.3, description: 'Trói chân và rút 20 MP của mục tiêu.' }
     ],
+    weakness: {
+      description: 'Quỷ Đồng Thần Khảm há miệng hút sạch oán linh và định thân trong 3 giây.',
+      counterItemName: 'Bát Sứ Thanh Hoa Mai Tinh Xảo',
+      counterItemId: 'item_porcelain_bowl',
+      damageMultiplier: 2.2,
+      folkLoreHint: 'Dâng Bát Sứ Thanh Hoa cho Âm Sai để hóa giải oán hận và đổi lấy Thư Mời Minh Phủ.'
+    },
     drops: [
       { itemId: 'item_minh_phu_invite', name: 'Thư Mời Minh Phủ', chance: 1.0, count: 1 },
       { itemId: 'item_porcelain_bowl', name: 'Bát Sứ Thanh Hoa', chance: 1.0, count: 1 },
-      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 80 }
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 100 }
     ]
   },
 
-  // Boss Stage 3
+  // Stage 3 Boss
   {
     id: 'enemy_boss_song_quy_vuong',
-    name: 'Song Quỷ Chi Vương Athi (Cấp 8)',
-    title: 'Chúa Tể Ngai Vàng Băng Giá',
-    hp: 600,
-    maxHp: 600,
-    attack: 55,
-    defense: 40,
-    speed: 18,
-    expReward: 500,
+    name: 'Song Quỷ Chi Vương Asith (Cấp 12)',
+    title: 'Chúa Tể Ngai Vàng Băng Giá - Chương 6 & 7',
+    hp: 680,
+    maxHp: 680,
+    attack: 58,
+    defense: 42,
+    speed: 19,
+    expReward: 550,
     stageId: 3,
+    floor: 'Tầng Thượng Băng Giá',
     isBoss: true,
     icon: '👑',
-    description: 'Thủ lĩnh bộ tộc Song Quỷ, thi triển bão tuyết hạ nhiệt độ ký túc xá xuống -30°C và chỉ huy vạn quân băng tuyết.',
+    description: 'Thủ lĩnh bộ tộc Song Quỷ, thi triển bão tuyết hạ nhiệt độ KTX xuống -30°C và chỉ huy vạn quân băng tuyết.',
     skills: [
       { name: 'Băng Phong Trí Tức', damageMultiplier: 1.8, description: 'Đóng băng pháo đài và làm chậm hành động của người chơi.' },
-      { name: 'Kiếm Băng Bạo Liệt', damageMultiplier: 1.6, description: 'Chém nát độ bền cửa phòng bằng kiếm băng đôi.' }
+      { name: 'Cuồng Huyết Cực Hạn', damageMultiplier: 1.9, description: 'Song kiếm băng trảm nát độ bền cửa siêu hợp kim.' }
     ],
+    weakness: {
+      description: 'Nỏ Công Trình Cấp 5 kết hợp Lõi Hàn Khí bắn xuyên lồng ngực đóng đinh Asith lên lan can.',
+      counterItemName: 'Khẩu Galax Sấm Sét & Nỏ Công Trình',
+      counterItemId: 'weapon_galax_twin',
+      damageMultiplier: 2.5,
+      folkLoreHint: 'Khi Asith nứt vỡ lõi băng, dùng Minh Hỏa thiêu đốt lập tức hóa giải bão tuyết.'
+    },
     drops: [
-      { itemId: 'weapon_galax_twin', name: 'Song Súng Galax Sấm Sét', chance: 1.0, count: 1 },
-      { itemId: 'item_wolf_pelt', name: 'Da Sói Băng Giá', chance: 1.0, count: 10 },
-      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 120 }
+      { itemId: 'weapon_galax_twin', name: 'Song Súng Galax Sấm Sét Cấp 4', chance: 1.0, count: 1 },
+      { itemId: 'item_map_sector09', name: 'Bản Đồ Khu Vực: Sương Mù Máu – Phân Vùng 09', chance: 1.0, count: 1 },
+      { itemId: 'item_wolf_pelt', name: 'Da Sói Băng Giá', chance: 1.0, count: 15 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 150 }
     ]
   },
 
-  // Boss Stage 4
+  // ==========================================
+  // THẬP ĐẠI ÁC NHÂN 10 TẦNG LẦU (CHƯƠNG 4)
+  // ==========================================
+
+  // Tầng 10: Thi Khôi Kim Cương Cấp 4
   {
     id: 'enemy_boss_thi_khoi',
-    name: 'Đoàn Mới Sát Thủ Thi Khôi (Cấp 4)',
-    title: 'Thống Lĩnh Kim Cương Bất Hoại',
+    name: 'Thi Khôi Cương Thi Kim Cương (Tầng 10)',
+    title: 'Thống Lĩnh Kim Cương Bất Hoại - Cấp 4',
     hp: 750,
     maxHp: 750,
     attack: 62,
-    defense: 45,
+    defense: 48,
     speed: 16,
     expReward: 650,
     stageId: 4,
+    floor: 'Tầng 10',
     isBoss: true,
     icon: '🧟‍♂️',
     description: 'Boss cấp 4 toàn thân xích giao kim cương bất hoại, lắc chuông triệu hồi đàn thi ma đồng giáp trấn giữ 10 tầng.',
     skills: [
-      { name: 'Xích Giao Kim Cương', damageMultiplier: 1.5, description: 'Miễn nhiễm 50% sát thương vật lý và tăng sức đập cửa.' },
-      { name: 'Lắc Chuông Triệu Hồi', damageMultiplier: 1.2, description: 'Triệu hồi 6 thi ma phụ trợ chiến đấu.' }
+      { name: 'Kim Cương Hộ Thể', damageMultiplier: 1.5, description: 'Miễn nhiễm 50% sát thương vật lý và đập nát cửa phòng.' },
+      { name: 'Chuông Triệu Hồn Ma', damageMultiplier: 1.2, description: 'Triệu hồi 6 thi ma phụ trợ chiến đấu.' }
     ],
+    weakness: {
+      description: 'Dùng máu chó mực pha thi độc tạt thẳng vào ngực phá hủy Kim Cương Thân, sau đó dùng súng bắn tỉa xuyên hộp sọ.',
+      counterItemName: 'Máu Chó Mực Pha Thi Độc',
+      counterItemId: 'item_mau_cho_muc',
+      damageMultiplier: 2.5,
+      folkLoreHint: 'Cổ Thư Dị Văn: Kim cương cương thi kỵ nhất máu chó mực hắc ám.'
+    },
     drops: [
       { itemId: 'armor_kim_tieu', name: 'Kim Tiêu Ngọc Y Cấp 4', chance: 1.0, count: 1 },
+      { itemId: 'item_co_thu_di_van', name: 'Cổ Thư Dị Văn Dân Gian', chance: 1.0, count: 1 },
       { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 180 },
       { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 8 }
     ]
   },
 
-  // Boss Stage 5 (Transcendence Boss)
+  // Tầng 9: Lang Man Tốc Độ
+  {
+    id: 'enemy_boss_lang_man',
+    name: 'Lang Man Huyết Sói (Tầng 9)',
+    title: 'Thần Tốc Đao Ma Tầng 9',
+    hp: 420,
+    maxHp: 420,
+    attack: 48,
+    defense: 28,
+    speed: 26,
+    expReward: 380,
+    stageId: 4,
+    floor: 'Tầng 9',
+    isBoss: true,
+    icon: '🐺',
+    description: 'Nhanh như chớp giật, móng vuốt cào rách mọi tấm chắn kim loại trên hành lang tầng 9.',
+    skills: [
+      { name: 'Ảnh Lang Trảm', damageMultiplier: 1.6, description: 'Lướt qua bóng tối chém liên tiếp 3 nhát chí mạng.' }
+    ],
+    weakness: {
+      description: 'Dùng kiếm phủ thi độc khắc chế tốc độ di chuyển.',
+      counterItemName: 'Thanh Kiếm Độc Thi của Hứa Thanh Nhiên',
+      damageMultiplier: 2.2,
+      folkLoreHint: 'Cổ Thư Dị Văn: Độc thi ngấm vào gân cốt khiến Lang Man tê liệt chân.'
+    },
+    drops: [
+      { itemId: 'item_wolf_pelt', name: 'Da Sói Băng Giá', chance: 1.0, count: 5 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 60 }
+    ]
+  },
+
+  // Tầng 8: Quỷ Thư Sinh
+  {
+    id: 'enemy_boss_quy_thu_sinh',
+    name: 'Quỷ Thư Sinh Thôi Miên (Tầng 8)',
+    title: 'Huyễn Thuật Chi Ma Tầng 8',
+    hp: 390,
+    maxHp: 390,
+    attack: 42,
+    defense: 25,
+    speed: 18,
+    expReward: 350,
+    stageId: 4,
+    floor: 'Tầng 8',
+    isBoss: true,
+    icon: '📜',
+    description: 'Cầm quạt sắt ngâm thơ thôi miên người chơi khiến nạn nhân tự mở cửa nộp mạng.',
+    skills: [
+      { name: 'Mê Hồn Khúc Điệu', damageMultiplier: 1.4, description: 'Gây hỗn loạn và rút cạn năng lượng MP của mục tiêu.' }
+    ],
+    weakness: {
+      description: 'Dùng Hương Mê Thần thôi miên ngược lại rồi chém đứt đầu trong chớp mắt.',
+      counterItemName: 'Hương Mê Thần Thôi Miên',
+      counterItemId: 'item_huong_me_than',
+      damageMultiplier: 2.4,
+      folkLoreHint: 'Cổ Thư Dị Văn: Kẻ dùng huyễn thuật sợ nhất bị mê hương phản phệ.'
+    },
+    drops: [
+      { itemId: 'item_porcelain_bowl', name: 'Bát Sứ Thanh Hoa', chance: 1.0, count: 1 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 70 }
+    ]
+  },
+
+  // Tầng 7: Phong Cương Cơ Quan Sư
+  {
+    id: 'enemy_boss_phong_cuong',
+    name: 'Phong Cương Cơ Quan Sư (Tầng 7)',
+    title: 'Bậc Thầy Rối Thịt Xương Tầng 7',
+    hp: 460,
+    maxHp: 460,
+    attack: 44,
+    defense: 30,
+    speed: 15,
+    expReward: 400,
+    stageId: 4,
+    floor: 'Tầng 7',
+    isBoss: true,
+    icon: '🎎',
+    description: 'Chỉ huy 3 con rối cơ quan từ xương thịt (Rối Đầu To bắn kim, Rối Vợ phun lửa, Rối Lực Sĩ).',
+    skills: [
+      { name: 'Mưa Phi Châm Thép', damageMultiplier: 1.5, description: 'Bắn hàng vạn cây kim xuyên thủng vách tường.' }
+    ],
+    weakness: {
+      description: 'Dùng trường đao hợp kim bén ngót (Kim khắc Mộc) chặt đứt toàn bộ rối cơ quan trước khi chém nát lõi.',
+      counterItemName: 'Đao Hợp Kim Cường Hóa',
+      damageMultiplier: 2.3,
+      folkLoreHint: 'Cổ Thư Dị Văn: Chặt đứt dây nối tơ rối sẽ khiến Phong Cương mất toàn bộ sức chiến đấu.'
+    },
+    drops: [
+      { itemId: 'item_golden_serum', name: 'Dược Tề Gen Hoàng Kim', chance: 0.8, count: 1 },
+      { itemId: 'mat_scrap', name: 'Mảnh Kim Loại', chance: 1.0, count: 15 }
+    ]
+  },
+
+  // Tầng 6: Huyết Cốt Tử
+  {
+    id: 'enemy_boss_huyet_cot_tu',
+    name: 'Huyết Cốt Tử (Tầng 6)',
+    title: 'Tà Linh Huyết Cốt Tầng 6',
+    hp: 440,
+    maxHp: 440,
+    attack: 46,
+    defense: 29,
+    speed: 17,
+    expReward: 390,
+    stageId: 4,
+    floor: 'Tầng 6',
+    isBoss: true,
+    icon: '🦴',
+    description: 'Toàn thân ghép từ xương máu người chết, dưới lòng bàn chân nuôi dưỡng sâu độc bản mệnh.',
+    skills: [
+      { name: 'Bão Xương Máu', damageMultiplier: 1.5, description: 'Phóng phi tiêu xương gai gây xuất huyết liên tục.' }
+    ],
+    weakness: {
+      description: 'Đặt Bẫy Thú Ẩn Nặc ngay lối rẽ để kích nổ sâu độc bản mệnh dưới lòng bàn chân.',
+      counterItemName: 'Bẫy Thú Ẩn Nặc Bản Mệnh',
+      counterItemId: 'item_bay_thu_an_nac',
+      damageMultiplier: 2.5,
+      folkLoreHint: 'Cổ Thư Dị Văn: Sâu độc nổ tung sẽ triệt tiêu hoàn toàn sức mạnh của Huyết Cốt Tử.'
+    },
+    drops: [
+      { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 4 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 75 }
+    ]
+  },
+
+  // Tầng 5: Quỷ Họa Bì
+  {
+    id: 'enemy_boss_hoa_bi',
+    name: 'Quỷ Họa Bì Giả Dạng (Tầng 5)',
+    title: 'Kẻ Lột Da Đổi Mặt Tầng 5',
+    hp: 360,
+    maxHp: 360,
+    attack: 38,
+    defense: 22,
+    speed: 21,
+    expReward: 310,
+    stageId: 4,
+    floor: 'Tầng 5',
+    isBoss: true,
+    icon: '🎭',
+    description: 'Khoác lớp da sinh viên để lừa người chơi mở cửa, khi tiếp cận sẽ xé xác nạn nhân.',
+    skills: [
+      { name: 'Cào Xé Lột Da', damageMultiplier: 1.4, description: 'Đòn đánh cào xé cực nhanh làm giảm phòng ngự.' }
+    ],
+    weakness: {
+      description: 'Dùng nước sôi hoặc ngọn lửa thiêu rụi lớp da giả để lộ nguyên hình.',
+      counterItemName: 'Hỏa Cầu Thuật hoặc Bom Cồn Lửa',
+      damageMultiplier: 2.2,
+      folkLoreHint: 'Cổ Thư Dị Văn: Lớp da nhân tạo kỵ nhất lửa nung.'
+    },
+    drops: [
+      { itemId: 'food_bread', name: 'Bánh Mì Tinh Xảo', chance: 1.0, count: 3 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 50 }
+    ]
+  },
+
+  // Tầng 4: Hồng Nương Tử Giày Hoa Đỏ
+  {
+    id: 'enemy_boss_hong_nuong_tu',
+    name: 'Hồng Nương Tử Giày Hoa Đỏ (Tầng 4)',
+    title: 'Ác Quỷ Mê Hồn Huyết Hài Tầng 4',
+    hp: 380,
+    maxHp: 380,
+    attack: 40,
+    defense: 24,
+    speed: 22,
+    expReward: 340,
+    stageId: 4,
+    floor: 'Tầng 4',
+    isBoss: true,
+    icon: '👠',
+    description: 'Ẩn hiện sau lưng người chơi với đôi giày thêu hoa đỏ, thì thầm mê hoặc và bóp nghẹt tâm trí.',
+    skills: [
+      { name: 'Hơi Thở Lạnh Lẽo', damageMultiplier: 1.4, description: 'Giảm 30 điểm tinh thần và làm tê liệt mục tiêu.' }
+    ],
+    weakness: {
+      description: 'Sử dụng Gương Đồng Bát Quái phản chiếu chân dung tà ma khiến ả tự hoảng loạn tan biến.',
+      counterItemName: 'Gương Đồng Bát Quái Chiếu Yêu',
+      counterItemId: 'item_guong_dong_bat_quai',
+      damageMultiplier: 2.6,
+      folkLoreHint: 'Cổ Thư Dị Văn: Tự nhìn thấy dung mạo thật trong gương bát quái sẽ hoảng sợ tiêu tán.'
+    },
+    drops: [
+      { itemId: 'item_porcelain_bowl', name: 'Bát Sứ Thanh Hoa', chance: 0.9, count: 1 },
+      { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 3 }
+    ]
+  },
+
+  // Tầng 3: Kim Giao Tướng Quân
+  {
+    id: 'enemy_boss_kim_giao',
+    name: 'Kim Giao Tướng Quân (Tầng 3)',
+    title: 'Thiết Giáp Chiến Quỷ Tầng 3',
+    hp: 480,
+    maxHp: 480,
+    attack: 50,
+    defense: 35,
+    speed: 14,
+    expReward: 420,
+    stageId: 4,
+    floor: 'Tầng 3',
+    isBoss: true,
+    icon: '🛡️',
+    description: 'Toàn thân bọc giáp sắt nặng nề, cầm đại kích quét sạch hành lang.',
+    skills: [
+      { name: 'Đại Kích Phá Thành', damageMultiplier: 1.6, description: 'Cú quét kích cực mạnh gây sát thương diện rộng.' }
+    ],
+    weakness: {
+      description: 'Dẫn dụ vào cửa hợp kim phản sát thương kết hợp Song Súng Galax sấm sét truyền điện.',
+      counterItemName: 'Song Súng Galax Sấm Sét',
+      counterItemId: 'weapon_galax_twin',
+      damageMultiplier: 2.2,
+      folkLoreHint: 'Cổ Thư Dị Văn: Giáp kim loại dẫn điện cực mạnh khi bị sấm sét đánh trúng.'
+    },
+    drops: [
+      { itemId: 'mat_scrap', name: 'Mảnh Kim Loại', chance: 1.0, count: 20 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 85 }
+    ]
+  },
+
+  // Tầng 2: Hồ Yêu Mị Hương
+  {
+    id: 'enemy_boss_ho_yeu',
+    name: 'Hồ Yêu Mị Hương (Tầng 2)',
+    title: 'Hồ Ly Huyễn Ảnh Tầng 2',
+    hp: 350,
+    maxHp: 350,
+    attack: 36,
+    defense: 22,
+    speed: 23,
+    expReward: 330,
+    stageId: 4,
+    floor: 'Tầng 2',
+    isBoss: true,
+    icon: '🦊',
+    description: 'Hóa thân thành mỹ nữ tỏa mùi hương mê hồn khiến kẻ địch mất phương hướng.',
+    skills: [
+      { name: 'Mị Hương Điên Đảo', damageMultiplier: 1.3, description: 'Làm giảm 50% độ chính xác của người chơi.' }
+    ],
+    weakness: {
+      description: 'Dùng Mộc Tâm Phiến miễn nhiễm mị hương để trảm sát trong một chiêu.',
+      counterItemName: 'Mộc Tâm Phiến Thanh Tâm',
+      counterItemId: 'item_moc_tam_phien',
+      damageMultiplier: 2.5,
+      folkLoreHint: 'Cổ Thư Dị Văn: Mộc Tâm Phiến xua tan hương độc, lộ ra tử huyệt ở đuôi.'
+    },
+    drops: [
+      { itemId: 'drink_water', name: 'Nước Tinh Khiết 18L', chance: 1.0, count: 2 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 65 }
+    ]
+  },
+
+  // Tầng 1: Quỷ Mù Âm Thanh
+  {
+    id: 'enemy_boss_quy_mu',
+    name: 'Quỷ Mù Âm Thanh (Tầng 1)',
+    title: 'Thính Giác Thích Khách Tầng 1',
+    hp: 370,
+    maxHp: 370,
+    attack: 42,
+    defense: 24,
+    speed: 20,
+    expReward: 320,
+    stageId: 4,
+    floor: 'Tầng 1',
+    isBoss: true,
+    icon: '👂',
+    description: 'Mắt bị mù hoàn toàn nhưng thính giác siêu nhạy, lao tới xé xác bất kỳ ai phát ra tiếng động.',
+    skills: [
+      { name: 'Âm Ba Thính Phong Trảm', damageMultiplier: 1.5, description: 'Đòn cắn xé bất ngờ dựa theo nguồn âm thanh.' }
+    ],
+    weakness: {
+      description: 'Dùng gõ sàn hoặc ném đồ vật sang hướng khác để đánh lạc hướng rồi đánh lén sau lưng.',
+      counterItemName: 'Bẫy Âm Thanh & Đánh Lạc Hướng',
+      damageMultiplier: 2.3,
+      folkLoreHint: 'Cổ Thư Dị Văn: Tạo tiếng động giả ở góc xa để Quỷ Mù sơ hở quay lưng lại.'
+    },
+    drops: [
+      { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 3 },
+      { itemId: 'item_lord_coin', name: 'Tiền Chúa Tể', chance: 1.0, count: 60 }
+    ]
+  },
+
+  // Stage 5 (Transcendence Boss)
   {
     id: 'enemy_boss_minh_vuong',
     name: 'Minh Vương Thần Khảm Vô Hạn (Cấp EX)',
@@ -779,6 +1255,7 @@ export const ENEMIES: Enemy[] = [
     speed: 24,
     expReward: 1500,
     stageId: 5,
+    floor: 'Đa Vũ Trụ Minh Phủ',
     isBoss: true,
     icon: '🌌',
     description: 'Thực thể cai quản thế giới sương mù máu, nắm giữ 10 mảnh Thập Nhật Linh và quyền năng thao túng sinh tử.',
@@ -786,6 +1263,13 @@ export const ENEMIES: Enemy[] = [
       { name: 'Minh Hỏa Phần Thiên', damageMultiplier: 2.0, description: 'Thiêu đốt linh hồn, gây sát thương bỏ qua 50% giáp.' },
       { name: 'Thập Nhật Trảm Quyết', damageMultiplier: 2.2, description: 'Đòn trảm diệt thế từ 10 thanh kiếm linh hồn.' }
     ],
+    weakness: {
+      description: 'Hợp lực của toàn bộ Bạn Cùng Phòng (Bách Quỷ Huyết Khế, Thanh Linh Kiếm, Súng Lôi Đình, Bất Tử).',
+      counterItemName: 'Thần Khảm Minh Vương Kiếm & Chiến Giáp Thập Nhật',
+      counterItemId: 'weapon_minh_vuong_sword',
+      damageMultiplier: 2.0,
+      folkLoreHint: 'Khai mở toàn bộ 10 Mảnh Thập Nhật Linh để phá vỡ kết giới bất tử của Minh Vương.'
+    },
     drops: [
       { itemId: 'weapon_minh_vuong_sword', name: 'Thần Khảm Minh Vương Kiếm', chance: 1.0, count: 1 },
       { itemId: 'armor_thap_nhat_giap', name: 'Chiến Giáp Thập Nhật Linh Tinh Vân', chance: 1.0, count: 1 },
@@ -794,51 +1278,7 @@ export const ENEMIES: Enemy[] = [
     ]
   },
 
-  // Minions and Floor Mini-Bosses
-  {
-    id: 'enemy_boss_hong_nuong_tu',
-    name: 'Hồng Nương Tử Giày Hoa Đỏ (Tầng 4)',
-    title: 'Ác Quỷ Mê Hồn Huyết Hài',
-    hp: 280,
-    maxHp: 280,
-    attack: 36,
-    defense: 20,
-    speed: 22,
-    expReward: 240,
-    stageId: 4,
-    isBoss: true,
-    icon: '👠',
-    description: 'Ẩn hiện sau lưng người chơi với đôi giày thêu hoa đỏ, thì thầm mê hoặc và bóp nghẹt tâm trí.',
-    skills: [
-      { name: 'Hơi Thở Lạnh Lẽo', damageMultiplier: 1.4, description: 'Giảm 30 điểm tinh thần và làm tê liệt mục tiêu.' }
-    ],
-    drops: [
-      { itemId: 'item_porcelain_bowl', name: 'Bát Sứ Thanh Hoa', chance: 0.9, count: 1 },
-      { itemId: 'special_crystal', name: 'Tinh Thể Dị Biến', chance: 1.0, count: 3 }
-    ]
-  },
-  {
-    id: 'enemy_boss_phong_cuong',
-    name: 'Phong Cương Cơ Quan Sư (Tầng 7)',
-    title: 'Bậc Thầy Rối Thịt Xương',
-    hp: 340,
-    maxHp: 340,
-    attack: 38,
-    defense: 25,
-    speed: 15,
-    expReward: 280,
-    stageId: 4,
-    isBoss: true,
-    icon: '🎎',
-    description: 'Chỉ huy 3 con rối cơ quan từ xương thịt (Rối Đầu To bắn kim, Rối Vợ phun lửa, Rối Lực Sĩ).',
-    skills: [
-      { name: 'Mưa Phi Châm Thép', damageMultiplier: 1.5, description: 'Bắn hàng vạn cây kim xuyên thủng vách tường.' }
-    ],
-    drops: [
-      { itemId: 'item_golden_serum', name: 'Dược Tề Gen Hoàng Kim', chance: 0.8, count: 1 },
-      { itemId: 'mat_scrap', name: 'Mảnh Kim Loại', chance: 1.0, count: 15 }
-    ]
-  },
+  // Minions
   {
     id: 'enemy_zombie_tang_hinh',
     name: 'Zombie Tàng Hình Bóng Tối',
@@ -888,7 +1328,7 @@ export const LOCATIONS: LocationArea[] = [
     name: 'Phòng 200 (Phòng Chúa Tể - Tầng 10)',
     floor: 'Tầng 10',
     danger: 1,
-    description: 'Căn cứ địa của Tiết Mộc, Tinh Thần, Vương Như Huyên, Hứa Thanh Nhiên và Lạc Nương. Trang bị Cửa Kim Cương, Quỷ Đồng và Pháo Đài Kẻ Phân Tách Không Gian.',
+    description: 'Căn cứ địa của Tiết Mộc, Tinh Thần, Vương Như Huyên, Hứa Thanh Nhiên, Liễu Như Yên, Lô Nương và Kế Thư An. Trang bị Cửa Kim Cương, Quỷ Đồng và Pháo Đài Kẻ Phân Tách Không Gian.',
     icon: '👑',
     isLocked: false,
     requiredStage: 1,
@@ -937,100 +1377,119 @@ export const LOCATIONS: LocationArea[] = [
   },
   {
     id: 'loc_gymnasium',
-    name: 'Nhà Thi Đấu Thể Thao KTX',
+    name: 'Nhà Thi Đấu Thể Thao KTX (Tổ Ấp Trứng Biến Dị)',
     floor: 'Tầng Trệt & Sân',
     danger: 4,
-    description: 'Nơi Zombie tập kết thôn phệ đồng loại tiến hóa thành quái vật cấp 3.',
+    description: 'Nơi Zombie tập kết thôn phệ đồng loại tiến hóa thành Zombie Khổng Lồ Cấp 3.',
     icon: '🏟️',
     isLocked: false,
     requiredStage: 2,
     exploredPercentage: 40,
     possibleLoots: ['Súng Lục G17', 'Thuốc Giảm Đau', 'Quân Bài Chuồn 3', 'Da Sói'],
-    zombieTypes: ['Zombie Khổng Lồ', 'Zombie Bò Trườn', 'Huyết Mộc Ma Cà Rồng']
+    zombieTypes: ['Zombie Khổng Lồ', 'Zombie Bò Trườn', 'Zombie Tàng Hình']
   },
   {
     id: 'loc_dongho_park',
     name: 'Công Viên & Hồ Nước Đông Hồ',
     floor: 'Khu Hoang Dã Ngoại Vi',
     danger: 5,
-    description: 'Lãnh địa riêng của Tiết Mộc, nơi lặn tìm bảo vật Minh Hỏa dưới đáy hồ bằng Giao Nhân Châu.',
+    description: 'Lãnh địa riêng của Tiết Mộc, nơi lặn tìm bảo vật Khiên Trụ Phản Xạ và bí kíp Minh Hỏa dưới đáy hồ.',
     icon: '🌊',
     isLocked: false,
     requiredStage: 3,
     exploredPercentage: 30,
-    possibleLoots: ['Giao Nhân Châu', 'Cuộn Kỹ Năng Minh Hỏa', 'Khiên Trụ Cấp 3', 'Mảnh Thần Khảm'],
+    possibleLoots: ['Khiên Trụ Phản Xạ Cấp 3', 'Cuộn Kỹ Năng Minh Hỏa', 'Mảnh Thần Khảm'],
     zombieTypes: ['Thuỷ Quái Đông Hồ', 'Ác Quỷ Băng Sương', 'Linh Hồn Tổ Tiên']
   }
 ];
 
 // ==========================================
-// 7. CỐT TRUYỆN THẾ GIỚI THEO KỊCH BẢN NGUYÊN TÁC
+// 7. CỐT TRUYỆN THẾ GIỚI 7 CHƯƠNG THEO TIỂU THUYẾT NGUYÊN TÁC
 // ==========================================
 export const WORLD_LORE_CHAPTERS: WorldLoreChapter[] = [
   {
     id: 'lore_ch1',
-    title: 'Chương 1: Thức Tỉnh Thiên Phú Chúa Tể & Phòng 200 Cố Thủ',
+    chapterNumber: 1,
+    title: 'Chương 1: Khởi Đầu Hỗn Loạn – Thức Tỉnh Thiên Phú Chúa Tể',
     unlockedDay: 1,
     isUnlocked: true,
-    content: `Tiết Mộc và hoa khôi lớp Tinh Thần đột ngột bị dịch chuyển vào Ký Túc Xá Sinh Tồn 100 người. Tiết Mộc thức tỉnh Thiên Phú Chúa Tể: chỉ cần ngủ là nhận được Tiền Chúa Tể để cường hóa vạn vật!
+    content: `Tiết Mộc và hoa khôi lớp Tinh Thần đột ngột bị dịch chuyển vào Ký Túc Xá Sinh Tồn. Tiết Mộc kích hoạt thành công Thiên Phú Ẩn: CHÚA TỂ DUNG HỢP (Cấp 1):
+- Quy tắc cốt lõi: Duy trì trạng thái nghỉ ngơi/ngủ để sản sinh Tiền Chúa Tể (40 xu/giờ).
+- Đồng đội chất lượng cao Tinh Thần tăng +96% tốc độ sản xuất!
+- Tiền Chúa Tể có thể cường hóa, tái cấu trúc và dung hợp mọi vật phẩm, kiến trúc, đạo cụ.
 
-Căn phòng 200 nhỏ bé ban đầu có tỉ lệ chuyển đổi tiền tăng 96% nhờ bạn cùng phòng chất lượng cao Tinh Thần. Khi tên cướp Vương Đại Tráng đến đập cửa đòi cướp vật tư tân thủ, Tiết Mộc dùng Tiền Chúa Tể nâng cấp cánh cửa gỗ mục thành Cửa Sắt Ánh Kim hất văng hắn ra ngoài.
-
-Đêm đầu tiên, Zombie tràn vào tàn sát hơn 100 người ở các phòng yếu ớt. Tiết Mộc mua máy lọc nước 18L hỏng với giá 1 lát bánh mì, cường hóa thành máy lọc mới tinh cung cấp nước ngọt vô hạn. Bằng súng G17 Lôi Đình, Tiết Mộc bắn hạ Zombie Tàng Hình và Zombie Khổng Lồ, đoạt Top 1 Bảng Điểm và nhận danh hiệu Phong Vương!`
+Khi tên côn đồ Vương Đại Tráng đá cửa phòng 200 đòi cướp vật tư tân thủ, Tiết Mộc tiêu hao Tiền Chúa Tể nâng cấp cánh cửa gỗ mục thành Cửa Hợp Kim Ánh Kim. Cú đá của Vương Đại Tráng bị phản chấn gãy xương ống chân. Đêm đầu tiên, Zombie sơ cấp tràn vào tàn sát người chơi ngoài hành lang, nhưng phòng 200 bất khả xâm phạm.`
   },
   {
     id: 'lore_ch2',
-    title: 'Chương 2: Đêm Hồi Hồn & Cuộc Chạm Trán Quỷ Sai Tuần Tra',
+    chapterNumber: 2,
+    title: 'Chương 2: Xây Dựng Cứ Điểm – Chiêu Mộ Đồng Minh & Bẫy Tiến Hóa',
     unlockedDay: 8,
     isUnlocked: false,
-    content: `Vòng 2 mang tên "Đêm Hồi Hồn". Những người chơi đã chết hóa thành u linh quay lại báo thù. Tuy nhiên, pho tượng Quỷ Đồng Thần Khảm trên cửa phòng 200 há miệng tạo cơn lốc nuốt trọn toàn bộ u linh, đem về hàng vạn điểm tích lũy.
+    content: `Ngày thứ 2, Tiết Mộc dùng 1 mẩu bánh mì đổi lấy chiếc Máy Lọc Nước cũ nát rồi nâng cấp thành Máy Lọc Nước Hợp Kim Nguyên Sinh (18L/ngày). Vấn đề nước sạch được giải quyết.
 
-Sau đó, Quỷ Sai mặc quan phục đen cầm xích sắt tuần tra khảo sát các phòng. Bất kỳ ai nói dối đều bị móc tim treo lên xích. Tiết Mộc dùng Bát Sứ Thanh Hoa Mai Tinh Xảo dâng lên, Quỷ Sai kinh ngạc thưởng cho "Thư Mời Minh Phủ" và tiết lộ bí mật về Thập Nhật Linh.
+Tiết Mộc chiêu mộ Vương Như Huyên – nữ sinh thức tỉnh Thiên phú Ngự Quỷ Sư (Cấp SS, +90% cộng hưởng Tiền Chúa Tể). 
 
-Chiêu mộ thêm Vương Như Huyên (thức tỉnh Ngự Quỷ Linh) và Hứa Thanh Nhiên (thức tỉnh Thanh Linh Kiếm Pháp), phòng 200 trở thành pháo đài bất khả chiến bại.`
+Ngày thứ 4, tại Nhà Thi Đấu, Zombie tiến hóa Thôn Phệ xuất hiện. Đợt tổng tấn công của các phe phái thất bại thảm hại trước Zombie Khổng Lồ Cấp 3. Một con Zombie Tàng Hình mò lên tầng 10, Tiết Mộc dùng 200 Tiền Chúa Tể nâng cấp khẩu Glock-17 thành Ánh Bạc Lôi Đình, bắn hạ chuẩn xác cả Zombie Tàng Hình lẫn Zombie Khổng Lồ, đoạt Top 1 Bảng Xếp Hạng Toàn Server!`
   },
   {
     id: 'lore_ch3',
-    title: 'Chương 3: Đêm Cực Hàn & Song Quỷ Chi Vương Athi',
+    chapterNumber: 3,
+    title: 'Chương 3: Phong Vương Đệ Nhất – Đêm Hồi Hồn & Thư Mời Minh Phủ',
     unlockedDay: 15,
     isUnlocked: false,
-    content: `Nhiệt độ KTX giảm đột ngột từ 0°C xuống -30°C trong vòng chơi Đêm Cực Hàn. Song Quỷ Chi Vương Athi ngự trị trên ngai vàng băng giá chỉ huy đại quân Song Quỷ bao vây tòa nhà.
+    content: `Phòng 200 nhận danh hiệu "Ký Túc Xá Phong Vương", mở khóa Quỷ Đồng Hộ Mệnh Cấp 3 và kỹ năng Siêu Trực Giác.
 
-Tiết Mộc nâng cấp pháo đài thành "Kẻ Phân Tách Không Gian (Máy Bắn Bi Cấp 5)", mỗi phát bắn nổ tung thành hàng chục mảnh bi sắc bén dọn sạch hành lang trong 5 giây. 
+Hoàng Dũng dẫn tay sai lên tầng 10 cướp phòng, bị Quỷ Đồng định thân và Hắc Thiết Liên Nỗ bắn gục tại chỗ. Liễu Như Yên xuất hiện cảnh báo quy tắc ngầm về Chỉ Số Thù Hận. Tiết Mộc chiêu mộ Hứa Thanh Nhiên – nữ kiếm khách võ học cổ truyền.
 
-Trong khi nhóm đầu cơ Vương Đức Lợi điên cuồng gom hàng đẩy giá Da Sói lên 10.000 kim tệ, Tiết Mộc âm thầm xả kho thu về hơn 800.000 kim tệ trước khi Song Quỷ Chi Vương bị bắn hạ và nhiệt độ ấm trở lại, khiến toàn bộ phe đầu cơ phá sản hoàn toàn.`
+Đêm Hồi Hồn giáng lâm: Oán linh người chơi quay lại báo thù, nhưng Quỷ Đồng hút sạch vào bụng tạo thành hàng vạn kinh nghiệm thuần khiết. Khi Âm Sai Minh Phủ tuần tra khảo sát, Tiết Mộc dâng lên Bát Sứ Thanh Hoa Cấp 1, nhận lại Thư Mời Minh Phủ và manh mối về Thập Nhật Linh!`
   },
   {
     id: 'lore_ch4',
-    title: 'Chương 4: Đêm Sát Thủ 10 Tầng Lầu & Bí Mật Thập Nhật Linh',
+    chapterNumber: 4,
+    title: 'Chương 4: Điểm Yếu Dân Gian – Cuộc Càn Quét Thập Đại Ác Nhân',
     unlockedDay: 29,
     isUnlocked: false,
-    content: `Vòng chung kết "Đêm Sát Thủ" kéo dài 12 tiếng. 10 con Boss trấn giữ 10 tầng lầu: Thi Khôi Kim Cương Cấp 4, Lang Man, Quỷ Thư Sinh, Phong Cương Cơ Quan, Hồng Nương Tử Giày Hoa Đỏ, Kim Cương Tướng Quân và Quỷ Mù Tầng 1.
+    content: `Nhờ cuốn Cổ Thư Dị Văn Dân Gian được cường hóa, Tiết Mộc nắm rõ điểm yếu của 10 con Boss cai quản 10 tầng lầu:
+- Tầng 10 (Thi Khôi): Dùng máu chó mực phá Kim Cương Thân, bắn tỉa vỡ sọ (nhận Kim Tiêu Ngọc Y Cấp 4).
+- Tầng 9 & 8 (Lang Man & Quỷ Thư Sinh): Dùng độc thi và Hương Mê Thần trảm sát.
+- Tầng 7 (Phong Cương): Đao hợp kim chặt đứt rối cơ quan.
+- Tầng 6 (Huyết Cốt Tử): Bẫy Thú Ẩn Nặc nổ sâu độc bản mệnh.
+- Tầng 4 & 2 (Hồng Nương Tử & Hồ Yêu): Gương bát quái phản chiếu và Mộc Tâm Phiến miễn mị hương.
 
-Nhờ dị năng Trực Giác Ác Ý và Cổ Thư Dị Văn Dân Gian, Tiết Mộc nắm rõ điểm yếu của từng con Boss:
-- Dùng chất lỏng hắc ám phá hủy Kim Cương Thân của Thi Khôi.
-- Dùng gương soi khiến Hồng Nương Tử tự sợ hãi tan biến.
-- Dùng Bẫy Thú gia truyền nghiền nát sâu độc dưới lòng bàn chân Huyết Cốt Tử.
-
-Tiết Mộc trang bị Chiến Giáp Kim Tiêu Ngọc Y, Danh Đao Huyết Đề Hỗ Trảm và Long Tượng Chiến Pháp, dẫn dắt toàn đội quét sạch 10 tầng lầu, đạt hơn 43.000 điểm thống trị tuyệt đối.`
+Phòng 200 độc chiếm Top 4 toàn bảng, thu về hơn 100.000 Tiền Vàng và Máy Thu Thanh Đa Chiều.`
   },
   {
     id: 'lore_ch5',
-    title: 'Chương 5: Đài Phát Thanh Kênh Huyết Vụ 107.5MHz & Hội Tương Trợ',
-    unlockedDay: 35,
+    chapterNumber: 5,
+    title: 'Chương 5: Sóng Radio Bí Ẩn – Bước Chân Vào Hội Tương Trợ Huyết Vụ',
+    unlockedDay: 40,
     isUnlocked: false,
-    content: `Tiết Mộc lắp đặt Máy Thu Thanh Kênh Huyết Vụ trong phòng 200, bất ngờ kết nối được với "Hội Tương Trợ Ký Túc Xá Tinh Anh" (gồm Đao Khách Xạ Vũ, Quản trị viên Top 97).
+    content: `Sau 47 lần dò sóng tốn hàng ngàn kim tệ, Tiết Mộc bắt được tần số 107.5MHz của Hội Tương Trợ Huyết Vụ từ Đao Khách Dạ Vũ (Top 97). Sự thật hé lộ: KTX chỉ là 1 trong hàng ngàn Tế Đàn, tồn tại các Du Hiệp bí ẩn và các tòa nhà sắp bị ép sáp nhập tàn sát lẫn nhau.
 
-Hóa ra thế giới sương mù máu này có hàng trăm tòa KTX khác nhau đang cùng tham gia trò chơi sinh tồn đa vũ trụ. Người chơi thuộc hệ Du Hiệp có thể ẩn nấp giữa bầy quái vật và dịch chuyển giữa các tòa tháp. Phòng 200 của Tiết Mộc chính thức trở thành Tòa Tháp Phong Vương hạt nhân chuẩn bị tiến vào Minh Phủ!`
+Tuyển thêm Lô Nương (+97 thoải mái, 500 xu/ngày). Vương Như Huyên mở khóa Bách Quỷ Huyết Khế, thu phục 3 tiểu quỷ và 2 Song Quỷ Đại Pháp Sư. Cùng Chu Lỗi lặn xuống hồ Đông Hồ tìm được Khiên Trụ Phản Xạ Cấp 3 và bí kíp Minh Hỏa.`
   },
   {
     id: 'lore_ch6',
-    title: 'Chương 6: Cánh Cổng Minh Phủ & Huyết Mạch Phong Vương Tối Thượng',
-    unlockedDay: 46,
+    chapterNumber: 6,
+    title: 'Chương 6: Đêm Cực Hàn & Đại Chiến Song Quỷ Chi Vương Asith',
+    unlockedDay: 55,
     isUnlocked: false,
-    content: `Thu thập đủ 10 Mảnh Thần Khảm Thập Nhật Linh, Tiết Mộc mở toang Cổng Dịch Chuyển Minh Phủ trên nóc Tòa KTX. Minh Vương Thần Khảm Cấp EX hiện thân thách thức phàm nhân.
+    content: `Hiện tượng Đêm Cực Hàn hạ nhiệt độ xuống -30°C và -40°C do ma pháp của Song Quỷ Chi Vương Asith (Cấp 12). Phe tài phiệt Vương Đức Lợi đầu cơ Da Sói đẩy giá lên 10.000 Tiền Vàng. Tiết Mộc âm thầm xả kho hàng trăm tấm Da Sói, thu về hơn 800.000 Tiền Vàng và đánh sập phe đầu cơ.
 
-Dưới sự phối hợp của 5 Bạn Cùng Phòng (Tinh Thần xạ kích lôi đình, Vương Như Huyên ngự quỷ định thân, Hứa Thanh Nhiên kiếm vũ hộ thể, Lạc Nương hồi máu toàn đoàn), Tiết Mộc vung Thần Khảm Minh Vương Kiếm chém vỡ kết giới U Minh, chính thức xưng bá toàn cõi sinh tồn đa vũ trụ!`
+Tiết Mộc nâng cấp Pháo Đài Kẻ Phân Tách Không Gian (Cấp 6) và Nỏ Công Trình Cấp 5. Trong đêm Dạ Mị, Siêu Trực Giác phối hợp Quỷ Đồng tiêu diệt 10 Ma Cà Rồng Thuần Huyết, thu 10 Huyết Tinh Cực Phẩm.`
+  },
+  {
+    id: 'lore_ch7',
+    chapterNumber: 7,
+    title: 'Chương 7: Bước Ra Sương Mù – Hướng Tới Thành Phố Hoang Tàn',
+    unlockedDay: 70,
+    isUnlocked: false,
+    content: `Asith thân chinh giáng lâm tầng 10 trong trạng thái Cuồng Huyết Cực Hạn. Tiết Mộc kích hoạt Chúa Tể Dung Hợp Thức Tỉnh Cấp 2, bắn mũi trọng tiễn băng tím đóng đinh Asith lên lan can; Minh Hỏa của Như Huyên và kiếm của Thanh Nhiên kết liễu hoàn toàn gã vua quỷ.
+
+Tiết Mộc thu được Bản Đồ Khu Vực: Sương Mù Máu – Phân Vùng 09 (8 Tế Đàn lân cận đang hợp nhất). Kế Thư An (người mang hệ thống Bất Tử) xuất hiện cảnh báo về cuộc chiến khốc liệt tiếp theo. 
+
+Kỷ nguyên Ký Túc Xá khép lại, cánh cửa dẫn vào Thành Phố Hoang Tàn và Đại Chiến Các Tòa Tháp chính thức mở ra!`
   }
 ];
 
@@ -1040,23 +1499,40 @@ Dưới sự phối hợp của 5 Bạn Cùng Phòng (Tinh Thần xạ kích lô
 export const RADIO_TRANSMISSIONS: RadioTransmission[] = [
   {
     id: 'radio_1',
-    sender: 'Đao Khách Xạ Vũ (Top 97 Tinh Anh)',
-    rank: 'Quản Trị Viên Hội Tương Trợ',
+    sender: 'Đao Khách Dạ Vũ (Top 97 Toàn Cầu)',
+    rank: 'Quản Trị Viên Hội Tương Trợ Huyết Vụ',
     frequency: '107.5 MHz',
-    title: 'Cảnh Báo Về Phó Bản Môi Trường Kép',
-    message: 'Tân thủ phòng 200 nghe rõ! Nếu tòa KTX của các cậu xuất hiện phó bản môi trường bão tuyết hoặc cực hàn, tuyệt đối phải bán tháo vật tư chống rét trước ngày cuối cùng 1 ngày, vì khi Boss chết thời tiết sẽ ấm lại ngay lập tức!',
+    title: 'Bí Mật 1000 Tế Đàn & Du Hiệp Thế Giới Sương Mù',
+    message: 'Tân thủ phòng 200 nghe rõ! Tòa KTX của các cậu chỉ là 1 trong hàng ngàn Tế Đàn trong Thế Giới Sương Mù Máu. Những người chơi mang hệ thống Du Hiệp có thể di chuyển tự do ngoài hoang dã. Chuẩn bị tinh thần: các tòa tháp sắp bị ép sáp nhập để tàn sát lẫn nhau!',
     timestamp: 'Hôm nay 07:15',
-    secretIntel: 'Điểm yếu của Ma Tộc cấp cao là không thể hồi máu trong không gian kín của KTX.'
+    secretIntel: 'Đợt rét -30°C sinh ra từ ma pháp của Asith Cấp 12. Khi Asith chết nhiệt độ sẽ ấm lại ngay, tuyệt đối phải xả hàng Da Sói trước trận chiến!',
+    isSecret: true,
+    requiredAttempts: 47,
+    isUnlocked: false
   },
   {
     id: 'radio_2',
-    sender: 'Nữ Quỷ Nửa Đêm',
+    sender: 'Nữ Quỷ Nửa Đêm (Hội Tương Trợ)',
     rank: 'Hội Viên Kênh Huyết Vụ',
     frequency: '107.5 MHz',
-    title: 'Quy Tắc Sinh Vật Bóng Tối & Huyết Mộc',
-    message: 'Sinh vật bóng tối trong đêm nửa đêm có khả năng nguyên tố hóa né tránh đạn pháo. Phải dùng quỷ đồng định thân hoặc dụ chúng đến sát cửa mới bắn trúng được!',
+    title: 'Quy Tắc Sinh Vật Bóng Tối & Đêm Dạ Mị',
+    message: 'Sinh vật bóng tối trong đêm Dạ Mị có khả năng nguyên tố hóa né tránh đạn pháo. Phải dùng Quỷ Đồng định thân và kích hoạt Siêu Trực Giác mới bắn trúng được!',
     timestamp: 'Hôm qua 23:40',
-    secretIntel: 'Thu thập đủ 10 Huyết Chi Tinh Thể có thể dung hợp Kỹ Năng Huyết Khí Thần Cấp.'
+    secretIntel: 'Thu thập đủ 10 Huyết Tinh Cực Phẩm có thể dung hợp Kỹ Năng Huyết Khí Thần Cấp.',
+    isSecret: false,
+    isUnlocked: true
+  },
+  {
+    id: 'radio_3',
+    sender: 'Kênh Cứu Trợ Tòa Tháp 04',
+    rank: 'Kênh Khẩn Cấp Công Cộng',
+    frequency: '98.2 MHz',
+    title: 'Cảnh Báo Về Phe Đầu Cơ Vật Tư Chống Rét',
+    message: 'Nhóm tài phiệt Vương Đức Lợi đang gom sạch Da Sói trên sàn đấu giá để ép giá sinh viên nghèo. Mọi người cẩn thận đừng bán tháo tài nguyên sinh tồn!',
+    timestamp: 'Hôm qua 18:20',
+    secretIntel: 'Vương Đức Lợi sẽ phá sản nếu giá Da Sói sụp đổ đột ngột trước khi bão tuyết tan.',
+    isSecret: false,
+    isUnlocked: true
   }
 ];
 
@@ -1356,18 +1832,32 @@ export function generateInitialSurvivors(): Survivor[] {
       specialty: 'Thanh Linh Kiếm Quyết, tăng 93% sản xuất Tiền Chúa Tể'
     },
     {
-      id: 'survivor_lac_nuong',
-      name: 'Lạc Nương (Sona)',
+      id: 'survivor_lo_nuong',
+      name: 'Lô Nương (Sona)',
       room: 'Phòng 200',
       status: 'alive',
       role: 'medic',
       gender: 'female',
-      originalJob: 'Cô Giáo Ngoại Ngữ',
-      awakenedSkill: SKILL_POOL[9],
+      originalJob: 'Cựu Giảng Viên Ngoại Ngữ',
+      awakenedSkill: SKILL_POOL[9] || SKILL_POOL[0],
       hp: 95,
       maxHp: 95,
       mood: 92,
-      specialty: 'Trị Liệu Toàn Năng, tăng 97% sản xuất Tiền Chúa Tể'
+      specialty: 'Trị Liệu Dã Chiến, tăng 97% sản xuất Tiền Chúa Tể (500 xu/ngày)'
+    },
+    {
+      id: 'survivor_ke_thu_an',
+      name: 'Kế Thư An',
+      room: 'Phòng 200',
+      status: 'alive',
+      role: 'guard',
+      gender: 'male',
+      originalJob: 'Kẻ Nắm Giữ Hệ Thống Bất Tử',
+      awakenedSkill: SKILL_POOL[5] || SKILL_POOL[0],
+      hp: 150,
+      maxHp: 150,
+      mood: 99,
+      specialty: 'Bất Tử Thần Khảm, Tái sinh vô hạn, tăng 120% Tiền Chúa Tể'
     },
     {
       id: 'survivor_truong_vu_dinh',
@@ -1395,7 +1885,7 @@ export function generateInitialSurvivors(): Survivor[] {
       hp: 105,
       maxHp: 105,
       mood: 90,
-      specialty: 'Ám Sát Hư Không, Top 3 Bảng Điểm'
+      specialty: 'Ám Sát Hư Không, Cảnh Báo Thù Hận'
     },
     {
       id: 'survivor_chu_loi',
@@ -1405,7 +1895,7 @@ export function generateInitialSurvivors(): Survivor[] {
       role: 'scavenger',
       gender: 'male',
       originalJob: 'Trinh Sát Đường Ống Thông Gió',
-      awakenedSkill: SKILL_POOL[8],
+      awakenedSkill: SKILL_POOL[8] || SKILL_POOL[0],
       hp: 85,
       maxHp: 85,
       mood: 85,

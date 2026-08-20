@@ -60,6 +60,9 @@ export const CombatModal: React.FC<CombatModalProps> = ({
     ]);
   };
 
+  const hasFolkBook = inventory.some((item) => item.id === 'item_co_thu_di_van');
+  const enemyWeakness = enemy.weakness;
+
   // 1. Basic Attack
   const handleBasicAttack = () => {
     if (!isPlayerTurn || combatFinished) return;
@@ -155,9 +158,28 @@ export const CombatModal: React.FC<CombatModalProps> = ({
     triggerCompanionSupport(enemyHp);
   };
 
-  // 5. Use Consumable Item
+  // 5. Use Consumable & Weakness Counter Item
   const handleUseItemInCombat = (item: Item) => {
     if (!isPlayerTurn || combatFinished) return;
+
+    // Check if item matches enemy weakness counter
+    if (enemyWeakness && (item.id === enemyWeakness.counterItemId || item.name.includes(enemyWeakness.counterItemName || '___'))) {
+      soundManager.play('skill');
+      const counterMultiplier = enemyWeakness.damageMultiplier || 2.0;
+      const weaknessDmg = Math.floor(100 * counterMultiplier);
+      const newEnemyHp = Math.max(0, enemyHp - weaknessDmg);
+      setEnemyHp(newEnemyHp);
+      onUseCombatItem(item);
+      addLog(`[KHẮC CHẾ ĐIỂM YẾU DÂN GIAN] 🎯 Sử dụng [${item.name}] chuẩn xác! ${enemyWeakness.description} -> GÂY ${weaknessDmg} SÁT THƯƠNG ĐẶC BIỆT!`, 'crit');
+      setShowItemMenu(false);
+
+      if (newEnemyHp <= 0) {
+        handleCombatEnd(true);
+      } else {
+        triggerCompanionSupport(newEnemyHp);
+      }
+      return;
+    }
 
     if (item.id === 'item_molotov' || item.id === 'craft_molotov_pack' || item.id.includes('molotov')) {
       soundManager.play('skill');
@@ -236,9 +258,18 @@ export const CombatModal: React.FC<CombatModalProps> = ({
 
   const combatUsableItems = inventory.filter(
     (item) =>
-      item.category === 'consumable' &&
       item.quantity > 0 &&
-      (item.id === 'item_molotov' || item.id === 'craft_molotov_pack' || item.id.includes('molotov') || !!item.stats?.hp)
+      (item.category === 'consumable' ||
+        item.id === 'item_mau_cho_muc' ||
+        item.id === 'item_guong_dong_bat_quai' ||
+        item.id === 'item_huong_me_than' ||
+        item.id === 'item_bay_thu_an_nac' ||
+        item.id === 'item_moc_tam_phien' ||
+        item.id === 'item_molotov' ||
+        item.id === 'craft_molotov_pack' ||
+        item.id.includes('molotov') ||
+        !!item.stats?.hp ||
+        (enemyWeakness && item.id === enemyWeakness.counterItemId))
   );
 
   return (
@@ -254,7 +285,7 @@ export const CombatModal: React.FC<CombatModalProps> = ({
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-neutral-800 pb-2.5 mb-3 mt-1">
+        <div className="flex items-center justify-between border-b border-neutral-800 pb-2.5 mb-2 mt-1">
           <div className="flex items-center gap-2 text-red-400 font-bold text-xs">
             <Swords className="w-4 h-4 animate-pulse" />
             <span>CHẠM TRÁN THỰC THỂ DỊ BIẾN</span>
@@ -263,6 +294,20 @@ export const CombatModal: React.FC<CombatModalProps> = ({
             Lượt: <span className={isPlayerTurn ? 'text-cyan-400 font-bold' : 'text-red-400 font-bold'}>{isPlayerTurn ? 'LƯỢT CỦA BẠN' : 'LƯỢT CỦA KẺ ĐỊCH...'}</span>
           </div>
         </div>
+
+        {/* Boss Weakness Folklore Banner */}
+        {enemyWeakness && (
+          <div className="mb-2 p-2 bg-amber-950/50 border border-amber-500/50 text-[10px] text-amber-200 flex items-start gap-2">
+            <span className="text-sm">📖</span>
+            <div className="flex-1">
+              <div className="font-bold text-amber-400 uppercase flex items-center gap-1">
+                <span>Điểm Yếu Dân Gian: {enemyWeakness.counterItemName || 'Vật phẩm khắc chế'}</span>
+                {hasFolkBook && <span className="bg-amber-400 text-black text-[8px] font-black px-1 rounded-xs">ĐÃ GIẢI MÃ TỪ CỔ THƯ</span>}
+              </div>
+              <p className="text-neutral-300 mt-0.5">{enemyWeakness.folkLoreHint}</p>
+            </div>
+          </div>
+        )}
 
         {/* Top Arena: Enemy & Player Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-2.5">

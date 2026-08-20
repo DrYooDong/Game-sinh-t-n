@@ -255,6 +255,14 @@ export interface LocationArea {
   zombieTypes: string[];
 }
 
+export interface EnemyWeakness {
+  description: string;
+  counterItemName?: string;
+  counterItemId?: string;
+  damageMultiplier?: number;
+  folkLoreHint: string;
+}
+
 export interface Enemy {
   id: string;
   name: string;
@@ -273,6 +281,8 @@ export interface Enemy {
   skills: { name: string; damageMultiplier: number; description: string }[];
   phases?: number;
   currentPhase?: number;
+  floor?: string;
+  weakness?: EnemyWeakness;
 }
 
 export interface CombatLog {
@@ -286,7 +296,7 @@ export interface SystemNotification {
   id: string;
   title: string;
   message: string;
-  type: 'rule' | 'levelup' | 'item' | 'event' | 'warning' | 'phase' | 'extract' | 'siege' | 'evolution';
+  type: 'rule' | 'levelup' | 'item' | 'event' | 'warning' | 'phase' | 'extract' | 'siege' | 'evolution' | 'lore';
   tier?: SkillTier | ItemRarity;
   timestamp: string;
   read: boolean;
@@ -334,6 +344,7 @@ export interface WorldLoreChapter {
   unlockedDay: number;
   content: string;
   isUnlocked: boolean;
+  chapterNumber: number;
 }
 
 export interface RadioTransmission {
@@ -345,4 +356,8 @@ export interface RadioTransmission {
   message: string;
   timestamp: string;
   secretIntel: string;
+  isSecret?: boolean;
+  requiredAttempts?: number;
+  isUnlocked?: boolean;
 }
+

@@ -7,11 +7,15 @@ import { Tv, Globe, Trophy, Award, X, Sparkles, Flag } from 'lucide-react';
 
 interface PvzNationalBroadcastModalProps {
   nationalStats: NationalStats;
+  currentWave?: number;
+  totalWaves?: number;
   onClose: () => void;
 }
 
 export const PvzNationalBroadcastModal: React.FC<PvzNationalBroadcastModalProps> = ({
   nationalStats,
+  currentWave,
+  totalWaves,
   onClose
 }) => {
   const rankingTable = [

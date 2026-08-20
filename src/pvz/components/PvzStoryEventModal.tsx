@@ -11,10 +11,10 @@ interface PvzStoryEventModalProps {
 
 export const PvzStoryEventModal: React.FC<PvzStoryEventModalProps> = ({ event, onClose }) => {
   useEffect(() => {
-    if (event.soundEffect) {
-      soundManager.play(event.soundEffect);
+    if (event.soundEffect && event.soundEffect !== 'dialogue') {
+      soundManager.play(event.soundEffect as any);
     } else {
-      soundManager.play('dialogue');
+      soundManager.play('system_alert');
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {

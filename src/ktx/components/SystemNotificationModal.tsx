@@ -18,7 +18,7 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
 }) => {
   const [showHistory, setShowHistory] = React.useState(false);
 
-  if (!notification && !showHistory) return null;
+  const isLore = notification?.type === 'lore';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm font-mono">
@@ -29,12 +29,16 @@ export const SystemNotificationModal: React.FC<SystemNotificationModalProps> = (
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="w-full max-w-2xl bg-neutral-950/98 border-2 border-cyan-500 p-6 sm:p-8 relative shadow-[0_0_80px_rgba(6,182,212,0.3)] text-neutral-100 rounded-sm"
+            className={`w-full max-w-2xl bg-neutral-950/98 border-2 p-6 sm:p-8 relative shadow-[0_0_80px_rgba(6,182,212,0.3)] text-neutral-100 rounded-sm ${
+              isLore ? 'border-amber-500 shadow-[0_0_80px_rgba(245,158,11,0.3)]' : 'border-cyan-500'
+            }`}
           >
             {/* System Badge */}
-            <div className="absolute -top-4 left-7 bg-gradient-to-r from-cyan-500 to-blue-600 text-neutral-950 px-4 py-1 text-xs font-black uppercase tracking-wider shadow-[0_0_15px_rgba(6,182,212,0.5)] flex items-center gap-1.5 rounded-xs">
-              <Sparkles className="w-3.5 h-3.5 fill-neutral-950" />
-              <span>THÔNG BÁO HỆ THỐNG TOÀN KHÔNG GIAN</span>
+            <div className={`absolute -top-4 left-7 px-4 py-1 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1.5 rounded-xs ${
+              isLore ? 'bg-gradient-to-r from-amber-500 to-yellow-400 text-neutral-950' : 'bg-gradient-to-r from-cyan-500 to-blue-600 text-neutral-950'
+            }`}>
+              {isLore ? <BookOpen className="w-3.5 h-3.5 fill-neutral-950" /> : <Sparkles className="w-3.5 h-3.5 fill-neutral-950" />}
+              <span>{isLore ? 'TIẾN TRÌNH CỐT TRUYỆN TIỂU THUYẾT' : 'THÔNG BÁO HỆ THỐNG TOÀN KHÔNG GIAN'}</span>
             </div>
 
             {/* Close Button */}

@@ -162,30 +162,48 @@ export const SurvivorsHubModal: React.FC<SurvivorsHubModalProps> = ({
               ))}
             </div>
 
-            {/* Grid List */}
+              {/* Grid List */}
             <div className="overflow-y-auto space-y-1.5 flex-1 pr-1 max-h-[50vh]">
-              {filteredSurvivors.map((survivor) => (
-                <div
-                  key={survivor.id}
-                  className="p-2.5 bg-neutral-900/80 border border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs"
-                >
-                  <div className="flex items-center gap-2.5 truncate">
-                    <div className="w-7 h-7 bg-neutral-800 border border-neutral-700 flex items-center justify-center font-bold text-xs text-neutral-300">
-                      {survivor.gender === 'male' ? '♂' : '♀'}
-                    </div>
-                    <div className="truncate">
-                      <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-white uppercase truncate">{survivor.name}</span>
-                        <span className="text-[9px] text-cyan-400">{survivor.room}</span>
-                        <span className="text-[9px] px-1 bg-cyan-950 text-cyan-300 border border-cyan-800">
-                          {survivor.awakenedSkill.name} [{survivor.awakenedSkill.tier}]
-                        </span>
+              {filteredSurvivors.map((survivor) => {
+                const isRoom200 = survivor.room.includes('200');
+                const tier = survivor.awakenedSkill?.tier || 'A';
+                const tierColor =
+                  tier === 'SSS' || tier === 'EX'
+                    ? 'bg-amber-950 text-amber-300 border-amber-400 font-black'
+                    : tier === 'SS'
+                    ? 'bg-purple-950 text-purple-300 border-purple-400 font-bold'
+                    : tier === 'S'
+                    ? 'bg-cyan-950 text-cyan-300 border-cyan-400 font-bold'
+                    : 'bg-neutral-900 text-neutral-300 border-neutral-700';
+
+                return (
+                  <div
+                    key={survivor.id}
+                    className={`p-2.5 border flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs ${
+                      isRoom200 ? 'bg-amber-950/20 border-amber-500/40' : 'bg-neutral-900/80 border-neutral-800'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <div className={`w-7 h-7 flex items-center justify-center font-bold text-xs border ${
+                        isRoom200 ? 'bg-amber-900/60 border-amber-400 text-amber-200' : 'bg-neutral-800 border-neutral-700 text-neutral-300'
+                      }`}>
+                        {survivor.gender === 'male' ? '♂' : '♀'}
                       </div>
-                      <div className="text-[9px] text-neutral-400">
-                        Nghề nghiệp: {survivor.originalJob} • HP: {survivor.hp}/{survivor.maxHp}
+                      <div className="truncate">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-white uppercase truncate">{survivor.name}</span>
+                          <span className={`text-[9px] font-bold px-1 rounded-xs ${isRoom200 ? 'bg-amber-500 text-neutral-950' : 'text-cyan-400'}`}>
+                            {survivor.room}
+                          </span>
+                          <span className={`text-[9px] px-1.5 py-0.2 border uppercase ${tierColor}`}>
+                            {survivor.awakenedSkill.name} [{tier}]
+                          </span>
+                        </div>
+                        <div className="text-[9px] text-neutral-400">
+                          Nghề nghiệp: {survivor.originalJob} • HP: {survivor.hp}/{survivor.maxHp}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
                   {/* Assign Role Buttons */}
                   <div className="flex items-center gap-1 shrink-0 text-[9px]">
@@ -215,7 +233,8 @@ export const SurvivorsHubModal: React.FC<SurvivorsHubModalProps> = ({
                     })}
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
           </div>
         )}

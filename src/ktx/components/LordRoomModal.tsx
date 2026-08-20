@@ -144,7 +144,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                 : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
-            <Users className="w-3.5 h-3.5" /> Bạn Cùng Phòng ({roomTenants.filter(t => t.isRecruited).length}/5)
+            <Users className="w-3.5 h-3.5" /> Bạn Cùng Phòng ({roomTenants.filter(t => t.isRecruited).length}/6)
           </button>
           <button
             onClick={() => {
@@ -245,6 +245,26 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                   >
                     <ArrowUpCircle className="w-3.5 h-3.5" /> Nâng Cấp Giường (300 Xu)
                   </button>
+                </div>
+              </div>
+
+              {/* Special Story Artefacts Status (Minh Phủ & Sector 09) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="p-3 bg-neutral-900 border border-purple-500/40 space-y-1">
+                  <div className="flex items-center gap-2 text-purple-400 font-bold uppercase text-[11px]">
+                    <span>📜</span> Thư Mời Minh Phủ (Chương 3)
+                  </div>
+                  <p className="text-[10px] text-neutral-300">
+                    Đã dâng Bát Sứ Thanh Hoa cho Âm Sai tuần tra. Phó bản song song <strong>"Ký Túc Xá Bóng Tối"</strong> đã sẵn sàng.
+                  </p>
+                </div>
+                <div className="p-3 bg-neutral-900 border border-cyan-500/40 space-y-1">
+                  <div className="flex items-center gap-2 text-cyan-400 font-bold uppercase text-[11px]">
+                    <span>🗺️</span> Phân Vùng 09 (Chương 7)
+                  </div>
+                  <p className="text-[10px] text-neutral-300">
+                    Bản đồ chiến lược: 8 Tế Đàn lân cận đang sáp nhập vào <strong>Thành Phố Hoang Tàn</strong>.
+                  </p>
                 </div>
               </div>
 
