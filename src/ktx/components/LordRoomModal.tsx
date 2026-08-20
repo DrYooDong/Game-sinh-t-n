@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CharacterStats, LordRoomData, RoomTenant } from '../types';
 import { soundManager } from '../utils/audio';
+import { Language, t, formatNumberWithComma } from '../utils/i18n';
 import confetti from 'canvas-confetti';
 import {
   X,
@@ -36,6 +37,7 @@ interface LordRoomModalProps {
   onToggleAggro: () => void;
   onOpenRadio: () => void;
   onGiftTenant: (tenantId: string) => void;
+  lang?: Language;
 }
 
 export const LordRoomModal: React.FC<LordRoomModalProps> = ({
@@ -51,7 +53,8 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
   onSleepAndProduce,
   onToggleAggro,
   onOpenRadio,
-  onGiftTenant
+  onGiftTenant,
+  lang = 'vi'
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'tenants' | 'defenses' | 'guardian'>('overview');
   const [selectedTenant, setSelectedTenant] = useState<RoomTenant>(roomTenants[0]);
@@ -73,7 +76,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
         {/* Top Floating Badge */}
         <div className="absolute -top-3.5 left-6 bg-gradient-to-r from-amber-500 to-yellow-400 text-neutral-950 px-3.5 py-0.5 text-[11px] font-black uppercase tracking-tighter shadow-md flex items-center gap-1.5">
           <Crown className="w-3.5 h-3.5" />
-          HỆ THỐNG PHÒNG 200: THIÊN PHÚ CHÚA TỂ CƯỜNG HÓA VẠN VẬT
+          {lang === 'vi' ? 'HỆ THỐNG PHÒNG 200: THIÊN PHÚ CHÚA TỂ CƯỜNG HÓA VẠN VẬT' : 'ROOM 200: LORD TALENT & REALM PRODUCTION ENGINE'}
         </div>
 
         {/* Header */}
@@ -85,25 +88,25 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base sm:text-lg font-black text-amber-300 uppercase tracking-wide">
-                  PHÒNG CHÚA TỂ 200 (KTX PHONG VƯƠNG TẦNG 10)
+                  {lang === 'vi' ? 'PHÒNG CHÚA TỂ 200 (KTX PHONG VƯƠNG TẦNG 10)' : 'LORD ROOM 200 (PIONEER TOWER 10TH FLOOR)'}
                 </h2>
                 <span className="text-[10px] px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase font-bold">
-                  Bất Khả Xâm Phạm
+                  {lang === 'vi' ? 'Bất Khả Xâm Phạm' : 'Sanctuary'}
                 </span>
               </div>
               <p className="text-xs text-neutral-400 flex items-center gap-2 mt-0.5">
-                <span>Tỉ lệ chuyển đổi: <strong className="text-amber-400 font-bold">+{totalConversionRate}%</strong></span>
+                <span>{lang === 'vi' ? 'Tỉ lệ chuyển đổi' : 'Conversion Rate'}: <strong className="text-amber-400 font-bold">+{totalConversionRate}%</strong></span>
                 <span>•</span>
-                <span>Sản lượng: <strong className="text-emerald-400 font-bold">{hourlyOutput} Xu/giờ</strong></span>
+                <span>{lang === 'vi' ? 'Sản lượng' : 'Production'}: <strong className="text-emerald-400 font-bold">{hourlyOutput} {t('app.coins', lang)}/{lang === 'vi' ? 'giờ' : 'hr'}</strong></span>
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="text-right bg-neutral-900 border border-amber-500/30 px-3 py-1.5 hidden sm:block">
-              <div className="text-[10px] text-neutral-400 uppercase">Xu Chúa Tể Hiện Có:</div>
+              <div className="text-[10px] text-neutral-400 uppercase">{t('app.coins', lang)}:</div>
               <div className="text-sm font-black text-amber-400 flex items-center justify-end gap-1">
-                <span>🪙</span> {stats.lordCoins} XU
+                <span>🪙</span> {formatNumberWithComma(stats.lordCoins)}
               </div>
             </div>
             <button
@@ -131,7 +134,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                 : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
-            <Bed className="w-3.5 h-3.5" /> Giường Ngủ & Sản Xuất
+            <Bed className="w-3.5 h-3.5" /> {lang === 'vi' ? 'Giường Ngủ & Sản Xuất' : 'Bed & Production'}
           </button>
           <button
             onClick={() => {
@@ -144,7 +147,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                 : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
-            <Users className="w-3.5 h-3.5" /> Bạn Cùng Phòng ({roomTenants.filter(t => t.isRecruited).length}/6)
+            <Users className="w-3.5 h-3.5" /> {t('lord.tenants', lang)} ({roomTenants.filter(t => t.isRecruited).length}/6)
           </button>
           <button
             onClick={() => {
@@ -157,7 +160,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                 : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
-            <DoorClosed className="w-3.5 h-3.5" /> Cửa & Ụ Pháo Đài
+            <DoorClosed className="w-3.5 h-3.5" /> {lang === 'vi' ? 'Cửa & Ụ Pháo Đài' : 'Door & Turrets'}
           </button>
           <button
             onClick={() => {
@@ -170,7 +173,7 @@ export const LordRoomModal: React.FC<LordRoomModalProps> = ({
                 : 'bg-neutral-900 text-neutral-400 hover:text-white hover:bg-neutral-800'
             }`}
           >
-            <Eye className="w-3.5 h-3.5" /> Thần Khảm Quỷ Đồng
+            <Eye className="w-3.5 h-3.5" /> {t('lord.guardian', lang)}
           </button>
         </div>
 

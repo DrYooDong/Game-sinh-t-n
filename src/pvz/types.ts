@@ -137,6 +137,7 @@ export interface PlacedPlant {
   overchargeExpire?: number;
   isUltActive?: boolean;
   ultExpire?: number;
+  level?: number;
 }
 
 export interface ActiveZombie {

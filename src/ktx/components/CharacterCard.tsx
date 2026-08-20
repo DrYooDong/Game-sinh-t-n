@@ -1,6 +1,7 @@
 import React from 'react';
 import { CharacterStats, Companion, Equipment, Skill } from '../types';
 import { soundManager } from '../utils/audio';
+import { Language, t } from '../utils/i18n';
 import {
   Heart,
   Zap,
@@ -33,6 +34,7 @@ interface CharacterCardProps {
   onOpenBlacksmith: () => void;
   onOpenPets: () => void;
   crystalsCount: number;
+  lang?: Language;
 }
 
 export const CharacterCard: React.FC<CharacterCardProps> = ({
@@ -45,7 +47,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
   onOpenSkillEvolution,
   onOpenBlacksmith,
   onOpenPets,
-  crystalsCount
+  crystalsCount,
+  lang = 'vi'
 }) => {
   const getVitalColor = (val: number) => {
     if (val > 60) return 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]';
@@ -76,20 +79,22 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-white uppercase tracking-wide">Chỉ Huy Sinh Tồn</span>
+                <span className="text-sm font-bold text-white uppercase tracking-wide">
+                  {lang === 'vi' ? 'Chỉ Huy Sinh Tồn' : 'Survival Commander'}
+                </span>
                 <span className="text-[10px] px-2 py-0.5 bg-cyan-950/80 border border-cyan-500/50 text-cyan-300 font-bold uppercase rounded-xs">
-                  CẤP {stats.level}
+                  {t('gauge.level', lang)} {stats.level}
                 </span>
               </div>
               <p className="text-xs text-neutral-400 mt-0.5">
-                Kinh nghiệm: <span className="text-cyan-300 font-bold">{stats.exp}/{stats.maxExp}</span> ({((stats.exp / stats.maxExp) * 100).toFixed(0)}%)
+                {lang === 'vi' ? 'Kinh nghiệm' : 'Exp'}: <span className="text-cyan-300 font-bold">{stats.exp}/{stats.maxExp}</span> ({((stats.exp / stats.maxExp) * 100).toFixed(0)}%)
               </p>
             </div>
           </div>
 
           {stats.unspentStatPoints > 0 && (
             <div className="px-2.5 py-1 bg-amber-950/80 border border-amber-500/80 text-amber-300 text-xs font-bold flex items-center gap-1.5 animate-pulse rounded-xs shadow-[0_0_10px_rgba(245,158,11,0.3)]">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400" /> +{stats.unspentStatPoints} TIỀM NĂNG
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" /> +{stats.unspentStatPoints} {t('stat.unspent_points', lang).toUpperCase()}
             </div>
           )}
         </div>
@@ -97,9 +102,11 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* 5 Core Attributes Grid */}
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-neutral-400 uppercase font-bold tracking-wider">Chỉ Số Thuộc Tính</span>
+            <span className="text-neutral-400 uppercase font-bold tracking-wider">
+              {lang === 'vi' ? 'Chỉ Số Thuộc Tính' : 'Core Attributes'}
+            </span>
             <div className="text-xs font-mono">
-              TẤN CÔNG: <span className="text-rose-400 font-black">{calculateTotalAtk()}</span> • PHÒNG THỦ: <span className="text-cyan-400 font-black">{calculateTotalDef()}</span>
+              {lang === 'vi' ? 'TẤN CÔNG' : 'ATK'}: <span className="text-rose-400 font-black">{calculateTotalAtk()}</span> • {lang === 'vi' ? 'PHÒNG THỦ' : 'DEF'}: <span className="text-cyan-400 font-black">{calculateTotalDef()}</span>
             </div>
           </div>
 
@@ -187,7 +194,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="flex items-center justify-between border-b border-neutral-800 pb-2 mb-2.5">
           <h2 className="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span>Kỹ Năng Thức Tỉnh & Dung Hợp</span>
+            <span>{lang === 'vi' ? 'Kỹ Năng Thức Tỉnh & Dung Hợp' : 'Awakened & Fusion Skills'}</span>
           </h2>
           <button
             onClick={() => {
@@ -197,17 +204,17 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className="px-2.5 py-1 bg-purple-950/80 hover:bg-purple-900 border border-purple-500/60 text-purple-300 text-xs font-bold flex items-center gap-1 cursor-pointer transition-all shadow-sm rounded-xs"
           >
             <GitMerge className="w-3.5 h-3.5" />
-            <span>Đột Phá & Thiên Phú</span>
+            <span>{lang === 'vi' ? 'Đột Phá & Thiên Phú' : 'Evolution & Talents'}</span>
           </button>
         </div>
 
         <div className="bg-neutral-950 border border-cyan-800/60 p-3 rounded-sm shadow-inner">
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs text-cyan-400 font-bold uppercase">
-              [HẠNG {playerSkill.tier}] • Cấp {playerSkill.level}/{playerSkill.maxLevel}
+              [{lang === 'vi' ? 'HẠNG' : 'TIER'} {playerSkill.tier}] • {t('gauge.level', lang)} {playerSkill.level}/{playerSkill.maxLevel}
             </span>
             <span className="text-xs text-amber-300 font-bold">
-              Uy lực: {playerSkill.power}
+              {t('common.power', lang)}: {playerSkill.power}
             </span>
           </div>
 
@@ -222,7 +229,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
 
           <div className="mt-3 pt-2 border-t border-neutral-800 flex flex-wrap justify-between items-center gap-2 text-xs">
             <span className="text-neutral-400">
-              Tiêu hao: <strong className="text-cyan-300">{playerSkill.mpCost} MP</strong> | Hồi chiêu: <strong className="text-amber-300">{playerSkill.cooldownTurns} lượt</strong>
+              {t('common.cost', lang)}: <strong className="text-cyan-300">{playerSkill.mpCost} MP</strong> | {t('common.cooldown', lang)}: <strong className="text-amber-300">{playerSkill.cooldownTurns} {t('common.turns', lang)}</strong>
             </span>
             {playerSkill.level < playerSkill.maxLevel && (
               <button
@@ -234,7 +241,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
                     : 'bg-neutral-800 text-neutral-500 cursor-not-allowed border border-neutral-700'
                 }`}
               >
-                Nâng cấp ({playerSkill.level * 2} 💎)
+                {t('action.upgrade', lang)} ({playerSkill.level * 2} 💎)
               </button>
             )}
           </div>
@@ -250,7 +257,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className="p-2 bg-neutral-950 hover:bg-amber-950/40 border border-neutral-800 hover:border-amber-500/60 text-amber-300 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all rounded-xs"
           >
             <Hammer className="w-4 h-4 text-amber-400" />
-            <span>Lò Rèn (+15)</span>
+            <span>{t('menu.blacksmith', lang)}</span>
           </button>
 
           <button
@@ -261,7 +268,7 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
             className="p-2 bg-neutral-950 hover:bg-emerald-950/40 border border-neutral-800 hover:border-emerald-500/60 text-emerald-300 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all rounded-xs"
           >
             <Sparkles className="w-4 h-4 text-emerald-400" />
-            <span>Thú Cưng Dị Biến</span>
+            <span>{t('menu.pets', lang)}</span>
           </button>
         </div>
       </div>
@@ -272,8 +279,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         <div className="bg-neutral-900/90 border border-neutral-800 p-3 rounded-sm flex flex-col justify-between shadow-md">
           <div>
             <div className="flex justify-between items-center text-xs text-cyan-400 font-bold uppercase border-b border-neutral-800 pb-1.5 mb-2">
-              <span>Đồng Đội Cùng Phòng</span>
-              <span className="text-emerald-400">Gắn kết: {companion.bond}%</span>
+              <span>{t('stat.companion', lang)}</span>
+              <span className="text-emerald-400">{t('stat.bond', lang)}: {companion.bond}%</span>
             </div>
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 bg-neutral-950 border border-neutral-700 rounded-sm flex items-center justify-center font-bold text-base text-rose-400">
@@ -293,8 +300,8 @@ export const CharacterCard: React.FC<CharacterCardProps> = ({
         {/* Mini Radar HUD Overlay */}
         <div className="bg-neutral-900/90 border border-neutral-800 p-3 rounded-sm relative overflow-hidden flex flex-col shadow-md">
           <div className="flex justify-between items-center text-xs font-bold text-neutral-400 uppercase mb-2">
-            <span>Radar Quét Khu Vực</span>
-            <span className="text-cyan-400 font-mono text-[10px]">Bán kính: 50m</span>
+            <span>{lang === 'vi' ? 'Radar Quét Khu Vực' : 'Sector Radar'}</span>
+            <span className="text-cyan-400 font-mono text-[10px]">{lang === 'vi' ? 'Bán kính: 50m' : 'Radius: 50m'}</span>
           </div>
 
           <div className="flex-1 min-h-[90px] border border-neutral-800 relative bg-neutral-950 overflow-hidden rounded-xs">

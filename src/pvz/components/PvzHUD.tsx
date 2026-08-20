@@ -39,6 +39,7 @@ interface PvzHUDProps {
   onTogglePossession: () => void;
   // Modals
   onOpenStageSelect: () => void;
+  onOpenMastery: () => void;
   onOpenPathology: () => void;
   onOpenBroadcast: () => void;
   onOpenDaveShop: () => void;
@@ -76,6 +77,7 @@ export const PvzHUD: React.FC<PvzHUDProps> = ({
   isPossessionMode,
   onTogglePossession,
   onOpenStageSelect,
+  onOpenMastery,
   onOpenPathology,
   onOpenBroadcast,
   onOpenDaveShop,
@@ -245,6 +247,18 @@ export const PvzHUD: React.FC<PvzHUDProps> = ({
             >
               <Tent className="w-3.5 h-3.5" />
               <span className="hidden lg:inline">Trại Sinh Tồn</span>
+            </button>
+
+            <button
+              onClick={() => {
+                soundManager.play('click');
+                onOpenMastery();
+              }}
+              className="px-2 py-1 bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-400 text-emerald-300 text-xs font-bold flex items-center gap-1 rounded-xs cursor-pointer shadow-[0_0_10px_rgba(16,185,129,0.3)] animate-pulse"
+              title="Viện Nghiên Cứu Di Truyền & Tiến Hóa Cây Trồng (Plant Mastery)"
+            >
+              <span>🧬</span>
+              <span className="hidden lg:inline">Di Truyền</span>
             </button>
 
             <button

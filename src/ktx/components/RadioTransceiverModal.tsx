@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { RadioTransmission } from '../types';
 import { soundManager } from '../utils/audio';
+import { Language, t } from '../utils/i18n';
 import { X, Radio, Signal, Volume2, ShieldCheck, Zap, RefreshCw, Send, Lock } from 'lucide-react';
 
 interface RadioTransceiverModalProps {
@@ -9,13 +10,15 @@ interface RadioTransceiverModalProps {
   onClose: () => void;
   transmissions: RadioTransmission[];
   onScanFrequency: () => void;
+  lang?: Language;
 }
 
 export const RadioTransceiverModal: React.FC<RadioTransceiverModalProps> = ({
   isOpen,
   onClose,
   transmissions,
-  onScanFrequency
+  onScanFrequency,
+  lang = 'vi'
 }) => {
   const [selectedTx, setSelectedTx] = useState<RadioTransmission>(transmissions[0]);
   const [frequency, setFrequency] = useState('107.5');
@@ -40,7 +43,7 @@ export const RadioTransceiverModal: React.FC<RadioTransceiverModalProps> = ({
         {/* Top Badge */}
         <div className="absolute -top-3.5 left-6 bg-cyan-500 text-neutral-950 px-3 py-0.5 text-[11px] font-black uppercase tracking-tighter flex items-center gap-1.5">
           <Radio className="w-3.5 h-3.5 animate-pulse" />
-          MÁY THU THANH KÊNH HUYẾT VỤ 107.5MHZ (HỘI TƯƠNG TRỢ TINH ANH)
+          {t('radio.title', lang)}
         </div>
 
         {/* Header */}
@@ -51,10 +54,10 @@ export const RadioTransceiverModal: React.FC<RadioTransceiverModalProps> = ({
             </div>
             <div>
               <h2 className="text-sm sm:text-base font-black text-cyan-300 uppercase tracking-wide">
-                KÊNH LIÊN LẠC THẾ GIỚI KTX PHONG VƯƠNG
+                {lang === 'vi' ? 'KÊNH LIÊN LẠC THẾ GIỚI KTX PHONG VƯƠNG' : 'WORLDWIDE PIONEER RADIO NETWORK'}
               </h2>
               <p className="text-[11px] text-neutral-400">
-                Tần số phát sóng: <strong className="text-white font-bold">{frequency} MHz</strong> | Trạng thái: <span className="text-emerald-400 font-bold">ĐÃ KẾT NỐI HỘI TƯƠNG TRỢ</span>
+                {lang === 'vi' ? 'Tần số phát sóng' : 'Band'}: <strong className="text-white font-bold">{frequency} MHz</strong> | {lang === 'vi' ? 'Trạng thái' : 'Status'}: <span className="text-emerald-400 font-bold">{lang === 'vi' ? 'ĐÃ KẾT NỐI HỘI TƯƠNG TRỢ' : 'CONNECTED TO ALLIANCE'}</span>
               </p>
             </div>
           </div>

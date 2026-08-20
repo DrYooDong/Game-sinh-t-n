@@ -41,6 +41,7 @@ import { PvzStageSelectModal } from './components/PvzStageSelectModal';
 import { PvzPathologyModal } from './components/PvzPathologyModal';
 import { PvzStoryEventModal } from './components/PvzStoryEventModal';
 import { PvzSurvivalCampModal } from './components/PvzSurvivalCampModal';
+import { PvzPlantMasteryModal, getPlantEffectiveStats, getPlantUpgradeCost } from './components/PvzPlantMasteryModal';
 import { Trophy, RotateCcw, Play, CheckCircle2, Skull, Sparkles, MapPin, AlertTriangle } from 'lucide-react';
 
 interface PvzAppProps {
@@ -138,9 +139,22 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
   const [showTacticsModal, setShowTacticsModal] = useState<boolean>(false);
   const [showCodexModal, setShowCodexModal] = useState<boolean>(false);
   const [showStageSelectModal, setShowStageSelectModal] = useState<boolean>(false);
+  const [showMasteryModal, setShowMasteryModal] = useState<boolean>(false);
   const [showPathologyModal, setShowPathologyModal] = useState<boolean>(false);
   const [waveClearedModal, setWaveClearedModal] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+
+  // Plant Leveling & Mastery state
+  const [plantLevels, setPlantLevels] = useState<Record<PlantId, number>>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.plantLevels) return parsed.plantLevels;
+      } catch {}
+    }
+    return {} as Record<PlantId, number>;
+  });
 
   // Dynamic Content state
   const [currentCommentIndex, setCurrentCommentIndex] = useState<number>(0);
@@ -317,6 +331,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
         if (parsed.companions) setCompanions(parsed.companions);
         if (parsed.tactics) setTactics(parsed.tactics);
         if (parsed.plantFoodCount !== undefined) setPlantFoodCount(parsed.plantFoodCount);
+        if (parsed.plantLevels) setPlantLevels(parsed.plantLevels);
       } catch (e) {
         console.error('Error loading PvZ save', e);
       }
@@ -339,7 +354,8 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
         daveUpgrades,
         companions,
         tactics,
-        plantFoodCount
+        plantFoodCount,
+        plantLevels
       })
     );
   }, [
@@ -354,7 +370,8 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
     daveUpgrades,
     companions,
     tactics,
-    plantFoodCount
+    plantFoodCount,
+    plantLevels
   ]);
 
   // Story Event Trigger on Wave Start
@@ -581,20 +598,23 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
           );
           const isOvercharged = p.isOvercharged && (p.overchargeExpire || 0) > now;
           const speedMultiplier = (laneHasPlantern ? 0.7 : 1.0) * (isOvercharged ? 0.5 : 1.0);
+          const plantLvl = p.level || plantLevels[p.plantId] || 1;
+          const lvlDmgMultiplier = 1 + (plantLvl - 1) * 0.15;
 
           // Sunflower Produce Sun
           if (p.plantId === 'plant_sunflower') {
             const lastSun = p.lastSunTime || p.lastAttackTime;
             if (now - lastSun >= pDef.attackIntervalSec * 1000 * speedMultiplier) {
               p.lastSunTime = now;
-              addDamagePopup(p.row, p.col, `+${25 + extraSunValue} ☀️`, 'text-amber-300 font-bold');
+              const bonusLvlSun = plantLvl >= 10 ? 25 : 0;
+              addDamagePopup(p.row, p.col, `+${25 + extraSunValue + bonusLvlSun} ☀️`, 'text-amber-300 font-bold');
               setSunDrops((prev) => [
                 ...prev,
                 {
                   id: `sun_flower_${Date.now()}_${Math.random()}`,
                   row: p.row,
                   col: p.col,
-                  value: 25 + extraSunValue,
+                  value: 25 + extraSunValue + bonusLvlSun,
                   spawnTime: now
                 }
               ]);
@@ -615,7 +635,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
                     id: `proj_${Date.now()}_${Math.random()}`,
                     row: p.row,
                     colPosition: p.col + 0.4,
-                    damage: Math.round(pDef.attackDmg * peashooterDmgMultiplier),
+                    damage: Math.round(pDef.attackDmg * peashooterDmgMultiplier * lvlDmgMultiplier),
                     speed: 2.3,
                     type: 'pea'
                   }
@@ -638,7 +658,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
                     id: `proj_ice_${Date.now()}_${Math.random()}`,
                     row: p.row,
                     colPosition: p.col + 0.4,
-                    damage: Math.round(pDef.attackDmg * peashooterDmgMultiplier),
+                    damage: Math.round(pDef.attackDmg * peashooterDmgMultiplier * lvlDmgMultiplier),
                     speed: 2.2,
                     type: 'ice_pea'
                   }
@@ -1641,6 +1661,22 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
     currentAreaM2
   ]);
 
+  // Handle Plant Upgrade in Mastery Modal
+  const handleUpgradePlant = (plantId: PlantId): boolean => {
+    const curLvl = plantLevels[plantId] || 1;
+    if (curLvl >= 10) return false;
+    const cost = getPlantUpgradeCost(curLvl);
+    if (energy < cost.costEnergy || beastCores < cost.costBeastCore) return false;
+
+    setEnergy((e) => e - cost.costEnergy);
+    setBeastCores((b) => b - cost.costBeastCore);
+    setPlantLevels((prev) => ({
+      ...prev,
+      [plantId]: curLvl + 1
+    }));
+    return true;
+  };
+
   // Handle Plant Placement
   const handleCellClick = (row: number, col: number) => {
     if (isShovelActive) {
@@ -1653,19 +1689,24 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
     if (!selectedPlantId) return;
 
     const plantDef = PVZ_PLANTS.find((p) => p.id === selectedPlantId);
-    if (!plantDef || sunlight < plantDef.sunCost) return;
+    if (!plantDef) return;
+
+    const plantLvl = plantLevels[selectedPlantId] || 1;
+    const stats = getPlantEffectiveStats(plantDef, plantLvl);
+
+    if (sunlight < stats.effectiveSunCost) return;
 
     const existingPlant = plants.find((p) => p.row === row && p.col === col);
     if (existingPlant) {
       // 1. Upgrade Peashooter -> Gatling Pea
       if (selectedPlantId === 'plant_gatling_pea' && existingPlant.plantId === 'plant_peashooter') {
         soundManager.play('level_up');
-        setSunlight((s) => s - plantDef.sunCost);
-        setCooldowns((prev) => ({ ...prev, [selectedPlantId]: plantDef.cooldownSec }));
+        setSunlight((s) => s - stats.effectiveSunCost);
+        setCooldowns((prev) => ({ ...prev, [selectedPlantId]: stats.effectiveCooldown }));
         setPlants((prev) =>
           prev.map((p) =>
             p.id === existingPlant.id
-              ? { ...p, plantId: 'plant_gatling_pea', hp: 450, maxHp: 450 }
+              ? { ...p, plantId: 'plant_gatling_pea', hp: stats.effectiveHp, maxHp: stats.effectiveHp, level: plantLvl }
               : p
           )
         );
@@ -1677,16 +1718,16 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
       // 2. Wrap existing plant in Pumpkin Shell Armor
       if (selectedPlantId === 'plant_pumpkin' && !existingPlant.hasPumpkinShell) {
         soundManager.play('item_get');
-        setSunlight((s) => s - plantDef.sunCost);
-        setCooldowns((prev) => ({ ...prev, [selectedPlantId]: plantDef.cooldownSec }));
+        setSunlight((s) => s - stats.effectiveSunCost);
+        setCooldowns((prev) => ({ ...prev, [selectedPlantId]: stats.effectiveCooldown }));
         setPlants((prev) =>
           prev.map((p) =>
             p.id === existingPlant.id
-              ? { ...p, hasPumpkinShell: true, pumpkinHp: 900, pumpkinMaxHp: 900 }
+              ? { ...p, hasPumpkinShell: true, pumpkinHp: stats.effectiveHp, pumpkinMaxHp: stats.effectiveHp }
               : p
           )
         );
-        addDamagePopup(row, col, '🎃 TRÙM KHIÊN BÍ NGÔ (+900 GIÁP)!', 'text-orange-400 font-black', true);
+        addDamagePopup(row, col, `🎃 TRÙM KHIÊN BÍ NGÔ (+${stats.effectiveHp} GIÁP)!`, 'text-orange-400 font-black', true);
         setSelectedPlantId(null);
         return;
       }
@@ -1695,8 +1736,8 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
     }
 
     soundManager.play('item_get');
-    setSunlight((s) => s - plantDef.sunCost);
-    setCooldowns((prev) => ({ ...prev, [selectedPlantId]: plantDef.cooldownSec }));
+    setSunlight((s) => s - stats.effectiveSunCost);
+    setCooldowns((prev) => ({ ...prev, [selectedPlantId]: stats.effectiveCooldown }));
 
     setPlants((prev) => [
       ...prev,
@@ -1705,8 +1746,9 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
         plantId: selectedPlantId,
         row,
         col,
-        hp: plantDef.maxHp,
-        maxHp: plantDef.maxHp,
+        hp: stats.effectiveHp,
+        maxHp: stats.effectiveHp,
+        level: plantLvl,
         lastAttackTime: Date.now(),
         createdTime: Date.now(),
         state: 'idle'
@@ -2015,6 +2057,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
         isPossessionMode={isPossessionMode}
         onTogglePossession={() => setIsPossessionMode((prev) => !prev)}
         onOpenStageSelect={() => setShowStageSelectModal(true)}
+        onOpenMastery={() => setShowMasteryModal(true)}
         onOpenPathology={() => setShowPathologyModal(true)}
         onOpenBroadcast={() => setShowBroadcastModal(true)}
         onOpenDaveShop={() => setShowDaveShopModal(true)}
@@ -2065,6 +2108,7 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
           cooldowns={cooldowns}
           currentWave={currentWaveIndex}
           isPlantFoodPrimed={isPlantFoodPrimed}
+          plantLevels={plantLevels}
         />
       </main>
 
@@ -2203,6 +2247,17 @@ export const PvzApp: React.FC<PvzAppProps> = ({ onReturnToWorldSelect }) => {
             setShowStageSelectModal(false);
           }}
           onClose={() => setShowStageSelectModal(false)}
+        />
+      )}
+
+      {showMasteryModal && (
+        <PvzPlantMasteryModal
+          plantLevels={plantLevels}
+          energy={energy}
+          beastCores={beastCores}
+          currentWave={currentWaveIndex}
+          onUpgradePlant={handleUpgradePlant}
+          onClose={() => setShowMasteryModal(false)}
         />
       )}
 

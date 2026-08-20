@@ -63,6 +63,7 @@ import {
 } from './data/initialData';
 
 import { soundManager } from './utils/audio';
+import { Language, t, formatNumberWithComma } from './utils/i18n';
 import confetti from 'canvas-confetti';
 import {
   ShieldAlert,
@@ -87,16 +88,32 @@ import {
   Flame,
   BookOpen,
   GitMerge,
-  Crown
+  Crown,
+  Languages,
+  Globe
 } from 'lucide-react';
 
 const STORAGE_KEY = 'isekai_survival_rpg_save_v2';
+const LANGUAGE_STORAGE_KEY = 'ktx_rpg_language_v1';
 
 interface AppProps {
   onReturnToWorldSelect?: () => void;
 }
 
 export default function App({ onReturnToWorldSelect }: AppProps = {}) {
+  // Language state
+  const [language, setLanguage] = useState<Language>(() => {
+    const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY) as Language;
+    return saved === 'vi' || saved === 'en' ? saved : 'vi';
+  });
+
+  const handleToggleLanguage = () => {
+    const nextLang: Language = language === 'vi' ? 'en' : 'vi';
+    setLanguage(nextLang);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLang);
+    soundManager.play('click');
+  };
+
   // Game state
   const [gameStarted, setGameStarted] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(false);
@@ -1333,11 +1350,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-[10px] text-cyan-400 font-mono uppercase tracking-widest font-bold">
-                    [CHỈ HUY SINH TỒN]
+                    [{lang === 'vi' ? 'CHỈ HUY SINH TỒN' : 'SURVIVAL COMMANDER'}]
                   </span>
                   <span className="text-neutral-600 text-xs">•</span>
                   <span className="text-xs text-amber-400 font-mono font-bold flex items-center gap-1">
-                    🪙 {stats.lordCoins || 0} Xu Chúa Tể
+                    🪙 {stats.lordCoins || 0} {t('app.coins', language)}
                   </span>
                 </div>
                 <h1 className="text-base font-black uppercase text-white tracking-wide leading-tight">
@@ -1349,16 +1366,16 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
             {/* Center: Stage & Day Timeline */}
             <div className="hidden md:flex items-center gap-4 bg-neutral-900/80 px-4 py-1.5 border border-neutral-800 rounded-sm">
               <div className="text-center">
-                <span className="text-[9px] text-neutral-400 font-mono uppercase block">Giai Đoạn</span>
+                <span className="text-[9px] text-neutral-400 font-mono uppercase block">{t('app.stage', language)}</span>
                 <span className="text-xs font-bold text-cyan-300 uppercase font-mono">
                   {currentStageObj.name.split(':')[0]}
                 </span>
               </div>
               <div className="h-6 w-[1px] bg-neutral-800"></div>
               <div className="text-center">
-                <span className="text-[9px] text-neutral-400 font-mono uppercase block">Thời Gian</span>
+                <span className="text-[9px] text-neutral-400 font-mono uppercase block">{lang === 'vi' ? 'Thời Gian' : 'Timeline'}</span>
                 <span className="text-sm font-black text-amber-400 font-mono">
-                  NGÀY 0{currentDay} • 14:24
+                  {t('app.day', language)} 0{currentDay} • 14:24
                 </span>
               </div>
               <div className="h-6 w-[1px] bg-neutral-800"></div>
@@ -1369,16 +1386,24 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                 {currentWeather === 'blood_moon' && <Flame className="w-4 h-4 text-rose-500 animate-pulse" />}
                 {currentWeather === 'toxic_fog' && <Activity className="w-4 h-4 text-purple-400" />}
                 <span className="text-neutral-300 uppercase font-bold text-[11px]">
-                  {currentWeather === 'clear' && 'Trời Trong'}
-                  {currentWeather === 'acid_rain' && 'Mưa Axit'}
-                  {currentWeather === 'blood_moon' && 'Huyết Nguyệt'}
-                  {currentWeather === 'toxic_fog' && 'Sương Độc'}
+                  {t(`weather.${currentWeather}`, language)}
                 </span>
               </div>
             </div>
 
-            {/* Right: Notifications, Sound & Utilities */}
+            {/* Right: Language Switcher, Notifications, Sound & Utilities */}
             <div className="flex items-center gap-2">
+              {/* Language Switcher Toggle */}
+              <button
+                id="btn_language_toggle"
+                onClick={handleToggleLanguage}
+                className="px-2.5 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-cyan-500/60 hover:border-cyan-400 text-cyan-300 font-bold flex items-center gap-1.5 text-xs font-mono cursor-pointer transition-all rounded-xs shadow-[0_0_10px_rgba(6,182,212,0.2)]"
+                title={language === 'vi' ? 'Switch to English' : 'Chuyển sang Tiếng Việt'}
+              >
+                <Globe className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" />
+                <span>{language === 'vi' ? '🇻🇳 VI' : '🇬🇧 EN'}</span>
+              </button>
+
               {onReturnToWorldSelect && (
                 <button
                   onClick={() => {
@@ -1386,10 +1411,10 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                     onReturnToWorldSelect();
                   }}
                   className="px-2.5 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-cyan-500 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-mono cursor-pointer transition-all rounded-xs shadow-sm"
-                  title="Quay lại bảng chọn thế giới"
+                  title={t('app.back_world', language)}
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Đổi Thế Giới</span>
+                  <span className="hidden sm:inline">{t('app.back_world', language)}</span>
                 </button>
               )}
 
@@ -1398,7 +1423,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   soundManager.play('click');
                   setCurrentNotification({
                     id: 'history_open',
-                    title: 'LỊCH SỬ THÔNG BÁO HỆ THỐNG',
+                    title: language === 'vi' ? 'LỊCH SỬ THÔNG BÁO HỆ THỐNG' : 'SYSTEM LOGS & NOTIFICATIONS',
                     message: '',
                     type: 'rule',
                     timestamp: '',
@@ -1406,10 +1431,10 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   });
                 }}
                 className="relative px-2.5 py-1.5 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-cyan-500 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-mono cursor-pointer transition-all rounded-xs"
-                title="Lịch sử thông báo"
+                title={language === 'vi' ? 'Lịch sử thông báo' : 'Notifications History'}
               >
                 <Bell className="w-3.5 h-3.5 text-amber-400" />
-                <span className="hidden sm:inline">Tin tức</span>
+                <span className="hidden sm:inline">{language === 'vi' ? 'Tin tức' : 'Logs'}</span>
                 {notificationHistory.length > 0 && (
                   <span className="px-1.5 py-0.2 bg-red-600 text-white text-[10px] font-black rounded-full animate-pulse">
                     {notificationHistory.length}
@@ -1420,7 +1445,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               <button
                 onClick={handleToggleMute}
                 className="p-2 bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 hover:border-neutral-600 text-neutral-300 hover:text-white cursor-pointer rounded-xs transition-all"
-                title={isMuted ? 'Bật âm thanh' : 'Tắt âm thanh'}
+                title={isMuted ? t('app.unmute', language) : t('app.mute', language)}
               >
                 {isMuted ? <VolumeX className="w-4 h-4 text-rose-400" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
               </button>
@@ -1428,7 +1453,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               <button
                 onClick={handleResetGame}
                 className="p-2 bg-neutral-900 hover:bg-rose-950/80 border border-neutral-800 hover:border-rose-700 text-neutral-500 hover:text-rose-400 cursor-pointer rounded-xs transition-all"
-                title="Chơi lại từ đầu"
+                title={t('app.reset', language)}
               >
                 <RotateCcw className="w-4 h-4" />
               </button>
@@ -1449,11 +1474,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowLordRoom(true);
                 }}
                 className="relative group w-12 h-12 bg-gradient-to-br from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-neutral-950 rounded-sm flex items-center justify-center cursor-pointer transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] hover:scale-105 border border-amber-400"
-                title="Phòng 200 Chúa Tể"
+                title={t('menu.lord_room', language)}
               >
                 <Crown className="w-6 h-6 stroke-[2.5]" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-amber-500 text-amber-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Phòng 200 Chúa Tể (🪙 {stats.lordCoins || 0})
+                  {t('menu.lord_room', language)} (🪙 {stats.lordCoins || 0})
                 </span>
               </button>
 
@@ -1467,11 +1492,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowRadioTransceiver(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-cyan-500/50 hover:border-cyan-400 text-cyan-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Đài Thu Thanh 107.5MHz"
+                title={t('menu.radio', language)}
               >
                 <Radio className="w-5 h-5 animate-pulse" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-cyan-500 text-cyan-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Đài Thu Thanh (107.5MHz)
+                  {t('menu.radio', language)}
                 </span>
               </button>
 
@@ -1483,14 +1508,14 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowSurvivorsHub(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-emerald-500 text-emerald-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="100 Cư Dân KTX"
+                title={t('menu.survivors', language)}
               >
                 <Users className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 px-1 bg-emerald-600 text-[9px] font-bold text-white rounded-full">
                   {aliveSurvivorsCount}
                 </span>
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-emerald-500 text-emerald-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  {aliveSurvivorsCount}/100 Cư Dân Sinh Tồn
+                  {aliveSurvivorsCount}/100 {language === 'vi' ? 'Cư Dân Sinh Tồn' : 'Survivors'}
                 </span>
               </button>
 
@@ -1502,11 +1527,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowDefense(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-rose-500 text-rose-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Phòng Thủ KTX"
+                title={t('menu.defense', language)}
               >
                 <ShieldAlert className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-rose-500 text-rose-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Phòng Tuyến & Tháp UV
+                  {t('menu.defense', language)}
                 </span>
               </button>
 
@@ -1518,11 +1543,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowSkillEvolution(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-purple-500 text-purple-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Đột Phá EX"
+                title={t('menu.skill_tree', language)}
               >
                 <GitMerge className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-purple-500 text-purple-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Đột Phá EX & Thiên Phú
+                  {t('menu.skill_tree', language)}
                 </span>
               </button>
 
@@ -1534,11 +1559,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowBlacksmith(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-amber-500 text-amber-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Lò Rèn Cường Hóa"
+                title={t('menu.blacksmith', language)}
               >
                 <Hammer className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-amber-500 text-amber-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Lò Rèn Cường Hóa (+15)
+                  {t('menu.blacksmith', language)} (+15)
                 </span>
               </button>
 
@@ -1550,11 +1575,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowPets(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-emerald-500 text-emerald-300 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Thú Cưng Dị Biến"
+                title={t('menu.pets', language)}
               >
                 <Sparkles className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-emerald-500 text-emerald-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Thú Cưng & Thực Thể Dị Biến
+                  {t('menu.pets', language)}
                 </span>
               </button>
 
@@ -1566,14 +1591,14 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowInventory(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-cyan-500 text-cyan-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Hành Trang"
+                title={t('menu.inventory', language)}
               >
                 <Backpack className="w-5 h-5" />
                 <span className="absolute -top-1 -right-1 px-1 bg-cyan-600 text-[9px] font-bold text-white rounded-full">
                   {inventory.reduce((a, b) => a + b.quantity, 0)}
                 </span>
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-cyan-500 text-cyan-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Hành Trang ({inventory.reduce((a, b) => a + b.quantity, 0)} món)
+                  {t('menu.inventory', language)} ({inventory.reduce((a, b) => a + b.quantity, 0)})
                 </span>
               </button>
 
@@ -1585,11 +1610,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowCrafting(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-amber-400 text-amber-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Chế Tạo"
+                title={t('menu.crafting', language)}
               >
                 <Hammer className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-amber-400 text-amber-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Bàn Chế Tạo Dã Chiến
+                  {t('menu.crafting', language)}
                 </span>
               </button>
 
@@ -1601,11 +1626,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowQuests(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-purple-400 text-purple-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Nhiệm Vụ"
+                title={t('menu.quests', language)}
               >
                 <Scroll className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-purple-400 text-purple-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Nhiệm Vụ & Quy Tắc Sinh Tồn
+                  {t('menu.quests', language)}
                 </span>
               </button>
 
@@ -1617,11 +1642,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowCodex(true);
                 }}
                 className="relative group w-11 h-11 bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 hover:border-indigo-400 text-indigo-400 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105"
-                title="Bách Khoa"
+                title={t('menu.codex', language)}
               >
                 <BookOpen className="w-5 h-5" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-indigo-400 text-indigo-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  Bách Khoa KTX & Cốt Truyện
+                  {t('menu.codex', language)}
                 </span>
               </button>
 
@@ -1633,11 +1658,11 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                   setShowAIOracle(true);
                 }}
                 className="relative group w-11 h-11 bg-cyan-950/60 hover:bg-cyan-900 border border-cyan-500/50 text-cyan-300 rounded-sm flex items-center justify-center cursor-pointer transition-all hover:scale-105 mt-auto"
-                title="AI Cố Vấn"
+                title={t('menu.oracle', language)}
               >
                 <Bot className="w-5 h-5 text-cyan-400 animate-pulse" />
                 <span className="absolute left-14 ml-2 px-2.5 py-1 bg-neutral-900 border border-cyan-500 text-cyan-300 text-xs font-bold font-mono rounded shadow-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity z-50">
-                  AI Cố Vấn Đồng Hành
+                  {t('menu.oracle', language)}
                 </span>
               </button>
             </aside>
@@ -1649,6 +1674,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               <StageProgressBar
                 currentStage={currentStageObj}
                 currentDay={currentDay}
+                lang={language}
                 onOpenStageDetails={() => {
                   soundManager.play('click');
                   setShowStageDetails(true);
@@ -1665,6 +1691,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                     companion={companion}
                     playerSkill={playerSkill}
                     equipment={equipment}
+                    lang={language}
                     onAllocateStat={handleAllocateStat}
                     onUpgradeSkill={handleUpgradeSkill}
                     onOpenSkillEvolution={() => setShowSkillEvolution(true)}
@@ -1705,7 +1732,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                 <div className="flex-1 min-w-[140px] max-w-[260px]">
                   <div className="flex justify-between items-center mb-1 text-[11px]">
                     <span className="text-red-400 font-bold flex items-center gap-1">
-                      <Heart className="w-3.5 h-3.5 fill-red-500 text-red-500" /> HP (SINH LỰC)
+                      <Heart className="w-3.5 h-3.5 fill-red-500 text-red-500" /> {t('gauge.hp', language)}
                     </span>
                     <span className="font-bold text-white font-mono">{stats.hp}/{stats.maxHp}</span>
                   </div>
@@ -1721,7 +1748,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                 <div className="flex-1 min-w-[140px] max-w-[260px]">
                   <div className="flex justify-between items-center mb-1 text-[11px]">
                     <span className="text-amber-400 font-bold flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" /> SP (THỂ LỰC)
+                      <Zap className="w-3.5 h-3.5 fill-amber-500 text-amber-500" /> {t('gauge.sp', language)}
                     </span>
                     <span className="font-bold text-white font-mono">{stats.stamina}/{stats.maxStamina}</span>
                   </div>
@@ -1737,7 +1764,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
                 <div className="flex-1 min-w-[140px] max-w-[260px]">
                   <div className="flex justify-between items-center mb-1 text-[11px]">
                     <span className="text-cyan-400 font-bold flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> MP (NĂNG LƯỢNG)
+                      <Sparkles className="w-3.5 h-3.5 text-cyan-400" /> {t('gauge.mp', language)}
                     </span>
                     <span className="font-bold text-white font-mono">{stats.mp}/{stats.maxMp}</span>
                   </div>
@@ -1753,19 +1780,19 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               {/* Survival Quick Indicators (No Đói / Cơn Khát / Tinh Thần) */}
               <div className="hidden md:flex items-center gap-4 border-l border-neutral-800 pl-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-400 text-[11px]">Đói:</span>
+                  <span className="text-neutral-400 text-[11px]">{t('gauge.hunger', language)}:</span>
                   <span className={`text-xs font-bold ${stats.hunger < 30 ? 'text-red-400 animate-pulse' : 'text-amber-300'}`}>
                     {stats.hunger}%
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-400 text-[11px]">Khát:</span>
+                  <span className="text-neutral-400 text-[11px]">{t('gauge.thirst', language)}:</span>
                   <span className={`text-xs font-bold ${stats.thirst < 30 ? 'text-red-400 animate-pulse' : 'text-blue-300'}`}>
                     {stats.thirst}%
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-neutral-400 text-[11px]">Tâm Trí:</span>
+                  <span className="text-neutral-400 text-[11px]">{t('gauge.sanity', language)}:</span>
                   <span className={`text-xs font-bold ${stats.sanity < 30 ? 'text-red-400 animate-pulse' : 'text-purple-300'}`}>
                     {stats.sanity}%
                   </span>
@@ -1926,6 +1953,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               stats={stats}
               lordRoomData={lordRoomData}
               roomTenants={roomTenants}
+              lang={language}
               onUpgradeBed={handleUpgradeBed}
               onUpgradeDoor={handleUpgradeDoor}
               onUpgradeTurret={handleUpgradeTurret}
@@ -1947,6 +1975,7 @@ export default function App({ onReturnToWorldSelect }: AppProps = {}) {
               onClose={() => setShowRadioTransceiver(false)}
               transmissions={radioTransmissions}
               onScanFrequency={handleScanFrequency}
+              lang={language}
             />
           )}
 

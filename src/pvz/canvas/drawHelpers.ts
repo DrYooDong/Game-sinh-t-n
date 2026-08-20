@@ -345,6 +345,19 @@ export function drawPlants(rc: RenderContext, plants: PlacedPlant[]) {
       ctx.textAlign = 'center';
       ctx.fillText('⏳ Đang nhai', cx, cy + cellHeight * 0.35);
     }
+
+    // Plant Level Badge (Lv.X)
+    if (plant.level && plant.level > 1) {
+      const lvlText = plant.level >= 10 ? 'Lv.MAX' : `Lv.${plant.level}`;
+      ctx.save();
+      ctx.font = 'bold 9px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = plant.level >= 10 ? '#fbbf24' : '#34d399';
+      ctx.shadowColor = '#000000';
+      ctx.shadowBlur = 4;
+      ctx.fillText(lvlText, cx, hpBarY - 2);
+      ctx.restore();
+    }
   });
 }
 
